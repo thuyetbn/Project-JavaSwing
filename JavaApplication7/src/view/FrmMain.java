@@ -5,26 +5,58 @@
  */
 package view;
 
+import DAO.BConnection;
 import java.awt.Color;
-
+import java.awt.Frame;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableModel;
+import model.Account;
+import DAO.AccountDAO;
+import java.util.List;
+import java.util.Vector;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import model.Role;
 /**
  *
  * @author BinDz
  */
 public class FrmMain extends javax.swing.JFrame {
-
+    
     static boolean maximized = true;
     int xMouse;
     int yMouse;
-
+    Account account;
+    List<Account> listacc;
+    List<Role> lr;
     /**
      * Creates new form FrmMain
      */
     public FrmMain() {
         initComponents();
         setLocationRelativeTo(null);
-        pnlBody.removeAll();
+        Home h = new Home();
+        Body.add(h);
+        Body.repaint();
+        Body.revalidate();
+
+//        show_table();
+//        load_data();
     }
+    
+    
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -36,10 +68,10 @@ public class FrmMain extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jPanel13 = new javax.swing.JPanel();
+        Header = new javax.swing.JPanel();
         rSMaterialButtonCircle1 = new rojerusan.RSMaterialButtonCircle();
         rSMaterialButtonCircle2 = new rojerusan.RSMaterialButtonCircle();
-        jPanel3 = new javax.swing.JPanel();
+        Left = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -54,63 +86,7 @@ public class FrmMain extends javax.swing.JFrame {
         btnHome9 = new rojerusan.RSButtonMetro();
         btnHome10 = new rojerusan.RSButtonMetro();
         btnHome11 = new rojerusan.RSButtonMetro();
-        jPanel4 = new javax.swing.JPanel();
-        Home2 = new javax.swing.JPanel();
-        jPanel30 = new javax.swing.JPanel();
-        jPanel31 = new javax.swing.JPanel();
-        jLabel16 = new javax.swing.JLabel();
-        jPanel32 = new javax.swing.JPanel();
-        jPanel33 = new javax.swing.JPanel();
-        jLabel17 = new javax.swing.JLabel();
-        jPanel34 = new javax.swing.JPanel();
-        jPanel35 = new javax.swing.JPanel();
-        jPanel36 = new javax.swing.JPanel();
-        jLabel18 = new javax.swing.JLabel();
-        pnlBody = new javax.swing.JPanel();
-        Home1 = new javax.swing.JPanel();
-        jPanel23 = new javax.swing.JPanel();
-        jPanel24 = new javax.swing.JPanel();
-        jLabel13 = new javax.swing.JLabel();
-        jPanel25 = new javax.swing.JPanel();
-        jPanel26 = new javax.swing.JPanel();
-        jLabel14 = new javax.swing.JLabel();
-        jPanel27 = new javax.swing.JPanel();
-        jPanel28 = new javax.swing.JPanel();
-        jPanel29 = new javax.swing.JPanel();
-        jLabel15 = new javax.swing.JLabel();
-        pnlManageAccount = new javax.swing.JPanel();
-        jPanel8 = new javax.swing.JPanel();
-        rSButtonMetro5 = new rojerusan.RSButtonMetro();
-        rSButtonMetro6 = new rojerusan.RSButtonMetro();
-        rSButtonMetro7 = new rojerusan.RSButtonMetro();
-        rSButtonMetro8 = new rojerusan.RSButtonMetro();
-        jPanel9 = new javax.swing.JPanel();
-        jLabel6 = new javax.swing.JLabel();
-        jPanel10 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
-        pnlManageStudent = new javax.swing.JPanel();
-        jPanel17 = new javax.swing.JPanel();
-        rSButtonMetro9 = new rojerusan.RSButtonMetro();
-        rSButtonMetro10 = new rojerusan.RSButtonMetro();
-        rSButtonMetro11 = new rojerusan.RSButtonMetro();
-        rSButtonMetro12 = new rojerusan.RSButtonMetro();
-        jPanel18 = new javax.swing.JPanel();
-        jLabel9 = new javax.swing.JLabel();
-        jPanel19 = new javax.swing.JPanel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        jTable3 = new javax.swing.JTable();
-        pnlManageSubject = new javax.swing.JPanel();
-        jPanel20 = new javax.swing.JPanel();
-        rSButtonMetro13 = new rojerusan.RSButtonMetro();
-        rSButtonMetro14 = new rojerusan.RSButtonMetro();
-        rSButtonMetro15 = new rojerusan.RSButtonMetro();
-        rSButtonMetro16 = new rojerusan.RSButtonMetro();
-        jPanel21 = new javax.swing.JPanel();
-        jLabel10 = new javax.swing.JLabel();
-        jPanel22 = new javax.swing.JPanel();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        jTable4 = new javax.swing.JTable();
+        Body = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(1000, 600));
@@ -123,16 +99,16 @@ public class FrmMain extends javax.swing.JFrame {
         jPanel1.setMinimumSize(new java.awt.Dimension(1000, 600));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel13.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel13.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-        jPanel13.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+        Header.setBackground(new java.awt.Color(255, 255, 255));
+        Header.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+        Header.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
-                jPanel13MouseDragged(evt);
+                HeaderMouseDragged(evt);
             }
         });
-        jPanel13.addMouseListener(new java.awt.event.MouseAdapter() {
+        Header.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                jPanel13MousePressed(evt);
+                HeaderMousePressed(evt);
             }
         });
 
@@ -152,32 +128,32 @@ public class FrmMain extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
-        jPanel13.setLayout(jPanel13Layout);
-        jPanel13Layout.setHorizontalGroup(
-            jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel13Layout.createSequentialGroup()
+        javax.swing.GroupLayout HeaderLayout = new javax.swing.GroupLayout(Header);
+        Header.setLayout(HeaderLayout);
+        HeaderLayout.setHorizontalGroup(
+            HeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, HeaderLayout.createSequentialGroup()
                 .addGap(0, 940, Short.MAX_VALUE)
                 .addComponent(rSMaterialButtonCircle2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addComponent(rSMaterialButtonCircle1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
-        jPanel13Layout.setVerticalGroup(
-            jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel13Layout.createSequentialGroup()
+        HeaderLayout.setVerticalGroup(
+            HeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, HeaderLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(rSMaterialButtonCircle1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(jPanel13Layout.createSequentialGroup()
+            .addGroup(HeaderLayout.createSequentialGroup()
                 .addComponent(rSMaterialButtonCircle2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
-        jPanel1.add(jPanel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 30));
+        jPanel1.add(Header, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 30));
 
-        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel3.setForeground(new java.awt.Color(255, 255, 255));
-        jPanel3.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        Left.setBackground(new java.awt.Color(255, 255, 255));
+        Left.setForeground(new java.awt.Color(255, 255, 255));
+        Left.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        Left.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel2.setBackground(new java.awt.Color(51, 204, 255));
         jPanel2.setForeground(new java.awt.Color(255, 255, 255));
@@ -195,7 +171,7 @@ public class FrmMain extends javax.swing.JFrame {
         jLabel3.setText("SINH VIÊN");
         jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 51, 160, 45));
 
-        jPanel3.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 180, 120));
+        Left.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 180, 120));
 
         jPanel12.setBackground(new java.awt.Color(255, 255, 255));
         jPanel12.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 0, 1, 0, new java.awt.Color(0, 0, 0)));
@@ -215,7 +191,7 @@ public class FrmMain extends javax.swing.JFrame {
         jLabel2.setText("- Thông tin:");
         jPanel12.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 5, 90, -1));
 
-        jPanel3.add(jPanel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 120, 180, 110));
+        Left.add(jPanel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 120, 180, 110));
 
         btnHome1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_settings_25px.png"))); // NOI18N
         btnHome1.setText("Trang Chủ");
@@ -234,7 +210,7 @@ public class FrmMain extends javax.swing.JFrame {
                 btnHome1ActionPerformed(evt);
             }
         });
-        jPanel3.add(btnHome1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 515, 180, 55));
+        Left.add(btnHome1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 515, 180, 55));
 
         btnHome3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_home_25px.png"))); // NOI18N
         btnHome3.setText("Trang Chủ");
@@ -253,7 +229,7 @@ public class FrmMain extends javax.swing.JFrame {
                 btnHome3ActionPerformed(evt);
             }
         });
-        jPanel3.add(btnHome3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 231, 180, 55));
+        Left.add(btnHome3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 231, 180, 55));
 
         btnHome4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_content_25px.png"))); // NOI18N
         btnHome4.setText("Quản lý tài khoản");
@@ -272,7 +248,7 @@ public class FrmMain extends javax.swing.JFrame {
                 btnHome4ActionPerformed(evt);
             }
         });
-        jPanel3.add(btnHome4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 287, 180, 55));
+        Left.add(btnHome4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 287, 180, 55));
 
         btnHome9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_student_male_25px.png"))); // NOI18N
         btnHome9.setText("Quản lý sinh viên");
@@ -291,7 +267,7 @@ public class FrmMain extends javax.swing.JFrame {
                 btnHome9ActionPerformed(evt);
             }
         });
-        jPanel3.add(btnHome9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 343, 180, 55));
+        Left.add(btnHome9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 343, 180, 55));
 
         btnHome10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_books_25px.png"))); // NOI18N
         btnHome10.setText("Quản lý môn học");
@@ -310,7 +286,7 @@ public class FrmMain extends javax.swing.JFrame {
                 btnHome10ActionPerformed(evt);
             }
         });
-        jPanel3.add(btnHome10, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 399, 180, 55));
+        Left.add(btnHome10, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 399, 180, 55));
 
         btnHome11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_graph_report_25px.png"))); // NOI18N
         btnHome11.setText("Thống kê");
@@ -329,498 +305,12 @@ public class FrmMain extends javax.swing.JFrame {
                 btnHome11ActionPerformed(evt);
             }
         });
-        jPanel3.add(btnHome11, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 455, 180, 59));
+        Left.add(btnHome11, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 455, 180, 59));
 
-        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 180, 570));
+        jPanel1.add(Left, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 180, 570));
 
-        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        Home2.setBackground(new java.awt.Color(153, 153, 255));
-        Home2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jPanel30.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel30.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-        jPanel30.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jPanel31.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel31.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel16.setFont(new java.awt.Font("Tahoma", 1, 20)); // NOI18N
-        jLabel16.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_content_50px.png"))); // NOI18N
-        jLabel16.setText("Trang chủ");
-        jPanel31.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 1, 260, 110));
-
-        jPanel30.add(jPanel31, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 2, 260, 96));
-
-        Home2.add(jPanel30, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 820, 120));
-
-        jPanel32.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel32.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jPanel33.setBackground(new java.awt.Color(255, 204, 102));
-        jPanel33.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel33.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel17.setText("jLabel8");
-        jPanel33.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, -1, -1));
-
-        jPanel32.add(jPanel33, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 20, 410, 230));
-
-        jPanel34.setBackground(new java.awt.Color(255, 204, 102));
-        jPanel34.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel34.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        jPanel32.add(jPanel34, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 250, 410, 220));
-
-        jPanel35.setBackground(new java.awt.Color(255, 51, 51));
-        jPanel35.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel35.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        jPanel32.add(jPanel35, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 250, 410, 220));
-
-        jPanel36.setBackground(new java.awt.Color(255, 51, 51));
-        jPanel36.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel36.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel18.setText("jLabel7");
-        jPanel36.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
-
-        jPanel32.add(jPanel36, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 20, 410, 230));
-
-        Home2.add(jPanel32, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 100, 820, 468));
-
-        jPanel4.add(Home2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 1, 820, 570));
-
-        pnlBody.setBackground(new java.awt.Color(255, 255, 255));
-        pnlBody.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        Home1.setBackground(new java.awt.Color(153, 153, 255));
-        Home1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jPanel23.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel23.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-        jPanel23.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jPanel24.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel24.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel13.setFont(new java.awt.Font("Tahoma", 1, 20)); // NOI18N
-        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_content_50px.png"))); // NOI18N
-        jLabel13.setText("Trang chủ");
-        jPanel24.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 1, 260, 110));
-
-        jPanel23.add(jPanel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 2, 260, 96));
-
-        Home1.add(jPanel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 820, 120));
-
-        jPanel25.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel25.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jPanel26.setBackground(new java.awt.Color(255, 204, 102));
-        jPanel26.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel26.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel14.setText("jLabel8");
-        jPanel26.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, -1, -1));
-
-        jPanel25.add(jPanel26, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 20, 410, 230));
-
-        jPanel27.setBackground(new java.awt.Color(255, 204, 102));
-        jPanel27.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel27.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        jPanel25.add(jPanel27, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 250, 410, 220));
-
-        jPanel28.setBackground(new java.awt.Color(255, 51, 51));
-        jPanel28.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel28.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        jPanel25.add(jPanel28, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 250, 410, 220));
-
-        jPanel29.setBackground(new java.awt.Color(255, 51, 51));
-        jPanel29.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel29.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel15.setText("jLabel7");
-        jPanel29.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
-
-        jPanel25.add(jPanel29, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 20, 410, 230));
-
-        Home1.add(jPanel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 100, 820, 468));
-
-        pnlBody.add(Home1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 1, 820, 570));
-
-        pnlManageAccount.setBackground(new java.awt.Color(153, 153, 255));
-        pnlManageAccount.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jPanel8.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel8.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-        jPanel8.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        rSButtonMetro5.setBackground(new java.awt.Color(255, 255, 255));
-        rSButtonMetro5.setForeground(new java.awt.Color(0, 0, 0));
-        rSButtonMetro5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_update_50px.png"))); // NOI18N
-        rSButtonMetro5.setText("Sửa");
-        rSButtonMetro5.setBorderPainted(false);
-        rSButtonMetro5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        rSButtonMetro5.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        rSButtonMetro5.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                rSButtonMetro5MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                rSButtonMetro5MouseExited(evt);
-            }
-        });
-        jPanel8.add(rSButtonMetro5, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 2, 120, 116));
-
-        rSButtonMetro6.setBackground(new java.awt.Color(255, 255, 255));
-        rSButtonMetro6.setForeground(new java.awt.Color(0, 0, 0));
-        rSButtonMetro6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_search_more_50px_1.png"))); // NOI18N
-        rSButtonMetro6.setText("Tìm kiếm");
-        rSButtonMetro6.setBorderPainted(false);
-        rSButtonMetro6.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        rSButtonMetro6.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        rSButtonMetro6.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                rSButtonMetro6MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                rSButtonMetro6MouseExited(evt);
-            }
-        });
-        jPanel8.add(rSButtonMetro6, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 2, 120, 116));
-
-        rSButtonMetro7.setBackground(new java.awt.Color(255, 255, 255));
-        rSButtonMetro7.setForeground(new java.awt.Color(0, 0, 0));
-        rSButtonMetro7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_delete_bin_50px.png"))); // NOI18N
-        rSButtonMetro7.setText("Xoá");
-        rSButtonMetro7.setBorderPainted(false);
-        rSButtonMetro7.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        rSButtonMetro7.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        rSButtonMetro7.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                rSButtonMetro7MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                rSButtonMetro7MouseExited(evt);
-            }
-        });
-        jPanel8.add(rSButtonMetro7, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 2, 120, 116));
-
-        rSButtonMetro8.setBackground(new java.awt.Color(255, 255, 255));
-        rSButtonMetro8.setForeground(new java.awt.Color(0, 0, 0));
-        rSButtonMetro8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_ball_point_pen_50px.png"))); // NOI18N
-        rSButtonMetro8.setText("Thêm");
-        rSButtonMetro8.setBorderPainted(false);
-        rSButtonMetro8.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        rSButtonMetro8.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        rSButtonMetro8.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                rSButtonMetro8MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                rSButtonMetro8MouseExited(evt);
-            }
-        });
-        rSButtonMetro8.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rSButtonMetro8ActionPerformed(evt);
-            }
-        });
-        jPanel8.add(rSButtonMetro8, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 2, 120, 116));
-
-        jPanel9.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel9.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 20)); // NOI18N
-        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_content_50px.png"))); // NOI18N
-        jLabel6.setText("Quản lý tài khoản");
-        jPanel9.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 1, 260, 110));
-
-        jPanel8.add(jPanel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 2, 260, 110));
-
-        pnlManageAccount.add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 820, 120));
-
-        jPanel10.setBackground(new java.awt.Color(255, 255, 255));
-
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jTable2.setGridColor(new java.awt.Color(0, 0, 0));
-        jTable2.setSelectionBackground(new java.awt.Color(51, 204, 255));
-        jScrollPane2.setViewportView(jTable2);
-
-        javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
-        jPanel10.setLayout(jPanel10Layout);
-        jPanel10Layout.setHorizontalGroup(
-            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 820, Short.MAX_VALUE)
-        );
-        jPanel10Layout.setVerticalGroup(
-            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
-        );
-
-        pnlManageAccount.add(jPanel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 118, 820, 450));
-
-        pnlBody.add(pnlManageAccount, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 1, 820, 570));
-
-        pnlManageStudent.setBackground(new java.awt.Color(153, 153, 255));
-        pnlManageStudent.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jPanel17.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel17.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-        jPanel17.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        rSButtonMetro9.setBackground(new java.awt.Color(255, 255, 255));
-        rSButtonMetro9.setForeground(new java.awt.Color(0, 0, 0));
-        rSButtonMetro9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_update_50px.png"))); // NOI18N
-        rSButtonMetro9.setText("Sửa");
-        rSButtonMetro9.setBorderPainted(false);
-        rSButtonMetro9.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        rSButtonMetro9.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        rSButtonMetro9.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                rSButtonMetro9MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                rSButtonMetro9MouseExited(evt);
-            }
-        });
-        jPanel17.add(rSButtonMetro9, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 2, 120, 116));
-
-        rSButtonMetro10.setBackground(new java.awt.Color(255, 255, 255));
-        rSButtonMetro10.setForeground(new java.awt.Color(0, 0, 0));
-        rSButtonMetro10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_search_more_50px_1.png"))); // NOI18N
-        rSButtonMetro10.setText("Tìm kiếm");
-        rSButtonMetro10.setBorderPainted(false);
-        rSButtonMetro10.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        rSButtonMetro10.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        rSButtonMetro10.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                rSButtonMetro10MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                rSButtonMetro10MouseExited(evt);
-            }
-        });
-        jPanel17.add(rSButtonMetro10, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 2, 120, 116));
-
-        rSButtonMetro11.setBackground(new java.awt.Color(255, 255, 255));
-        rSButtonMetro11.setForeground(new java.awt.Color(0, 0, 0));
-        rSButtonMetro11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_delete_bin_50px.png"))); // NOI18N
-        rSButtonMetro11.setText("Xoá");
-        rSButtonMetro11.setBorderPainted(false);
-        rSButtonMetro11.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        rSButtonMetro11.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        rSButtonMetro11.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                rSButtonMetro11MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                rSButtonMetro11MouseExited(evt);
-            }
-        });
-        jPanel17.add(rSButtonMetro11, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 2, 120, 116));
-
-        rSButtonMetro12.setBackground(new java.awt.Color(255, 255, 255));
-        rSButtonMetro12.setForeground(new java.awt.Color(0, 0, 0));
-        rSButtonMetro12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_ball_point_pen_50px.png"))); // NOI18N
-        rSButtonMetro12.setText("Thêm");
-        rSButtonMetro12.setBorderPainted(false);
-        rSButtonMetro12.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        rSButtonMetro12.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        rSButtonMetro12.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                rSButtonMetro12MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                rSButtonMetro12MouseExited(evt);
-            }
-        });
-        rSButtonMetro12.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rSButtonMetro12ActionPerformed(evt);
-            }
-        });
-        jPanel17.add(rSButtonMetro12, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 2, 120, 116));
-
-        jPanel18.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel18.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 20)); // NOI18N
-        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_content_50px.png"))); // NOI18N
-        jLabel9.setText("Quản lý sinh viên");
-        jPanel18.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 1, 260, 110));
-
-        jPanel17.add(jPanel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 2, 260, 110));
-
-        pnlManageStudent.add(jPanel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 820, 120));
-
-        jPanel19.setBackground(new java.awt.Color(255, 255, 255));
-
-        jTable3.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jTable3.setGridColor(new java.awt.Color(0, 0, 0));
-        jTable3.setSelectionBackground(new java.awt.Color(51, 204, 255));
-        jScrollPane3.setViewportView(jTable3);
-
-        javax.swing.GroupLayout jPanel19Layout = new javax.swing.GroupLayout(jPanel19);
-        jPanel19.setLayout(jPanel19Layout);
-        jPanel19Layout.setHorizontalGroup(
-            jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 820, Short.MAX_VALUE)
-        );
-        jPanel19Layout.setVerticalGroup(
-            jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
-        );
-
-        pnlManageStudent.add(jPanel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 118, 820, 450));
-
-        pnlBody.add(pnlManageStudent, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 1, 820, 570));
-
-        pnlManageSubject.setBackground(new java.awt.Color(153, 153, 255));
-        pnlManageSubject.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jPanel20.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel20.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-        jPanel20.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        rSButtonMetro13.setBackground(new java.awt.Color(255, 255, 255));
-        rSButtonMetro13.setForeground(new java.awt.Color(0, 0, 0));
-        rSButtonMetro13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_update_50px.png"))); // NOI18N
-        rSButtonMetro13.setText("Sửa");
-        rSButtonMetro13.setBorderPainted(false);
-        rSButtonMetro13.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        rSButtonMetro13.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        rSButtonMetro13.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                rSButtonMetro13MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                rSButtonMetro13MouseExited(evt);
-            }
-        });
-        jPanel20.add(rSButtonMetro13, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 2, 120, 116));
-
-        rSButtonMetro14.setBackground(new java.awt.Color(255, 255, 255));
-        rSButtonMetro14.setForeground(new java.awt.Color(0, 0, 0));
-        rSButtonMetro14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_search_more_50px_1.png"))); // NOI18N
-        rSButtonMetro14.setText("Tìm kiếm");
-        rSButtonMetro14.setBorderPainted(false);
-        rSButtonMetro14.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        rSButtonMetro14.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        rSButtonMetro14.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                rSButtonMetro14MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                rSButtonMetro14MouseExited(evt);
-            }
-        });
-        jPanel20.add(rSButtonMetro14, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 2, 120, 116));
-
-        rSButtonMetro15.setBackground(new java.awt.Color(255, 255, 255));
-        rSButtonMetro15.setForeground(new java.awt.Color(0, 0, 0));
-        rSButtonMetro15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_delete_bin_50px.png"))); // NOI18N
-        rSButtonMetro15.setText("Xoá");
-        rSButtonMetro15.setBorderPainted(false);
-        rSButtonMetro15.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        rSButtonMetro15.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        rSButtonMetro15.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                rSButtonMetro15MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                rSButtonMetro15MouseExited(evt);
-            }
-        });
-        jPanel20.add(rSButtonMetro15, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 2, 120, 116));
-
-        rSButtonMetro16.setBackground(new java.awt.Color(255, 255, 255));
-        rSButtonMetro16.setForeground(new java.awt.Color(0, 0, 0));
-        rSButtonMetro16.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_ball_point_pen_50px.png"))); // NOI18N
-        rSButtonMetro16.setText("Thêm");
-        rSButtonMetro16.setBorderPainted(false);
-        rSButtonMetro16.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        rSButtonMetro16.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        rSButtonMetro16.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                rSButtonMetro16MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                rSButtonMetro16MouseExited(evt);
-            }
-        });
-        rSButtonMetro16.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rSButtonMetro16ActionPerformed(evt);
-            }
-        });
-        jPanel20.add(rSButtonMetro16, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 2, 120, 116));
-
-        jPanel21.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel21.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 20)); // NOI18N
-        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_content_50px.png"))); // NOI18N
-        jLabel10.setText("Quản lý môn học");
-        jPanel21.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 1, 260, 110));
-
-        jPanel20.add(jPanel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 2, 260, 110));
-
-        pnlManageSubject.add(jPanel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 820, 120));
-
-        jPanel22.setBackground(new java.awt.Color(255, 255, 255));
-
-        jTable4.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jTable4.setGridColor(new java.awt.Color(0, 0, 0));
-        jTable4.setSelectionBackground(new java.awt.Color(51, 204, 255));
-        jScrollPane4.setViewportView(jTable4);
-
-        javax.swing.GroupLayout jPanel22Layout = new javax.swing.GroupLayout(jPanel22);
-        jPanel22.setLayout(jPanel22Layout);
-        jPanel22Layout.setHorizontalGroup(
-            jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 820, Short.MAX_VALUE)
-        );
-        jPanel22Layout.setVerticalGroup(
-            jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
-        );
-
-        pnlManageSubject.add(jPanel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 118, 820, 450));
-
-        pnlBody.add(pnlManageSubject, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 1, 820, 570));
-
-        jPanel4.add(pnlBody, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 1, 820, 570));
-
-        jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 30, 820, 570));
+        Body.setLayout(new java.awt.BorderLayout());
+        jPanel1.add(Body, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 30, 820, 570));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -835,62 +325,65 @@ public class FrmMain extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    
+    
+    
+    
+    
     private void rSMaterialButtonCircle1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSMaterialButtonCircle1ActionPerformed
         System.exit(0);
     }//GEN-LAST:event_rSMaterialButtonCircle1ActionPerformed
 
-    private void jPanel13MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel13MousePressed
+    private void HeaderMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_HeaderMousePressed
         xMouse = evt.getX();
         yMouse = evt.getY();
-    }//GEN-LAST:event_jPanel13MousePressed
+    }//GEN-LAST:event_HeaderMousePressed
 
-    private void jPanel13MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel13MouseDragged
+    private void HeaderMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_HeaderMouseDragged
         if (maximized) {
             int x = evt.getXOnScreen();
             int y = evt.getYOnScreen();
             this.setLocation(x - xMouse, y - yMouse);
         }
-    }//GEN-LAST:event_jPanel13MouseDragged
+    }//GEN-LAST:event_HeaderMouseDragged
 
     private void btnHome1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHome1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnHome1ActionPerformed
 
     private void btnHome3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHome3ActionPerformed
-        pnlBody.removeAll();
-        pnlBody.repaint();
-        pnlBody.revalidate();
-        pnlBody.add(Home1);
-        pnlBody.repaint();
-        pnlBody.revalidate();
+        Body.removeAll();
+        Home h = new Home();
+        Body.add(h);
+        Body.repaint();
+        Body.revalidate();
     }//GEN-LAST:event_btnHome3ActionPerformed
 
     private void btnHome4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHome4ActionPerformed
-        pnlBody.removeAll();
-        pnlBody.repaint();
-        pnlBody.revalidate();
-        pnlBody.add(pnlManageAccount);
-        pnlBody.repaint();
-        pnlBody.revalidate();
+        Body.removeAll();
+        ManageAccount ma = new ManageAccount();
+        Body.add(ma);
+        Body.repaint();
+        Body.revalidate();
+        
+        
     }//GEN-LAST:event_btnHome4ActionPerformed
 
     private void btnHome9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHome9ActionPerformed
-        pnlBody.removeAll();
-        pnlBody.repaint();
-        pnlBody.revalidate();
-        pnlBody.add(pnlManageStudent);
-        pnlBody.repaint();
-        pnlBody.revalidate();
+        Body.removeAll();
+        ManageStudent ms = new ManageStudent();
+        Body.add(ms);
+        Body.repaint();
+        Body.revalidate();
     }//GEN-LAST:event_btnHome9ActionPerformed
 
     private void btnHome10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHome10ActionPerformed
-        pnlBody.removeAll();
-        pnlBody.repaint();
-        pnlBody.revalidate();
-        pnlBody.add(pnlManageSubject);
-        pnlBody.repaint();
-        pnlBody.revalidate();
+        Body.removeAll();
+        ManageSubject ms = new ManageSubject();
+        Body.add(ms);
+        Body.repaint();
+        Body.revalidate();
     }//GEN-LAST:event_btnHome10ActionPerformed
 
     private void btnHome11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHome11ActionPerformed
@@ -898,20 +391,8 @@ public class FrmMain extends javax.swing.JFrame {
     }//GEN-LAST:event_btnHome11ActionPerformed
 
     private void rSMaterialButtonCircle2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSMaterialButtonCircle2ActionPerformed
-        // TODO add your handling code here:
+       this.setState(Frame.ICONIFIED);
     }//GEN-LAST:event_rSMaterialButtonCircle2ActionPerformed
-
-    private void rSButtonMetro8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro8ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_rSButtonMetro8ActionPerformed
-
-    private void rSButtonMetro12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro12ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_rSButtonMetro12ActionPerformed
-
-    private void rSButtonMetro16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro16ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_rSButtonMetro16ActionPerformed
 
     private void btnHome3MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnHome3MouseEntered
         btnHome3.setBackground(new Color(85, 159, 213));
@@ -961,102 +442,6 @@ public class FrmMain extends javax.swing.JFrame {
         btnHome1.setBackground(new Color(85, 159, 213));
     }//GEN-LAST:event_btnHome1MouseEntered
 
-    private void rSButtonMetro8MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSButtonMetro8MouseEntered
-        rSButtonMetro8.setBackground(new Color(85, 159, 213));
-    }//GEN-LAST:event_rSButtonMetro8MouseEntered
-
-    private void rSButtonMetro8MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSButtonMetro8MouseExited
-        rSButtonMetro8.setBackground(new Color(255, 255, 255));
-    }//GEN-LAST:event_rSButtonMetro8MouseExited
-
-    private void rSButtonMetro5MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSButtonMetro5MouseExited
-        rSButtonMetro5.setBackground(new Color(255, 255, 255));
-    }//GEN-LAST:event_rSButtonMetro5MouseExited
-
-    private void rSButtonMetro5MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSButtonMetro5MouseEntered
-        rSButtonMetro5.setBackground(new Color(85, 159, 213));
-    }//GEN-LAST:event_rSButtonMetro5MouseEntered
-
-    private void rSButtonMetro7MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSButtonMetro7MouseEntered
-        rSButtonMetro7.setBackground(new Color(85, 159, 213));
-    }//GEN-LAST:event_rSButtonMetro7MouseEntered
-
-    private void rSButtonMetro7MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSButtonMetro7MouseExited
-        rSButtonMetro7.setBackground(new Color(255, 255, 255));
-    }//GEN-LAST:event_rSButtonMetro7MouseExited
-
-    private void rSButtonMetro6MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSButtonMetro6MouseEntered
-        rSButtonMetro6.setBackground(new Color(85, 159, 213));
-    }//GEN-LAST:event_rSButtonMetro6MouseEntered
-
-    private void rSButtonMetro6MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSButtonMetro6MouseExited
-        rSButtonMetro6.setBackground(new Color(255, 255, 255));
-    }//GEN-LAST:event_rSButtonMetro6MouseExited
-
-    private void rSButtonMetro12MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSButtonMetro12MouseEntered
-        rSButtonMetro12.setBackground(new Color(85, 159, 213));
-    }//GEN-LAST:event_rSButtonMetro12MouseEntered
-
-    private void rSButtonMetro12MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSButtonMetro12MouseExited
-        rSButtonMetro12.setBackground(new Color(255, 255, 255));
-    }//GEN-LAST:event_rSButtonMetro12MouseExited
-
-    private void rSButtonMetro9MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSButtonMetro9MouseEntered
-        rSButtonMetro9.setBackground(new Color(85, 159, 213));
-    }//GEN-LAST:event_rSButtonMetro9MouseEntered
-
-    private void rSButtonMetro9MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSButtonMetro9MouseExited
-        rSButtonMetro9.setBackground(new Color(255, 255, 255));
-    }//GEN-LAST:event_rSButtonMetro9MouseExited
-
-    private void rSButtonMetro11MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSButtonMetro11MouseEntered
-        rSButtonMetro11.setBackground(new Color(85, 159, 213));
-    }//GEN-LAST:event_rSButtonMetro11MouseEntered
-
-    private void rSButtonMetro11MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSButtonMetro11MouseExited
-        rSButtonMetro11.setBackground(new Color(255, 255, 255));
-    }//GEN-LAST:event_rSButtonMetro11MouseExited
-
-    private void rSButtonMetro10MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSButtonMetro10MouseEntered
-        rSButtonMetro10.setBackground(new Color(85, 159, 213));
-    }//GEN-LAST:event_rSButtonMetro10MouseEntered
-
-    private void rSButtonMetro10MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSButtonMetro10MouseExited
-        rSButtonMetro10.setBackground(new Color(255, 255, 255));
-    }//GEN-LAST:event_rSButtonMetro10MouseExited
-
-    private void rSButtonMetro16MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSButtonMetro16MouseEntered
-        rSButtonMetro16.setBackground(new Color(85, 159, 213));
-    }//GEN-LAST:event_rSButtonMetro16MouseEntered
-
-    private void rSButtonMetro16MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSButtonMetro16MouseExited
-        rSButtonMetro16.setBackground(new Color(255, 255, 255));
-    }//GEN-LAST:event_rSButtonMetro16MouseExited
-
-    private void rSButtonMetro13MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSButtonMetro13MouseEntered
-        rSButtonMetro13.setBackground(new Color(85, 159, 213));
-    }//GEN-LAST:event_rSButtonMetro13MouseEntered
-
-    private void rSButtonMetro13MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSButtonMetro13MouseExited
-        rSButtonMetro13.setBackground(new Color(255, 255, 255));
-    }//GEN-LAST:event_rSButtonMetro13MouseExited
-
-    private void rSButtonMetro15MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSButtonMetro15MouseEntered
-        rSButtonMetro15.setBackground(new Color(85, 159, 213));
-    }//GEN-LAST:event_rSButtonMetro15MouseEntered
-
-    private void rSButtonMetro15MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSButtonMetro15MouseExited
-        rSButtonMetro15.setBackground(new Color(255, 255, 255));
-    }//GEN-LAST:event_rSButtonMetro15MouseExited
-
-    private void rSButtonMetro14MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSButtonMetro14MouseEntered
-        rSButtonMetro14.setBackground(new Color(85, 159, 213));
-    }//GEN-LAST:event_rSButtonMetro14MouseEntered
-
-    private void rSButtonMetro14MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSButtonMetro14MouseExited
-        rSButtonMetro14.setBackground(new Color(255, 255, 255));
-    }//GEN-LAST:event_rSButtonMetro14MouseExited
-
     /**
      * @param args the command line arguments
      */
@@ -1093,8 +478,9 @@ public class FrmMain extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel Home1;
-    private javax.swing.JPanel Home2;
+    private javax.swing.JPanel Body;
+    private javax.swing.JPanel Header;
+    private javax.swing.JPanel Left;
     private rojerusan.RSButtonMetro btnHome1;
     private rojerusan.RSButtonMetro btnHome10;
     private rojerusan.RSButtonMetro btnHome11;
@@ -1102,71 +488,14 @@ public class FrmMain extends javax.swing.JFrame {
     private rojerusan.RSButtonMetro btnHome4;
     private rojerusan.RSButtonMetro btnHome9;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel12;
-    private javax.swing.JPanel jPanel13;
-    private javax.swing.JPanel jPanel17;
-    private javax.swing.JPanel jPanel18;
-    private javax.swing.JPanel jPanel19;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel20;
-    private javax.swing.JPanel jPanel21;
-    private javax.swing.JPanel jPanel22;
-    private javax.swing.JPanel jPanel23;
-    private javax.swing.JPanel jPanel24;
-    private javax.swing.JPanel jPanel25;
-    private javax.swing.JPanel jPanel26;
-    private javax.swing.JPanel jPanel27;
-    private javax.swing.JPanel jPanel28;
-    private javax.swing.JPanel jPanel29;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel30;
-    private javax.swing.JPanel jPanel31;
-    private javax.swing.JPanel jPanel32;
-    private javax.swing.JPanel jPanel33;
-    private javax.swing.JPanel jPanel34;
-    private javax.swing.JPanel jPanel35;
-    private javax.swing.JPanel jPanel36;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel8;
-    private javax.swing.JPanel jPanel9;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JTable jTable2;
-    private javax.swing.JTable jTable3;
-    private javax.swing.JTable jTable4;
-    private javax.swing.JPanel pnlBody;
-    private javax.swing.JPanel pnlManageAccount;
-    private javax.swing.JPanel pnlManageStudent;
-    private javax.swing.JPanel pnlManageSubject;
-    private rojerusan.RSButtonMetro rSButtonMetro10;
-    private rojerusan.RSButtonMetro rSButtonMetro11;
-    private rojerusan.RSButtonMetro rSButtonMetro12;
-    private rojerusan.RSButtonMetro rSButtonMetro13;
-    private rojerusan.RSButtonMetro rSButtonMetro14;
-    private rojerusan.RSButtonMetro rSButtonMetro15;
-    private rojerusan.RSButtonMetro rSButtonMetro16;
-    private rojerusan.RSButtonMetro rSButtonMetro5;
-    private rojerusan.RSButtonMetro rSButtonMetro6;
-    private rojerusan.RSButtonMetro rSButtonMetro7;
-    private rojerusan.RSButtonMetro rSButtonMetro8;
-    private rojerusan.RSButtonMetro rSButtonMetro9;
     private rojerusan.RSMaterialButtonCircle rSMaterialButtonCircle1;
     private rojerusan.RSMaterialButtonCircle rSMaterialButtonCircle2;
     // End of variables declaration//GEN-END:variables
