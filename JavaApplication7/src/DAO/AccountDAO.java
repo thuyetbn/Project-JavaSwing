@@ -30,29 +30,7 @@ public class AccountDAO {
         this.conn = BConnection.getConnection();
     }
     
-    public List<Account> findAccount(String name) {
-        List<Account> lsta = new ArrayList<>();
-        String sql = "{call findAccount(?)}";
-        try {
-            CallableStatement cs = conn.prepareCall(sql);
-            ResultSet rs = cs.executeQuery();
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                String phone = rs.getString("Phone");
-                String email = rs.getString("Email");
-                String pass = rs.getString("Password");
-                String address = rs.getString("Address");
-                String birthday = rs.getString("Birthday");
-                int status = rs.getInt("Status");
-                int role_id = rs.getInt("RoleId");
-                String role_name = rs.getString("RoleName");
-                lsta.add(new Account(id, name, phone, email, pass, address, birthday, status, role_id, role_name));
-            }
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex);
-        }
-        return lsta;
-    }
+    
     
     public List<Account> getAllAccount1() {
         List<Account> lsta = new ArrayList<>();
@@ -137,6 +115,30 @@ public class AccountDAO {
         return check;
     }
 
-    
+    public List<Account> findAccount(String name1) {
+        List<Account> lsta = new ArrayList<>();
+        String sql = "{call findAccount(?)}";
+        try {
+            CallableStatement cs = conn.prepareCall(sql);
+            cs.setString(1, name1);
+            ResultSet rs = cs.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("Name");
+                String phone = rs.getString("Phone");
+                String email = rs.getString("Email");
+                String pass = rs.getString("Password");
+                String address = rs.getString("Address");
+                String birthday = rs.getString("Birthday");
+                int status = rs.getInt("Status");
+                int role_id = rs.getInt("RoleId");
+                String role_name = rs.getString("RoleName");
+                lsta.add(new Account(id, name, phone, email, pass, address, birthday, status, role_id, role_name));
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+        return lsta;
+    }
 
 }

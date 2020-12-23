@@ -9,6 +9,8 @@ import DAO.AccountDAO;
 import java.awt.Color;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Vector;
 import javax.swing.JFrame;
@@ -30,7 +32,7 @@ public class ManageAccount extends javax.swing.JPanel {
     Account account;
     List<Account> listacc;
     List<Role> lr;
-
+    String name_find;
     /**
      * Creates new form NewJPanel
      */
@@ -44,10 +46,14 @@ public class ManageAccount extends javax.swing.JPanel {
         listacc = ad.getAllAccount1();
         String columns[] = {"STT", "Tên", "Số điện thoại", "Email", "Address", "Ngày sinh", "Chức vụ", "Trạng thái"};
         DefaultTableModel dtm = new DefaultTableModel(columns, 0);
-        DateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         Integer i = 1;
         for (Account a : listacc) {
-            dtm.addRow(new Object[]{i, a.getName(), a.getPhone(), a.getEmail(), a.getAddress(), a.getBirthday(), a.getRolde_Name(), a.getStatus() == 0 ? "Đang giảng dạy" : "Đã nghỉ"});
+            LocalDate dt = LocalDate.parse(a.getBirthday());
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            String time = dtf.format(dt);
+            
+            
+            dtm.addRow(new Object[]{i, a.getName(), a.getPhone(), a.getEmail(), a.getAddress(), time, a.getRolde_Name(), a.getStatus() == 0 ? "Đang giảng dạy" : "Đã nghỉ"});
             i++;
         }
         tbAccount.setModel(dtm);
@@ -66,7 +72,41 @@ public class ManageAccount extends javax.swing.JPanel {
             });
         }
     }
+    
+    void load_find(String name){
+        AccountDAO ad = new AccountDAO();
+        listacc = ad.findAccount(name);
+        String columns[] = {"STT", "Tên", "Số điện thoại", "Email", "Address", "Ngày sinh", "Chức vụ", "Trạng thái"};
+        DefaultTableModel dtm = new DefaultTableModel(columns, 0);
+        Integer i = 1;
+        for (Account a : listacc) {
+            LocalDate dt = LocalDate.parse(a.getBirthday());
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            String time = dtf.format(dt);
+            
+            
+            dtm.addRow(new Object[]{i, a.getName(), a.getPhone(), a.getEmail(), a.getAddress(), time, a.getRolde_Name(), a.getStatus() == 0 ? "Đang giảng dạy" : "Đã nghỉ"});
+            i++;
+        }
+        tbAccount.setModel(dtm);
+        tbAccount.setRowHeight(25);
+        if (listacc.size() > 0) {
+            tbAccount.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+                @Override
+                public void valueChanged(ListSelectionEvent lse) {
+                    int pos = tbAccount.getSelectedRow();
+                    if (pos < 0) {
+                        pos = 0;
+                    }
 
+                    account = listacc.get(pos);
+                }
+            });
+        }
+        
+    }
+    
+    
    
 
     
@@ -368,6 +408,10 @@ public class ManageAccount extends javax.swing.JPanel {
         JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
         FrmFind ff = new FrmFind(frame, true);
         ff.setVisible(true);
+        String a = ff.getData();
+        load_find(a);
+         
+
 
     }//GEN-LAST:event_rSButtonMetro9ActionPerformed
 

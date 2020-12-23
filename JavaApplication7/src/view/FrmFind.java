@@ -4,18 +4,24 @@
  * and open the template in the editor.
  */
 package view;
+
 import model.Account;
 import DAO.AccountDAO;
+import java.awt.event.KeyEvent;
 import java.util.List;
 import javax.swing.JOptionPane;
+import view.ManageAccount;
+
 /**
  *
  * @author BinDz
  */
 public class FrmFind extends javax.swing.JDialog {
+
     Account account;
     AccountDAO ad;
     List<Account> lsta;
+
     /**
      * Creates new form FrmFind
      */
@@ -23,6 +29,10 @@ public class FrmFind extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         setLocationRelativeTo(null);
+    }
+
+    String getData() {
+        return txtNamefind.getText();
     }
 
     /**
@@ -37,7 +47,7 @@ public class FrmFind extends javax.swing.JDialog {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        txtName = new javax.swing.JTextField();
+        txtNamefind = new javax.swing.JTextField();
         rSButtonMetro1 = new rojerusan.RSButtonMetro();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -56,15 +66,30 @@ public class FrmFind extends javax.swing.JDialog {
         jLabel2.setText("Tên giáo viên muốn tìm kiếm:");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 370, 40));
 
-        txtName.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtName.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-        jPanel1.add(txtName, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, 360, 30));
+        txtNamefind.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtNamefind.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+        txtNamefind.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNamefindActionPerformed(evt);
+            }
+        });
+        txtNamefind.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtNamefindKeyPressed(evt);
+            }
+        });
+        jPanel1.add(txtNamefind, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, 360, 30));
 
         rSButtonMetro1.setBackground(new java.awt.Color(0, 204, 255));
         rSButtonMetro1.setText("Tìm kiếm");
         rSButtonMetro1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rSButtonMetro1ActionPerformed(evt);
+            }
+        });
+        rSButtonMetro1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                rSButtonMetro1KeyTyped(evt);
             }
         });
         jPanel1.add(rSButtonMetro1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 170, -1, 60));
@@ -82,13 +107,29 @@ public class FrmFind extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    private void formKeyPressed(java.awt.event.KeyEvent evt) {
+        if (evt.getKeyCode() == evt.VK_ENTER) {
+            dispose();
+        }
+    }
     private void rSButtonMetro1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro1ActionPerformed
-        String name = txtName.getText();
-        ad = new AccountDAO();
-        lsta =  ad.findAccount(name);
-        JOptionPane.showMessageDialog(null, lsta);
+        dispose();
+
     }//GEN-LAST:event_rSButtonMetro1ActionPerformed
+
+    private void rSButtonMetro1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_rSButtonMetro1KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_rSButtonMetro1KeyTyped
+
+    private void txtNamefindActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNamefindActionPerformed
+        
+    }//GEN-LAST:event_txtNamefindActionPerformed
+
+    private void txtNamefindKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNamefindKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            dispose();
+        }
+    }//GEN-LAST:event_txtNamefindKeyPressed
 
     /**
      * @param args the command line arguments
@@ -137,6 +178,6 @@ public class FrmFind extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private rojerusan.RSButtonMetro rSButtonMetro1;
-    private javax.swing.JTextField txtName;
+    private javax.swing.JTextField txtNamefind;
     // End of variables declaration//GEN-END:variables
 }
