@@ -5,7 +5,6 @@
  */
 package DAO;
 
-import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,32 +13,34 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Role;
+import model.KhoaHoc;
 /**
  *
  * @author BinDz
  */
-public class RoleDAO {
+public class KhoaHocDAO {
     Connection conn;
 
-    public RoleDAO() {
+    public KhoaHocDAO() {
         this.conn = BConnection.getConnection();
     }
     
-    public List<Role> get(){
-        List<Role> lr = new ArrayList<>();
-        String sql = "{call getAllRole}";
+    public List<KhoaHoc> getAllKhoaHoc(){
+        List<KhoaHoc> lh = new ArrayList<>();
+        String sql = "select * from tbl_KhoaHoc ";
         try {
-            CallableStatement cs = conn.prepareCall(sql);
-            ResultSet rs = cs.executeQuery();
+            PreparedStatement PS = conn.prepareCall(sql);
+            ResultSet rs =PS.executeQuery();
             while (rs.next()) {                
                 int id = rs.getInt("id");
                 String name = rs.getString("Name");
-                lr.add(new Role(id, name));
+                String begin_date = rs.getString("Begin_date");
+                String end_date = rs.getString("End_data");
+                lh.add(new KhoaHoc(id, name,begin_date , end_date));
             }
         } catch (SQLException ex) {
-            Logger.getLogger(RoleDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(KhoaHocDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return lr;
+        return lh;
     }
 }

@@ -5,8 +5,15 @@
  */
 package view;
 
+import DAO.SubjectDAO;
 import java.awt.Color;
-
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.List;
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableModel;
+import model.Subject;
 /**
  *
  * @author BinDz
@@ -18,8 +25,25 @@ public class ManageSubject extends javax.swing.JPanel {
      */
     public ManageSubject() {
         initComponents();
+        load_data();
     }
-
+    List<Subject> listsub;
+    private void load_data() {
+        SubjectDAO sd = new SubjectDAO();
+        listsub = sd.getAllSubject();
+        String columns[] = {"STT", "Tên", "Số tín chỉ", "Trạng thái"};
+        DefaultTableModel dtm = new DefaultTableModel(columns, 0);
+        DateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        Integer i = 1;
+        for (Subject s : listsub) {
+            dtm.addRow(new Object[]{i, s.getName(),s.getCredits(), s.getStatus() == 0 ? "Đang hoạt động" : "Đã ngừng dạy"});
+            i++;
+        }
+        tbSubject.setModel(dtm);
+        tbSubject.setRowHeight(25);
+    }
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -39,7 +63,7 @@ public class ManageSubject extends javax.swing.JPanel {
         jLabel10 = new javax.swing.JLabel();
         jPanel22 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jTable4 = new javax.swing.JTable();
+        tbSubject = new javax.swing.JTable();
 
         jPanel20.setBackground(new java.awt.Color(255, 255, 255));
         jPanel20.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
@@ -130,7 +154,7 @@ public class ManageSubject extends javax.swing.JPanel {
 
         jPanel22.setBackground(new java.awt.Color(255, 255, 255));
 
-        jTable4.setModel(new javax.swing.table.DefaultTableModel(
+        tbSubject.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -141,9 +165,9 @@ public class ManageSubject extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jTable4.setGridColor(new java.awt.Color(0, 0, 0));
-        jTable4.setSelectionBackground(new java.awt.Color(51, 204, 255));
-        jScrollPane4.setViewportView(jTable4);
+        tbSubject.setGridColor(new java.awt.Color(0, 0, 0));
+        tbSubject.setSelectionBackground(new java.awt.Color(51, 204, 255));
+        jScrollPane4.setViewportView(tbSubject);
 
         javax.swing.GroupLayout jPanel22Layout = new javax.swing.GroupLayout(jPanel22);
         jPanel22.setLayout(jPanel22Layout);
@@ -232,7 +256,10 @@ public class ManageSubject extends javax.swing.JPanel {
     }//GEN-LAST:event_rSButtonMetro16MouseExited
 
     private void rSButtonMetro16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro16ActionPerformed
-        // TODO add your handling code here:
+        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+        FrmDialogSubject fsub = new FrmDialogSubject(frame, true);
+        fsub.setVisible(true);
+        load_data();
     }//GEN-LAST:event_rSButtonMetro16ActionPerformed
 
 
@@ -243,10 +270,10 @@ public class ManageSubject extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel21;
     private javax.swing.JPanel jPanel22;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JTable jTable4;
     private rojerusan.RSButtonMetro rSButtonMetro13;
     private rojerusan.RSButtonMetro rSButtonMetro14;
     private rojerusan.RSButtonMetro rSButtonMetro15;
     private rojerusan.RSButtonMetro rSButtonMetro16;
+    private javax.swing.JTable tbSubject;
     // End of variables declaration//GEN-END:variables
 }

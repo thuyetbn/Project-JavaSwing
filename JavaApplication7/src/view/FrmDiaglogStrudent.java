@@ -5,6 +5,22 @@
  */
 package view;
 
+import DAO.AccountDAO;
+import DAO.ClassDAO;
+import DAO.KhoaHocDAO;
+import DAO.StudentDAO;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import model.Account;
+import model.Class;
+import model.KhoaHoc;
+import model.Student;
+
 /**
  *
  * @author BinDz
@@ -18,6 +34,9 @@ public class FrmDiaglogStrudent extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         setLocationRelativeTo(null);
+        loadcombobox();
+        loadkhoahoc();
+        setMaSV();
     }
 
     /**
@@ -30,19 +49,21 @@ public class FrmDiaglogStrudent extends javax.swing.JDialog {
     private void initComponents() {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
+        buttonGroup2 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
-        jTextField5 = new javax.swing.JTextField();
-        jTextField6 = new javax.swing.JTextField();
-        jRadioButton2 = new javax.swing.JRadioButton();
+        txtMaSV = new javax.swing.JTextField();
+        txtName = new javax.swing.JTextField();
+        txtPhone = new javax.swing.JTextField();
+        txtEmail = new javax.swing.JTextField();
+        txtAddress = new javax.swing.JTextField();
+        gender = new javax.swing.JRadioButton();
         jRadioButton3 = new javax.swing.JRadioButton();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jComboBox2 = new javax.swing.JComboBox<>();
-        jDatePicker1 = new org.jdatepicker.JDatePicker();
-        jComboBox3 = new javax.swing.JComboBox<>();
+        khoaHoc = new javax.swing.JComboBox<>();
+        className = new javax.swing.JComboBox<>();
+        jDateStudent = new com.toedter.calendar.JDateChooser();
+        jRadioButton1 = new javax.swing.JRadioButton();
+        Status = new javax.swing.JRadioButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -59,6 +80,7 @@ public class FrmDiaglogStrudent extends javax.swing.JDialog {
         rSButtonMetro4 = new rojerusan.RSButtonMetro();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Thêm sinh viên");
         setBackground(new java.awt.Color(255, 255, 255));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -68,39 +90,52 @@ public class FrmDiaglogStrudent extends javax.swing.JDialog {
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jTextField2.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-        jPanel2.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -5, 340, 20));
+        txtMaSV.setEditable(false);
+        txtMaSV.setBackground(new java.awt.Color(255, 255, 255));
+        txtMaSV.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+        jPanel2.add(txtMaSV, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -5, 340, 20));
 
-        jTextField3.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-        jPanel2.add(jTextField3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 25, 340, 20));
+        txtName.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+        jPanel2.add(txtName, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 25, 340, 20));
 
-        jTextField4.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-        jPanel2.add(jTextField4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 55, 340, 20));
+        txtPhone.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+        jPanel2.add(txtPhone, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 55, 340, 20));
 
-        jTextField5.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-        jPanel2.add(jTextField5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 85, 340, 20));
+        txtEmail.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+        jPanel2.add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 85, 340, 20));
 
-        jTextField6.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-        jPanel2.add(jTextField6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 115, 340, 20));
+        txtAddress.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+        jPanel2.add(txtAddress, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 115, 340, 20));
 
-        jRadioButton2.setBackground(new java.awt.Color(255, 255, 255));
-        buttonGroup1.add(jRadioButton2);
-        jRadioButton2.setSelected(true);
-        jRadioButton2.setText("Nam");
-        jPanel2.add(jRadioButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 180, -1, 20));
+        gender.setBackground(new java.awt.Color(255, 255, 255));
+        buttonGroup1.add(gender);
+        gender.setSelected(true);
+        gender.setText("Nam");
+        jPanel2.add(gender, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 180, -1, 20));
 
         jRadioButton3.setBackground(new java.awt.Color(255, 255, 255));
         buttonGroup1.add(jRadioButton3);
         jRadioButton3.setText("Nữ");
         jPanel2.add(jRadioButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 180, -1, -1));
 
-        jComboBox1.setToolTipText("");
-        jPanel2.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 270, 340, -1));
+        khoaHoc.setToolTipText("");
+        jPanel2.add(khoaHoc, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 270, 340, -1));
 
-        jPanel2.add(jComboBox2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 210, 340, -1));
-        jPanel2.add(jDatePicker1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 340, -1));
+        jPanel2.add(className, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 240, 340, -1));
 
-        jPanel2.add(jComboBox3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 240, 340, -1));
+        jDateStudent.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.add(jDateStudent, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 140, 340, 30));
+
+        jRadioButton1.setBackground(new java.awt.Color(255, 255, 255));
+        buttonGroup2.add(jRadioButton1);
+        jRadioButton1.setText("Đã tốt nghiệp");
+        jPanel2.add(jRadioButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 210, -1, -1));
+
+        Status.setBackground(new java.awt.Color(255, 255, 255));
+        buttonGroup2.add(Status);
+        Status.setSelected(true);
+        Status.setText("Đang theo học");
+        jPanel2.add(Status, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 210, -1, -1));
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 60, 340, 330));
 
@@ -113,23 +148,23 @@ public class FrmDiaglogStrudent extends javax.swing.JDialog {
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel3.setText("Tên sinh viên:");
-        jPanel3.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, -1, -1));
+        jPanel3.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 25, -1, 20));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel4.setText("Số điện thoại:");
-        jPanel3.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, -1, -1));
+        jPanel3.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 55, -1, 20));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel5.setText("Email:");
-        jPanel3.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 90, -1, -1));
+        jPanel3.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 85, -1, 20));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel6.setText("Khoá học:");
-        jPanel3.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 270, -1, -1));
+        jPanel3.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 270, -1, 20));
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel7.setText("Địa chỉ:");
-        jPanel3.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 120, -1, -1));
+        jPanel3.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 110, -1, 30));
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel8.setText("Ngày sinh:");
@@ -137,20 +172,25 @@ public class FrmDiaglogStrudent extends javax.swing.JDialog {
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel9.setText("Giới tính:");
-        jPanel3.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 180, -1, -1));
+        jPanel3.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 180, -1, 30));
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel10.setText("Trạng thái:");
-        jPanel3.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 210, -1, -1));
+        jPanel3.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 210, -1, 20));
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel11.setText("Lớp học:");
-        jPanel3.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 240, -1, -1));
+        jPanel3.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 240, -1, 20));
 
         jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 90, 290));
 
         rSButtonMetro3.setBackground(new java.awt.Color(51, 204, 255));
         rSButtonMetro3.setText("Thêm");
+        rSButtonMetro3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rSButtonMetro3ActionPerformed(evt);
+            }
+        });
         jPanel1.add(rSButtonMetro3, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 390, 140, 50));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
@@ -161,12 +201,111 @@ public class FrmDiaglogStrudent extends javax.swing.JDialog {
 
         rSButtonMetro4.setBackground(new java.awt.Color(51, 204, 255));
         rSButtonMetro4.setText("Cập nhật");
+        rSButtonMetro4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rSButtonMetro4ActionPerformed(evt);
+            }
+        });
         jPanel1.add(rSButtonMetro4, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 390, 140, 50));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 470, 460));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    List<KhoaHoc> lk;
+    List<Class> lc;
+    List<Student> ls;
+
+    private void loadcombobox() {
+        DefaultComboBoxModel dcm = new DefaultComboBoxModel();
+
+        ClassDAO cd = new ClassDAO();
+        lc = cd.getAllClass();
+        for (Class c : lc) {
+            dcm.addElement(c.getName());
+        }
+        className.setModel(dcm);
+
+    }
+
+    private void loadkhoahoc() {
+        DefaultComboBoxModel dcm2 = new DefaultComboBoxModel();
+        KhoaHocDAO kh = new KhoaHocDAO();
+        lk = kh.getAllKhoaHoc();
+        for (KhoaHoc k : lk) {
+            dcm2.addElement(k.getName());
+        }
+        khoaHoc.setModel(dcm2);
+    }
+
+    private boolean check_Mail_Phone(String mail, String phone) {
+        StudentDAO sd = new StudentDAO();
+        ls = sd.getAllStudent();
+        boolean check = false;
+        for (Student t : ls) {
+            if (t.getPhone().equals(phone) || t.getEmail().equals(mail)) {
+                check = true;
+            }
+        }
+        return check;
+    }
+
+    private void setMaSV() {
+        StudentDAO sd = new StudentDAO();
+        ls = sd.getAllStudent();
+        int i = ls.size();
+        String masv = ls.get(i-1).getMaSV().toString();
+        masv =masv.substring(1);
+        int id = (Integer.parseInt(masv))+1;
+        txtMaSV.setText("B"+String.format("%03d",id));
+    }
+
+    private void rSButtonMetro3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro3ActionPerformed
+        String regex_Phone = "^0[0-9]{9,10}$";
+
+        String new_masv = txtMaSV.getText();
+        String new_name = txtName.getText();
+        String new_phone = txtPhone.getText();
+        String new_email = txtEmail.getText();
+        String new_address = txtAddress.getText();
+        String birthday = String.valueOf(new SimpleDateFormat("yyyy/MM/dd").format(jDateStudent.getDate()));
+        int new_gender;
+        if (gender.isSelected()) {
+            new_gender = 0;
+        } else {
+            new_gender = 1;
+        }
+        
+        int new_class_id = lc.get(className.getSelectedIndex()).getId();
+        
+        int new_status;
+        if (Status.isSelected()) {
+            new_status = 0;
+        } else {
+            new_status = 1;
+        }
+        if (new_name.length() == 0 || new_phone.length() == 0 || new_email.length() == 0 || new_address.length() == 0) {
+            JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ thông tin vào các trường để tiến hành thêm mới");
+        } else if (new_phone.length() > 11 || new_phone.length() < 10 || regex_Phone.matches(new_phone)) {
+            JOptionPane.showMessageDialog(null, "Vui lòng điển đúng số điện thoại để tiếp tục!");
+        } else if (check_Mail_Phone(new_email, new_phone)) {
+            JOptionPane.showMessageDialog(null, "Email hoặc Số điện thoại đã được sử dụng!");
+        } else {
+            Student new_Student = new Student(new_masv, new_name, new_phone, new_email, new_address, birthday, new_gender, new_status, new_class_id);
+            StudentDAO SC = new StudentDAO();
+            if (SC.addStudent(new_Student) == 1) {
+                JOptionPane.showMessageDialog(null, "Bạn đã thêm học sinh mới thành công");
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(null, "Đã có lỗi xảy ra, vui lòng kiểm tra lại");
+            }
+        }
+    }//GEN-LAST:event_rSButtonMetro3ActionPerformed
+
+    private void rSButtonMetro4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro4ActionPerformed
+
+    }//GEN-LAST:event_rSButtonMetro4ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -211,11 +350,12 @@ public class FrmDiaglogStrudent extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JRadioButton Status;
     private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JComboBox<String> jComboBox3;
-    private org.jdatepicker.JDatePicker jDatePicker1;
+    private javax.swing.ButtonGroup buttonGroup2;
+    private javax.swing.JComboBox<String> className;
+    private javax.swing.JRadioButton gender;
+    private com.toedter.calendar.JDateChooser jDateStudent;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -230,14 +370,15 @@ public class FrmDiaglogStrudent extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JRadioButton jRadioButton2;
+    private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButton jRadioButton3;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
+    private javax.swing.JComboBox<String> khoaHoc;
     private rojerusan.RSButtonMetro rSButtonMetro3;
     private rojerusan.RSButtonMetro rSButtonMetro4;
+    private javax.swing.JTextField txtAddress;
+    private javax.swing.JTextField txtEmail;
+    private javax.swing.JTextField txtMaSV;
+    private javax.swing.JTextField txtName;
+    private javax.swing.JTextField txtPhone;
     // End of variables declaration//GEN-END:variables
 }

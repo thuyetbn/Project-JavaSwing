@@ -5,23 +5,46 @@
  */
 package view;
 
+import DAO.AccountDAO;
+import DAO.StudentDAO;
 import java.awt.Color;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.List;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableModel;
+import model.Student;
 
 /**
  *
  * @author BinDz
  */
 public class ManageStudent extends javax.swing.JPanel {
-
+    Student st;
+    List<Student> liststudent;
     /**
      * Creates new form ManageStudent
      */
     public ManageStudent() {
         initComponents();
+        load_data();
     }
-
+    private void load_data() {
+        StudentDAO ad = new StudentDAO();
+        liststudent = ad.getAllStudent();
+        String columns[] = {"STT","Mã SV", "Tên", "Số điện thoại", "Email", "Address", "Ngày sinh", "Giới tính", "Trạng thái","Lớp học"};
+        DefaultTableModel dtm = new DefaultTableModel(columns, 0);
+        DateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        Integer i = 1;
+        for (Student a : liststudent) {
+            dtm.addRow(new Object[]{i,a.getMaSV() ,a.getName(), a.getPhone(), a.getEmail(), a.getAddress(), a.getBirthday(), a.getGender()== 0 ?"Nam":"Nữ", a.getStatus() == 0 ? "Đang theo học" : "Đã nghỉ",a.getClass_name()});
+            i++;
+        }
+        tbStudent.setModel(dtm);
+        tbStudent.setRowHeight(25);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -41,7 +64,7 @@ public class ManageStudent extends javax.swing.JPanel {
         jLabel9 = new javax.swing.JLabel();
         jPanel19 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable3 = new javax.swing.JTable();
+        tbStudent = new javax.swing.JTable();
 
         jPanel17.setBackground(new java.awt.Color(255, 255, 255));
         jPanel17.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
@@ -60,6 +83,11 @@ public class ManageStudent extends javax.swing.JPanel {
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 rSButtonMetro9MouseExited(evt);
+            }
+        });
+        rSButtonMetro9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rSButtonMetro9ActionPerformed(evt);
             }
         });
         jPanel17.add(rSButtonMetro9, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 2, 120, 116));
@@ -94,6 +122,11 @@ public class ManageStudent extends javax.swing.JPanel {
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 rSButtonMetro11MouseExited(evt);
+            }
+        });
+        rSButtonMetro11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rSButtonMetro11ActionPerformed(evt);
             }
         });
         jPanel17.add(rSButtonMetro11, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 2, 120, 116));
@@ -132,7 +165,7 @@ public class ManageStudent extends javax.swing.JPanel {
 
         jPanel19.setBackground(new java.awt.Color(255, 255, 255));
 
-        jTable3.setModel(new javax.swing.table.DefaultTableModel(
+        tbStudent.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -143,9 +176,9 @@ public class ManageStudent extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jTable3.setGridColor(new java.awt.Color(0, 0, 0));
-        jTable3.setSelectionBackground(new java.awt.Color(51, 204, 255));
-        jScrollPane3.setViewportView(jTable3);
+        tbStudent.setGridColor(new java.awt.Color(0, 0, 0));
+        tbStudent.setSelectionBackground(new java.awt.Color(51, 204, 255));
+        jScrollPane3.setViewportView(tbStudent);
 
         javax.swing.GroupLayout jPanel19Layout = new javax.swing.GroupLayout(jPanel19);
         jPanel19.setLayout(jPanel19Layout);
@@ -237,7 +270,32 @@ public class ManageStudent extends javax.swing.JPanel {
         JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
         FrmDiaglogStrudent facc = new FrmDiaglogStrudent(frame, true);
         facc.setVisible(true);
+        load_data();
     }//GEN-LAST:event_rSButtonMetro12ActionPerformed
+
+    private void rSButtonMetro11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro11ActionPerformed
+        int pos = tbStudent.getSelectedRow();
+        if (pos < 0) {
+            pos = 0;
+        }
+        int id = liststudent.get(pos).getId();
+        String name = liststudent.get(pos).getName();
+        StudentDAO sd = new StudentDAO();
+        int choose = JOptionPane.showConfirmDialog(null, "Bạn chắc chắn muốn xoá "+name+" chứ!","Xoá "+name,JOptionPane.YES_NO_OPTION);
+       
+        if(choose == JOptionPane.YES_OPTION){
+            sd.delete(id);
+            JOptionPane.showMessageDialog(null,"Đã Xoá "+name);
+            load_data();
+        }
+    }//GEN-LAST:event_rSButtonMetro11ActionPerformed
+
+    private void rSButtonMetro9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro9ActionPerformed
+        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+        FrmDiaglogStrudent facc = new FrmDiaglogStrudent(frame, true);
+        facc.setVisible(true);
+        load_data();
+    }//GEN-LAST:event_rSButtonMetro9ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -247,10 +305,10 @@ public class ManageStudent extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel18;
     private javax.swing.JPanel jPanel19;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTable jTable3;
     private rojerusan.RSButtonMetro rSButtonMetro10;
     private rojerusan.RSButtonMetro rSButtonMetro11;
     private rojerusan.RSButtonMetro rSButtonMetro12;
     private rojerusan.RSButtonMetro rSButtonMetro9;
+    private javax.swing.JTable tbStudent;
     // End of variables declaration//GEN-END:variables
 }

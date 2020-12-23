@@ -7,9 +7,12 @@ package view;
 
 import DAO.AccountDAO;
 import java.awt.Color;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Vector;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -39,14 +42,34 @@ public class ManageAccount extends javax.swing.JPanel {
     private void load_data() {
         AccountDAO ad = new AccountDAO();
         listacc = ad.getAllAccount1();
-        String columns[] = {"Tên","Số điện thoại","Email","Address","Ngày sinh","Chức vụ","Trạng thái"};
+        String columns[] = {"STT", "Tên", "Số điện thoại", "Email", "Address", "Ngày sinh", "Chức vụ", "Trạng thái"};
         DefaultTableModel dtm = new DefaultTableModel(columns, 0);
-        for(Account a : listacc){
-            dtm.addRow(new Object[]{a.getName(),a.getPhone(),a.getEmail(),a.getAddress(),a.getBirthday(),a.getRolde_Name(),a.getStatus() == 0 ? "Đang giảng dạy" : "Đã nghỉ"});
+        DateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        Integer i = 1;
+        for (Account a : listacc) {
+            dtm.addRow(new Object[]{i, a.getName(), a.getPhone(), a.getEmail(), a.getAddress(), a.getBirthday(), a.getRolde_Name(), a.getStatus() == 0 ? "Đang giảng dạy" : "Đã nghỉ"});
+            i++;
         }
         tbAccount.setModel(dtm);
+        tbAccount.setRowHeight(25);
+        if (listacc.size() > 0) {
+            tbAccount.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+                @Override
+                public void valueChanged(ListSelectionEvent lse) {
+                    int pos = tbAccount.getSelectedRow();
+                    if (pos < 0) {
+                        pos = 0;
+                    }
+
+                    account = listacc.get(pos);
+                }
+            });
+        }
     }
 
+   
+
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -64,6 +87,7 @@ public class ManageAccount extends javax.swing.JPanel {
         rSButtonMetro8 = new rojerusan.RSButtonMetro();
         jPanel9 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
+        rSButtonMetro9 = new rojerusan.RSButtonMetro();
         jPanel10 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbAccount = new javax.swing.JTable();
@@ -78,6 +102,7 @@ public class ManageAccount extends javax.swing.JPanel {
         rSButtonMetro5.setText("Sửa");
         rSButtonMetro5.setBorderPainted(false);
         rSButtonMetro5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        rSButtonMetro5.setPreferredSize(new java.awt.Dimension(100, 100));
         rSButtonMetro5.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         rSButtonMetro5.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -87,14 +112,20 @@ public class ManageAccount extends javax.swing.JPanel {
                 rSButtonMetro5MouseExited(evt);
             }
         });
-        jPanel8.add(rSButtonMetro5, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 2, 120, 116));
+        rSButtonMetro5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rSButtonMetro5ActionPerformed(evt);
+            }
+        });
+        jPanel8.add(rSButtonMetro5, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 20, 70, 70));
 
         rSButtonMetro6.setBackground(new java.awt.Color(255, 255, 255));
         rSButtonMetro6.setForeground(new java.awt.Color(0, 0, 0));
-        rSButtonMetro6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_search_more_50px_1.png"))); // NOI18N
-        rSButtonMetro6.setText("Tìm kiếm");
+        rSButtonMetro6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_refresh_50px.png"))); // NOI18N
+        rSButtonMetro6.setText("Refresh");
         rSButtonMetro6.setBorderPainted(false);
         rSButtonMetro6.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        rSButtonMetro6.setPreferredSize(new java.awt.Dimension(100, 100));
         rSButtonMetro6.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         rSButtonMetro6.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -104,7 +135,12 @@ public class ManageAccount extends javax.swing.JPanel {
                 rSButtonMetro6MouseExited(evt);
             }
         });
-        jPanel8.add(rSButtonMetro6, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 2, 120, 116));
+        rSButtonMetro6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rSButtonMetro6ActionPerformed(evt);
+            }
+        });
+        jPanel8.add(rSButtonMetro6, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 20, 70, 70));
 
         rSButtonMetro7.setBackground(new java.awt.Color(255, 255, 255));
         rSButtonMetro7.setForeground(new java.awt.Color(0, 0, 0));
@@ -112,6 +148,7 @@ public class ManageAccount extends javax.swing.JPanel {
         rSButtonMetro7.setText("Xoá");
         rSButtonMetro7.setBorderPainted(false);
         rSButtonMetro7.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        rSButtonMetro7.setPreferredSize(new java.awt.Dimension(100, 100));
         rSButtonMetro7.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         rSButtonMetro7.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -121,7 +158,12 @@ public class ManageAccount extends javax.swing.JPanel {
                 rSButtonMetro7MouseExited(evt);
             }
         });
-        jPanel8.add(rSButtonMetro7, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 2, 120, 116));
+        rSButtonMetro7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rSButtonMetro7ActionPerformed(evt);
+            }
+        });
+        jPanel8.add(rSButtonMetro7, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 20, 70, 70));
 
         rSButtonMetro8.setBackground(new java.awt.Color(255, 255, 255));
         rSButtonMetro8.setForeground(new java.awt.Color(0, 0, 0));
@@ -129,6 +171,7 @@ public class ManageAccount extends javax.swing.JPanel {
         rSButtonMetro8.setText("Thêm");
         rSButtonMetro8.setBorderPainted(false);
         rSButtonMetro8.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        rSButtonMetro8.setPreferredSize(new java.awt.Dimension(100, 100));
         rSButtonMetro8.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         rSButtonMetro8.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -143,7 +186,7 @@ public class ManageAccount extends javax.swing.JPanel {
                 rSButtonMetro8ActionPerformed(evt);
             }
         });
-        jPanel8.add(rSButtonMetro8, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 2, 120, 116));
+        jPanel8.add(rSButtonMetro8, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 20, 70, 70));
 
         jPanel9.setBackground(new java.awt.Color(255, 255, 255));
         jPanel9.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -151,9 +194,32 @@ public class ManageAccount extends javax.swing.JPanel {
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 20)); // NOI18N
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_content_50px.png"))); // NOI18N
         jLabel6.setText("Quản lý tài khoản");
-        jPanel9.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 1, 260, 110));
+        jPanel9.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 1, 240, 110));
 
         jPanel8.add(jPanel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 2, 260, 110));
+
+        rSButtonMetro9.setBackground(new java.awt.Color(255, 255, 255));
+        rSButtonMetro9.setForeground(new java.awt.Color(0, 0, 0));
+        rSButtonMetro9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_search_more_50px_1.png"))); // NOI18N
+        rSButtonMetro9.setText("Tìm kiếm");
+        rSButtonMetro9.setBorderPainted(false);
+        rSButtonMetro9.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        rSButtonMetro9.setPreferredSize(new java.awt.Dimension(100, 100));
+        rSButtonMetro9.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        rSButtonMetro9.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                rSButtonMetro9MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                rSButtonMetro9MouseExited(evt);
+            }
+        });
+        rSButtonMetro9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rSButtonMetro9ActionPerformed(evt);
+            }
+        });
+        jPanel8.add(rSButtonMetro9, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 20, 80, 70));
 
         jPanel10.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -168,6 +234,8 @@ public class ManageAccount extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tbAccount.setGridColor(new java.awt.Color(0, 0, 0));
+        tbAccount.setSelectionBackground(new java.awt.Color(51, 204, 255));
         jScrollPane1.setViewportView(tbAccount);
 
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
@@ -254,9 +322,54 @@ public class ManageAccount extends javax.swing.JPanel {
 
     private void rSButtonMetro8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro8ActionPerformed
         JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
-        FrmDiaglogAccount facc = new FrmDiaglogAccount(frame, true);
+        FrmDiaglogAccount facc = new FrmDiaglogAccount(frame, true,null);
         facc.setVisible(true);
+        load_data();
     }//GEN-LAST:event_rSButtonMetro8ActionPerformed
+
+    private void rSButtonMetro7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro7ActionPerformed
+        int pos = tbAccount.getSelectedRow();
+        if (pos < 0) {
+            pos = 0;
+        }
+        int id = listacc.get(pos).getId();
+        String name = listacc.get(pos).getName();
+        AccountDAO ad = new AccountDAO();
+        int choose = JOptionPane.showConfirmDialog(null, "Bạn chắc chắn muốn xoá " + name + " chứ!", "Xoá " + name, JOptionPane.YES_NO_OPTION);
+
+        if (choose == JOptionPane.YES_OPTION) {
+            ad.delete(id);
+            JOptionPane.showMessageDialog(null, "Đã xoá " + name);
+            load_data();
+        }
+    }//GEN-LAST:event_rSButtonMetro7ActionPerformed
+
+    private void rSButtonMetro9MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSButtonMetro9MouseEntered
+        rSButtonMetro9.setBackground(new Color(85, 159, 213));
+    }//GEN-LAST:event_rSButtonMetro9MouseEntered
+
+    private void rSButtonMetro9MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSButtonMetro9MouseExited
+        rSButtonMetro9.setBackground(new Color(255, 255, 255));
+    }//GEN-LAST:event_rSButtonMetro9MouseExited
+
+    private void rSButtonMetro6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro6ActionPerformed
+        load_data();
+    }//GEN-LAST:event_rSButtonMetro6ActionPerformed
+
+    private void rSButtonMetro5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro5ActionPerformed
+        
+        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+        FrmDiaglogAccount facc = new FrmDiaglogAccount(frame, true,account);
+        facc.setVisible(true);
+        load_data();
+    }//GEN-LAST:event_rSButtonMetro5ActionPerformed
+
+    private void rSButtonMetro9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro9ActionPerformed
+        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+        FrmFind ff = new FrmFind(frame, true);
+        ff.setVisible(true);
+
+    }//GEN-LAST:event_rSButtonMetro9ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -270,6 +383,7 @@ public class ManageAccount extends javax.swing.JPanel {
     private rojerusan.RSButtonMetro rSButtonMetro6;
     private rojerusan.RSButtonMetro rSButtonMetro7;
     private rojerusan.RSButtonMetro rSButtonMetro8;
+    private rojerusan.RSButtonMetro rSButtonMetro9;
     private javax.swing.JTable tbAccount;
     // End of variables declaration//GEN-END:variables
 }

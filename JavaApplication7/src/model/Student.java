@@ -5,48 +5,46 @@
  */
 package model;
 
-import java.sql.Date;
-
 /**
  *
  * @author BinDz
  */
-public class Account {
-
+public class Student {
     private int id;
+    private String MaSV;
     private String Name;
     private String Phone;
     private String Email;
-    private String Password;
     private String Address;
     private String Birthday;
+    private int Gender;
     private int Status;
-    private int Role_ID;
-    private String Rolde_Name;
-
-    public Account(int id, String Name, String Phone, String Email, String Password, String Address, String Birthday, int Status, int Role_ID, String Rolde_Name) {
+    private int Class_ID;
+    private String Class_name;
+    
+    public Student(int id, String MaSV, String Name, String Phone, String Email, String Address, String Birthday, int Gender, int Status, int Class_ID,String Class_name) {
         this.id = id;
+        this.MaSV = MaSV;
         this.Name = Name;
         this.Phone = Phone;
         this.Email = Email;
-        this.Password = Password;
         this.Address = Address;
         this.Birthday = Birthday;
+        this.Gender = Gender;
         this.Status = Status;
-        this.Role_ID = Role_ID;
-        this.Rolde_Name = Rolde_Name;
+        this.Class_ID = Class_ID;
+        this.Class_name = Class_name;
     }
-
-    public Account( String Name, String Phone, String Email, String Password, String Address, String Birthday, int Status, int Role_ID, String Rolde_Name) {
+    public Student( String MaSV, String Name, String Phone, String Email, String Address, String Birthday, int Gender, int Status, int Class_ID) {
+        this.MaSV = MaSV;
         this.Name = Name;
         this.Phone = Phone;
         this.Email = Email;
-        this.Password = Password;
         this.Address = Address;
         this.Birthday = Birthday;
+        this.Gender = Gender;
         this.Status = Status;
-        this.Role_ID = Role_ID;
-        this.Rolde_Name = Rolde_Name;
+        this.Class_ID = Class_ID;
     }
 
     public int getId() {
@@ -55,6 +53,14 @@ public class Account {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getMaSV() {
+        return MaSV;
+    }
+
+    public void setMaSV(String MaSV) {
+        this.MaSV = MaSV;
     }
 
     public String getName() {
@@ -81,14 +87,6 @@ public class Account {
         this.Email = Email;
     }
 
-    public String getPassword() {
-        return Password;
-    }
-
-    public void setPassword(String Password) {
-        this.Password = Password;
-    }
-
     public String getAddress() {
         return Address;
     }
@@ -105,6 +103,14 @@ public class Account {
         this.Birthday = Birthday;
     }
 
+    public int getGender() {
+        return Gender;
+    }
+
+    public void setGender(int Gender) {
+        this.Gender = Gender;
+    }
+
     public int getStatus() {
         return Status;
     }
@@ -113,25 +119,27 @@ public class Account {
         this.Status = Status;
     }
 
-    public int getRole_ID() {
-        return Role_ID;
+    public int getClass_ID() {
+        return Class_ID;
     }
 
-    public void setRole_ID(int Role_ID) {
-        this.Role_ID = Role_ID;
+    public void setClass_ID(int Class_ID) {
+        this.Class_ID = Class_ID;
     }
 
-    public String getRolde_Name() {
-        return Rolde_Name;
+    public String getClass_name() {
+        return Class_name;
     }
 
-    public void setRolde_Name(String Rolde_Name) {
-        this.Rolde_Name = Rolde_Name;
+    public void setClass_name(String Class_name) {
+        this.Class_name = Class_name;
     }
+    
 
     @Override
     public String toString() {
-        return "Account{" + "id=" + id + ", Name=" + Name + ", Phone=" + Phone + ", Email=" + Email + ", Password=" + Password + ", Address=" + Address + ", Birthday=" + Birthday + ", Status=" + Status + ", Role_ID=" + Role_ID + ", Rolde_Name=" + Rolde_Name + '}';
+        return "Student{" + "id=" + id + ", MaSV=" + MaSV + ", Name=" + Name + ", Phone=" + Phone + ", Email=" + Email + ", Address=" + Address + ", Birthday=" + Birthday + ", Gender=" + Gender + ", Status=" + Status + ", Class_ID=" + Class_ID + '}';
     }
-
+    
+    
 }

@@ -19,6 +19,14 @@ import model.Account;
 import DAO.AccountDAO;
 import javax.swing.DefaultComboBoxModel;
 import DAO.RoleDAO;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableModel;
 import model.Role;
 
 /**
@@ -32,14 +40,18 @@ public class FrmDiaglogAccount extends javax.swing.JDialog {
     /**
      * Creates new form FrmDiaglogAccount
      */
-    public FrmDiaglogAccount(java.awt.Frame parent, boolean modal) {
+    public FrmDiaglogAccount(java.awt.Frame parent, boolean modal,Account account) {
         super(parent, modal);
         initComponents();
+        AccountDAO ad = new AccountDAO();
+        this.account = account;
         setLocationRelativeTo(null);
         fillCombobox();
+        initData();
     }
     Account account;
     List<Role> lr;
+    List<Account> la;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -65,19 +77,20 @@ public class FrmDiaglogAccount extends javax.swing.JDialog {
         txtName = new javax.swing.JTextField();
         txtPhone = new javax.swing.JTextField();
         txtMail = new javax.swing.JTextField();
-        jCheckBox2 = new javax.swing.JCheckBox();
         txtAddress = new javax.swing.JTextField();
-        txtBirthday = new org.jdatepicker.JDatePicker();
         rdStatus = new javax.swing.JRadioButton();
         jRadioButton2 = new javax.swing.JRadioButton();
         cbRole = new javax.swing.JComboBox<>();
+        jCheckBox2 = new javax.swing.JCheckBox();
         txtPassword = new javax.swing.JPasswordField();
+        jDateChooser = new com.toedter.calendar.JDateChooser();
         jLabel9 = new javax.swing.JLabel();
         rSButtonMetro1 = new rojerusan.RSButtonMetro();
         rSButtonMetro2 = new rojerusan.RSButtonMetro();
         jPanel1 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Thêm tài khoản giáo viên");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
@@ -130,8 +143,8 @@ public class FrmDiaglogAccount extends javax.swing.JDialog {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -157,23 +170,17 @@ public class FrmDiaglogAccount extends javax.swing.JDialog {
 
         txtMail.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
 
-        jCheckBox2.setBackground(new java.awt.Color(255, 255, 255));
-        jCheckBox2.setText("Show");
-        jCheckBox2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jCheckBox2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jCheckBox2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jCheckBox2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox2ActionPerformed(evt);
-            }
-        });
-
         txtAddress.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
 
         rdStatus.setBackground(new java.awt.Color(255, 255, 255));
         buttonGroup1.add(rdStatus);
         rdStatus.setSelected(true);
         rdStatus.setText("Đang giảng dạy");
+        rdStatus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdStatusActionPerformed(evt);
+            }
+        });
 
         jRadioButton2.setBackground(new java.awt.Color(255, 255, 255));
         buttonGroup1.add(jRadioButton2);
@@ -185,7 +192,20 @@ public class FrmDiaglogAccount extends javax.swing.JDialog {
             }
         });
 
+        jCheckBox2.setBackground(new java.awt.Color(255, 255, 255));
+        jCheckBox2.setText("Show");
+        jCheckBox2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jCheckBox2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jCheckBox2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jCheckBox2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox2ActionPerformed(evt);
+            }
+        });
+
         txtPassword.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+
+        jDateChooser.setBackground(new java.awt.Color(255, 255, 255));
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -196,44 +216,42 @@ public class FrmDiaglogAccount extends javax.swing.JDialog {
             .addComponent(txtMail)
             .addComponent(txtAddress)
             .addComponent(cbRole, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(txtBirthday, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jDateChooser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addComponent(rdStatus)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jRadioButton2)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(2, 2, 2)
-                .addComponent(jCheckBox2)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(2, 2, 2)
+                        .addComponent(jCheckBox2))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addComponent(rdStatus)
+                        .addGap(18, 18, 18)
+                        .addComponent(jRadioButton2)))
+                .addGap(0, 2, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(txtPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtMail, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtMail, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGap(11, 11, 11)
-                        .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGap(0, 0, 0)
-                        .addComponent(jCheckBox2)))
-                .addGap(0, 0, 0)
-                .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(txtBirthday, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jCheckBox2)
+                    .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jDateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(rdStatus)
                     .addComponent(jRadioButton2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(cbRole, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(45, Short.MAX_VALUE))
+                .addGap(13, 13, 13)
+                .addComponent(cbRole, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(19, Short.MAX_VALUE))
         );
 
         jPanel2.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 50, 290, 290));
@@ -250,16 +268,21 @@ public class FrmDiaglogAccount extends javax.swing.JDialog {
                 rSButtonMetro1ActionPerformed(evt);
             }
         });
-        jPanel2.add(rSButtonMetro1, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 350, 110, 40));
+        jPanel2.add(rSButtonMetro1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 340, 180, 50));
 
         rSButtonMetro2.setBackground(new java.awt.Color(51, 204, 255));
         rSButtonMetro2.setText("Thêm");
+        rSButtonMetro2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                rSButtonMetro2MouseClicked(evt);
+            }
+        });
         rSButtonMetro2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rSButtonMetro2ActionPerformed(evt);
             }
         });
-        jPanel2.add(rSButtonMetro2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 350, 110, 40));
+        jPanel2.add(rSButtonMetro2, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 340, 180, 50));
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 405, 410));
 
@@ -270,23 +293,140 @@ public class FrmDiaglogAccount extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    private void initData(){
+        if (account != null) {
+            rSButtonMetro2.setVisible(false);
+            txtName.setText(account.getName());
+            txtPhone.setText(account.getPhone());
+            txtMail.setText(account.getEmail());
+            txtPassword.setText(account.getPassword());
+            txtAddress.setText(account.getAddress());
+            Date date = null;
+            try {
+                date = new SimpleDateFormat("yyyy-MM-dd").parse(account.getBirthday());
+            } catch (ParseException ex) {
+                Logger.getLogger(FrmDiaglogAccount.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            jDateChooser.setDate(date);
+            if(account.getStatus()== 0){
+                rdStatus.setSelected(true);
+            }else{
+                jRadioButton2.setSelected(true);
+            }
+            cbRole.setSelectedIndex((account.getRole_ID())-1); 
+        } else{
+            rSButtonMetro1.setVisible(false);
+        }
+    }
+    
     private void fillCombobox() {
         DefaultComboBoxModel dcm = new DefaultComboBoxModel();
-        RoleDAO rd = new RoleDAO(conn);
+        RoleDAO rd = new RoleDAO();
         lr = rd.get();
         for (Role r : lr) {
-           dcm.addElement(r.getName());
+            dcm.addElement(r.getName());
         }
         cbRole.setModel(dcm);
 
-
     }
+
+    private boolean check_Mail_Phone(String mail, String phone) {
+        AccountDAO ad = new AccountDAO();
+        la = ad.getAllAccount1();
+        boolean check = false;
+        for (Account t : la) {
+            if (t.getPhone().equals(phone) || t.getEmail().equals(mail)) {
+                check = true;
+            }
+        }
+        return check;
+    }
+
     private void rSButtonMetro2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro2ActionPerformed
-       
+        String regex_Phone = "^0[0-9]{9,10}$";
+        String new_name = txtName.getText();
+        String new_Phone = txtPhone.getText();
+        String new_Email = txtMail.getText();
+        String new_pass = String.valueOf(txtPassword.getPassword());
+        String new_Address = txtAddress.getText();
+
+        Date date = jDateChooser.getDate();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String new_birthday = sdf.format(date);
+
+        int selectRole = cbRole.getSelectedIndex();
+        int new_id_Role = lr.get(selectRole).getId();
+        
+        Integer new_status;
+        if(rdStatus.isSelected()){
+            new_status = 0;
+        }else{
+            new_status = 1;
+        }
+
+        
+        String new_role_name = cbRole.getSelectedItem().toString();
+
+        if (new_name.length() == 0 || new_Phone.length() == 0 || new_Email.length() == 0 || new_Address.length() == 0 || new_birthday.length() == 0) {
+            JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ thông tin vào các trường để tiến hành");
+        } else if (new_Phone.length() > 11 || new_Phone.length() < 10 || regex_Phone.matches(new_Phone)) {
+            JOptionPane.showMessageDialog(null, "Vui lòng nhập đúng số điện thoại để tiếp tục");
+        } else if (check_Mail_Phone(new_Email, new_Phone)) {
+            JOptionPane.showMessageDialog(null, "Số điện thoại hoặc Email đã được sử dụng!");
+        } else {
+            Account newTeacher = new Account(new_name, new_Phone, new_Email, new_pass, new_Address, new_birthday, new_status, new_id_Role, new_role_name);
+            AccountDAO ad = new AccountDAO();
+            if (ad.addAccount(newTeacher) == 1) {
+                JOptionPane.showMessageDialog(null, "Bạn đã thêm tài khoản thành công");
+                    dispose();
+            } else {
+                JOptionPane.showMessageDialog(null, "Đã có lỗi xảy ra! \nVui lòng kiểm tra lại Email hoặc SĐT");
+            }
+        }
     }//GEN-LAST:event_rSButtonMetro2ActionPerformed
 
     private void rSButtonMetro1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro1ActionPerformed
-        // TODO add your handling code here:
+        String regex_Phone = "^0[0-9]{9,10}$";
+        String new_name = txtName.getText();
+        String new_Phone = txtPhone.getText();
+        String new_Email = txtMail.getText();
+        String new_pass = String.valueOf(txtPassword.getPassword());
+        String new_Address = txtAddress.getText();
+        int new_id = account.getId();
+        Date date = jDateChooser.getDate();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String new_birthday = sdf.format(date);
+
+        int selectRole = cbRole.getSelectedIndex();
+        int new_id_Role = lr.get(selectRole).getId();
+        
+        Integer new_status;
+        if(rdStatus.isSelected()){
+            new_status = 0;
+        }else{
+            new_status = 1;
+        }
+
+        
+        String new_role_name = cbRole.getSelectedItem().toString();
+
+        if (new_name.length() == 0 || new_Phone.length() == 0 || new_Email.length() == 0 || new_Address.length() == 0 || new_birthday.length() == 0) {
+            JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ thông tin vào các trường để tiến hành");
+        } else if (new_Phone.length() > 11 || new_Phone.length() < 10 || regex_Phone.matches(new_Phone)) {
+            JOptionPane.showMessageDialog(null, "Vui lòng nhập đúng số điện thoại để tiếp tục");
+        } 
+//        else if (check_Mail_Phone(new_Email, new_Phone)) {
+//            JOptionPane.showMessageDialog(null, "Số điện thoại hoặc Email đã được sử dụng!");}
+        else {
+            Account newTeacher = new Account(new_id,new_name, new_Phone, new_Email, new_pass, new_Address, new_birthday, new_status, new_id_Role, new_role_name);
+            AccountDAO ad = new AccountDAO();
+            if (ad.updateAccount(newTeacher) == 1) {
+                JOptionPane.showMessageDialog(null, "Bạn đã cập nhật tài khoản thành công");
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(null, "Đã có lỗi xảy ra! \nVui lòng kiểm tra lại Email hoặc SĐT");
+            }
+        }
     }//GEN-LAST:event_rSButtonMetro1ActionPerformed
 
     private void cbRoleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbRoleActionPerformed
@@ -302,6 +442,14 @@ public class FrmDiaglogAccount extends javax.swing.JDialog {
             jCheckBox2.setText("Show");
         }
     }//GEN-LAST:event_jCheckBox2ActionPerformed
+
+    private void rSButtonMetro2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSButtonMetro2MouseClicked
+        
+    }//GEN-LAST:event_rSButtonMetro2MouseClicked
+
+    private void rdStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdStatusActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_rdStatusActionPerformed
 
     /**
      * @param args the command line arguments
@@ -333,7 +481,7 @@ public class FrmDiaglogAccount extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                FrmDiaglogAccount dialog = new FrmDiaglogAccount(new javax.swing.JFrame(), true);
+                FrmDiaglogAccount dialog = new FrmDiaglogAccount(new javax.swing.JFrame(), true,null);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -349,6 +497,7 @@ public class FrmDiaglogAccount extends javax.swing.JDialog {
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JComboBox<String> cbRole;
     private javax.swing.JCheckBox jCheckBox2;
+    private com.toedter.calendar.JDateChooser jDateChooser;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -367,7 +516,6 @@ public class FrmDiaglogAccount extends javax.swing.JDialog {
     private rojerusan.RSButtonMetro rSButtonMetro2;
     private javax.swing.JRadioButton rdStatus;
     private javax.swing.JTextField txtAddress;
-    private org.jdatepicker.JDatePicker txtBirthday;
     private javax.swing.JTextField txtMail;
     private javax.swing.JTextField txtName;
     private javax.swing.JPasswordField txtPassword;

@@ -89,7 +89,6 @@ public class FrmMain extends javax.swing.JFrame {
         Body = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMaximumSize(new java.awt.Dimension(1000, 600));
         setUndecorated(true);
         setResizable(false);
 
