@@ -47,7 +47,42 @@ public class StudentDAO {
                 int status = rs.getInt("Status");
                 int class_id = rs.getInt("Class_ID");
                 String class_name = rs.getString("ClassName");
-                lsts.add(new Student(id, name, phone, email, pass, address, birthday, gender, status,class_id,class_name));
+                int teacher_id = rs.getInt("TeacherID");
+                String teacher = rs.getString("TeacherName");
+                int kh_id = rs.getInt("KH_ID");
+                String khoahoc = rs.getString("KH_Name");
+                
+                lsts.add(new Student(id, name, phone, email, pass, address, birthday, gender, status,class_id,class_name,teacher_id,teacher,kh_id,khoahoc));
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+        return lsts;
+    }
+    public List<Student> findStudent(String name1) {
+        List<Student> lsts = new ArrayList<>();
+        String sql = "{call findStudent(?)}";
+        try {
+            CallableStatement cs = conn.prepareCall(sql);
+            cs.setString(1, name1);
+            ResultSet rs = cs.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("MaSV");
+                String phone = rs.getString("Name");
+                String email = rs.getString("Phone");
+                String pass = rs.getString("Email");
+                String address = rs.getString("Address");
+                String birthday = rs.getString("Birthday");
+                int gender = rs.getInt("Gender");
+                int status = rs.getInt("Status");
+                int class_id = rs.getInt("Class_ID");
+                String class_name = rs.getString("ClassName");
+                int teacher_id = rs.getInt("TeacherID");
+                String teacher = rs.getString("TeacherName");
+                int kh_id = rs.getInt("KH_ID");
+                String khoahoc = rs.getString("KH_Name");
+                lsts.add(new Student(id, name, phone, email, pass, address, birthday, gender, status,class_id,class_name,teacher_id,teacher,kh_id,khoahoc));
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, ex);

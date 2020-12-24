@@ -10,10 +10,14 @@ import DAO.StudentDAO;
 import java.awt.Color;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import model.Student;
 
@@ -22,8 +26,10 @@ import model.Student;
  * @author BinDz
  */
 public class ManageStudent extends javax.swing.JPanel {
+
     Student st;
     List<Student> liststudent;
+
     /**
      * Creates new form ManageStudent
      */
@@ -31,19 +37,67 @@ public class ManageStudent extends javax.swing.JPanel {
         initComponents();
         load_data();
     }
+
     private void load_data() {
         StudentDAO ad = new StudentDAO();
         liststudent = ad.getAllStudent();
-        String columns[] = {"STT","Mã SV", "Tên", "Số điện thoại", "Email", "Address", "Ngày sinh", "Giới tính", "Trạng thái","Lớp học"};
+        String columns[] = {"STT", "Mã SV", "Tên", "Số điện thoại", "Email", "Address", "Ngày sinh", "Giới tính", "Trạng thái", "Lớp học","Khoá học","Giáo viên"};
         DefaultTableModel dtm = new DefaultTableModel(columns, 0);
-        DateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+
         Integer i = 1;
         for (Student a : liststudent) {
-            dtm.addRow(new Object[]{i,a.getMaSV() ,a.getName(), a.getPhone(), a.getEmail(), a.getAddress(), a.getBirthday(), a.getGender()== 0 ?"Nam":"Nữ", a.getStatus() == 0 ? "Đang theo học" : "Đã nghỉ",a.getClass_name()});
+            LocalDate dt = LocalDate.parse(a.getBirthday());
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            String time = dtf.format(dt);
+            dtm.addRow(new Object[]{i, a.getMaSV(), a.getName(), a.getPhone(), a.getEmail(), a.getAddress(), time, a.getGender() == 0 ? "Nam" : "Nữ", a.getStatus() == 0 ? "Đang theo học" : "Đã nghỉ", a.getClass_name(),a.getKH_Name(),a.getTeacher_Name()});
             i++;
         }
         tbStudent.setModel(dtm);
         tbStudent.setRowHeight(25);
+        if (liststudent.size() > 0) {
+            tbStudent.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+                @Override
+                public void valueChanged(ListSelectionEvent lse) {
+                    int pos = tbStudent.getSelectedRow();
+                    if (pos < 0) {
+                        pos = 0;
+                    }
+
+                    st = liststudent.get(pos);
+                }
+            });
+        }
+    }
+    
+    void load_find(String name) {
+        StudentDAO sd = new StudentDAO();
+        liststudent = sd.findStudent(name);
+        String columns[] = {"STT", "Mã SV", "Tên", "Số điện thoại", "Email", "Address", "Ngày sinh", "Giới tính", "Trạng thái", "Lớp học","Khoá học","Giáo viên"};
+        DefaultTableModel dtm = new DefaultTableModel(columns, 0);
+        Integer i = 1;
+        for (Student a : liststudent) {
+            LocalDate dt = LocalDate.parse(a.getBirthday());
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            String time = dtf.format(dt);
+            dtm.addRow(new Object[]{i, a.getMaSV(), a.getName(), a.getPhone(), a.getEmail(), a.getAddress(), time, a.getGender() == 0 ? "Nam" : "Nữ", a.getStatus() == 0 ? "Đang theo học" : "Đã nghỉ", a.getClass_name(),a.getKH_Name(),a.getTeacher_Name()});
+            i++;
+        }
+        tbStudent.setModel(dtm);
+        tbStudent.setRowHeight(25);
+        if (liststudent.size() > 0) {
+            tbStudent.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+                @Override
+                public void valueChanged(ListSelectionEvent lse) {
+                    int pos = tbStudent.getSelectedRow();
+                    if (pos < 0) {
+                        pos = 0;
+                    }
+
+                    st = liststudent.get(pos);
+                }
+            });
+        }
+
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -62,6 +116,8 @@ public class ManageStudent extends javax.swing.JPanel {
         rSButtonMetro12 = new rojerusan.RSButtonMetro();
         jPanel18 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
+        rSButtonMetro13 = new rojerusan.RSButtonMetro();
+        rSButtonMetro14 = new rojerusan.RSButtonMetro();
         jPanel19 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         tbStudent = new javax.swing.JTable();
@@ -90,12 +146,12 @@ public class ManageStudent extends javax.swing.JPanel {
                 rSButtonMetro9ActionPerformed(evt);
             }
         });
-        jPanel17.add(rSButtonMetro9, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 2, 120, 116));
+        jPanel17.add(rSButtonMetro9, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 20, 60, 70));
 
         rSButtonMetro10.setBackground(new java.awt.Color(255, 255, 255));
         rSButtonMetro10.setForeground(new java.awt.Color(0, 0, 0));
-        rSButtonMetro10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_search_more_50px_1.png"))); // NOI18N
-        rSButtonMetro10.setText("Tìm kiếm");
+        rSButtonMetro10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_classroom_50px.png"))); // NOI18N
+        rSButtonMetro10.setText("Qlý lớp học");
         rSButtonMetro10.setBorderPainted(false);
         rSButtonMetro10.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         rSButtonMetro10.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -107,7 +163,12 @@ public class ManageStudent extends javax.swing.JPanel {
                 rSButtonMetro10MouseExited(evt);
             }
         });
-        jPanel17.add(rSButtonMetro10, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 2, 120, 116));
+        rSButtonMetro10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rSButtonMetro10ActionPerformed(evt);
+            }
+        });
+        jPanel17.add(rSButtonMetro10, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 20, 100, 70));
 
         rSButtonMetro11.setBackground(new java.awt.Color(255, 255, 255));
         rSButtonMetro11.setForeground(new java.awt.Color(0, 0, 0));
@@ -129,7 +190,7 @@ public class ManageStudent extends javax.swing.JPanel {
                 rSButtonMetro11ActionPerformed(evt);
             }
         });
-        jPanel17.add(rSButtonMetro11, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 2, 120, 116));
+        jPanel17.add(rSButtonMetro11, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 20, 60, 70));
 
         rSButtonMetro12.setBackground(new java.awt.Color(255, 255, 255));
         rSButtonMetro12.setForeground(new java.awt.Color(0, 0, 0));
@@ -151,7 +212,7 @@ public class ManageStudent extends javax.swing.JPanel {
                 rSButtonMetro12ActionPerformed(evt);
             }
         });
-        jPanel17.add(rSButtonMetro12, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 2, 120, 116));
+        jPanel17.add(rSButtonMetro12, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 20, 60, 70));
 
         jPanel18.setBackground(new java.awt.Color(255, 255, 255));
         jPanel18.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -159,9 +220,53 @@ public class ManageStudent extends javax.swing.JPanel {
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 20)); // NOI18N
         jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_student_male_50px.png"))); // NOI18N
         jLabel9.setText("Quản lý sinh viên");
-        jPanel18.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 1, 260, 110));
+        jPanel18.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 1, 230, 110));
 
         jPanel17.add(jPanel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 2, 260, 110));
+
+        rSButtonMetro13.setBackground(new java.awt.Color(255, 255, 255));
+        rSButtonMetro13.setForeground(new java.awt.Color(0, 0, 0));
+        rSButtonMetro13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_search_more_50px_1.png"))); // NOI18N
+        rSButtonMetro13.setText("Tìm kiếm");
+        rSButtonMetro13.setBorderPainted(false);
+        rSButtonMetro13.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        rSButtonMetro13.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        rSButtonMetro13.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                rSButtonMetro13MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                rSButtonMetro13MouseExited(evt);
+            }
+        });
+        rSButtonMetro13.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rSButtonMetro13ActionPerformed(evt);
+            }
+        });
+        jPanel17.add(rSButtonMetro13, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 20, 70, 70));
+
+        rSButtonMetro14.setBackground(new java.awt.Color(255, 255, 255));
+        rSButtonMetro14.setForeground(new java.awt.Color(0, 0, 0));
+        rSButtonMetro14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_refresh_50px.png"))); // NOI18N
+        rSButtonMetro14.setText("Refesh");
+        rSButtonMetro14.setBorderPainted(false);
+        rSButtonMetro14.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        rSButtonMetro14.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        rSButtonMetro14.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                rSButtonMetro14MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                rSButtonMetro14MouseExited(evt);
+            }
+        });
+        rSButtonMetro14.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rSButtonMetro14ActionPerformed(evt);
+            }
+        });
+        jPanel17.add(rSButtonMetro14, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 20, 70, 70));
 
         jPanel19.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -268,7 +373,7 @@ public class ManageStudent extends javax.swing.JPanel {
 
     private void rSButtonMetro12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro12ActionPerformed
         JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
-        FrmDiaglogStrudent facc = new FrmDiaglogStrudent(frame, true);
+        FrmDiaglogStrudent facc = new FrmDiaglogStrudent(frame, true, null);
         facc.setVisible(true);
         load_data();
     }//GEN-LAST:event_rSButtonMetro12ActionPerformed
@@ -276,26 +381,67 @@ public class ManageStudent extends javax.swing.JPanel {
     private void rSButtonMetro11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro11ActionPerformed
         int pos = tbStudent.getSelectedRow();
         if (pos < 0) {
-            pos = 0;
+            JOptionPane.showMessageDialog(null, "Bạn chưa chọn gì để xoá!");
         }
         int id = liststudent.get(pos).getId();
         String name = liststudent.get(pos).getName();
         StudentDAO sd = new StudentDAO();
-        int choose = JOptionPane.showConfirmDialog(null, "Bạn chắc chắn muốn xoá "+name+" chứ!","Xoá "+name,JOptionPane.YES_NO_OPTION);
-       
-        if(choose == JOptionPane.YES_OPTION){
+        int choose = JOptionPane.showConfirmDialog(null, "Bạn chắc chắn muốn xoá " + name + " chứ!", "Xoá " + name, JOptionPane.YES_NO_OPTION);
+
+        if (choose == JOptionPane.YES_OPTION) {
             sd.delete(id);
-            JOptionPane.showMessageDialog(null,"Đã Xoá "+name);
+            JOptionPane.showMessageDialog(null, "Đã Xoá " + name);
             load_data();
         }
     }//GEN-LAST:event_rSButtonMetro11ActionPerformed
 
     private void rSButtonMetro9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro9ActionPerformed
-        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
-        FrmDiaglogStrudent facc = new FrmDiaglogStrudent(frame, true);
-        facc.setVisible(true);
-        load_data();
+        if (st != null) {
+            JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+            FrmDiaglogStrudent facc = new FrmDiaglogStrudent(frame, true, st);
+            facc.setVisible(true);
+            load_data();
+        } else {
+            JOptionPane.showMessageDialog(null, "Bạn chưa chọn !");
+        }
+
+
     }//GEN-LAST:event_rSButtonMetro9ActionPerformed
+
+    private void rSButtonMetro10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro10ActionPerformed
+        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+        FrmClassRoom fcl = new FrmClassRoom(frame, true);
+        fcl.setVisible(true);
+    }//GEN-LAST:event_rSButtonMetro10ActionPerformed
+
+    private void rSButtonMetro13MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSButtonMetro13MouseEntered
+        rSButtonMetro13.setBackground(new Color(85, 159, 213));
+    }//GEN-LAST:event_rSButtonMetro13MouseEntered
+
+    private void rSButtonMetro13MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSButtonMetro13MouseExited
+        rSButtonMetro13.setBackground(new Color(255, 255, 255));
+    }//GEN-LAST:event_rSButtonMetro13MouseExited
+
+    private void rSButtonMetro13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro13ActionPerformed
+        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+        FrmFind ff = new FrmFind(frame, true);
+        ff.setTitle("Tìm kiếm sinh viên theo tên");
+        ff.setVisible(true);
+        String a = ff.getData();
+        load_find(a);
+    }//GEN-LAST:event_rSButtonMetro13ActionPerformed
+
+    private void rSButtonMetro14MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSButtonMetro14MouseEntered
+        rSButtonMetro14.setBackground(new Color(85, 159, 213));
+    }//GEN-LAST:event_rSButtonMetro14MouseEntered
+
+    private void rSButtonMetro14MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSButtonMetro14MouseExited
+         rSButtonMetro14.setBackground(new Color(255, 255, 255));
+    }//GEN-LAST:event_rSButtonMetro14MouseExited
+
+    private void rSButtonMetro14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro14ActionPerformed
+        load_data();
+    }//GEN-LAST:event_rSButtonMetro14ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -308,6 +454,8 @@ public class ManageStudent extends javax.swing.JPanel {
     private rojerusan.RSButtonMetro rSButtonMetro10;
     private rojerusan.RSButtonMetro rSButtonMetro11;
     private rojerusan.RSButtonMetro rSButtonMetro12;
+    private rojerusan.RSButtonMetro rSButtonMetro13;
+    private rojerusan.RSButtonMetro rSButtonMetro14;
     private rojerusan.RSButtonMetro rSButtonMetro9;
     private javax.swing.JTable tbStudent;
     // End of variables declaration//GEN-END:variables

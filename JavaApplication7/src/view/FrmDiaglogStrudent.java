@@ -11,13 +11,14 @@ import DAO.KhoaHocDAO;
 import DAO.StudentDAO;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import model.Account;
-import model.Class;
+import model.ClassRoom;
 import model.KhoaHoc;
 import model.Student;
 
@@ -30,14 +31,19 @@ public class FrmDiaglogStrudent extends javax.swing.JDialog {
     /**
      * Creates new form FrmDiaglogStrudent
      */
-    public FrmDiaglogStrudent(java.awt.Frame parent, boolean modal) {
+    public FrmDiaglogStrudent(java.awt.Frame parent, boolean modal, Student st) {
         super(parent, modal);
         initComponents();
+        StudentDAO sd = new StudentDAO();
+        this.st = st;
         setLocationRelativeTo(null);
         loadcombobox();
-        loadkhoahoc();
-        setMaSV();
+        initData();
+
     }
+    Student st;
+    List<ClassRoom> lc;
+    List<Student> ls;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -59,7 +65,6 @@ public class FrmDiaglogStrudent extends javax.swing.JDialog {
         txtAddress = new javax.swing.JTextField();
         gender = new javax.swing.JRadioButton();
         jRadioButton3 = new javax.swing.JRadioButton();
-        khoaHoc = new javax.swing.JComboBox<>();
         className = new javax.swing.JComboBox<>();
         jDateStudent = new com.toedter.calendar.JDateChooser();
         jRadioButton1 = new javax.swing.JRadioButton();
@@ -69,7 +74,6 @@ public class FrmDiaglogStrudent extends javax.swing.JDialog {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
@@ -118,9 +122,6 @@ public class FrmDiaglogStrudent extends javax.swing.JDialog {
         jRadioButton3.setText("Nữ");
         jPanel2.add(jRadioButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 180, -1, -1));
 
-        khoaHoc.setToolTipText("");
-        jPanel2.add(khoaHoc, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 270, 340, -1));
-
         jPanel2.add(className, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 240, 340, -1));
 
         jDateStudent.setBackground(new java.awt.Color(255, 255, 255));
@@ -158,10 +159,6 @@ public class FrmDiaglogStrudent extends javax.swing.JDialog {
         jLabel5.setText("Email:");
         jPanel3.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 85, -1, 20));
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel6.setText("Khoá học:");
-        jPanel3.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 270, -1, 20));
-
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel7.setText("Địa chỉ:");
         jPanel3.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 110, -1, 30));
@@ -191,7 +188,7 @@ public class FrmDiaglogStrudent extends javax.swing.JDialog {
                 rSButtonMetro3ActionPerformed(evt);
             }
         });
-        jPanel1.add(rSButtonMetro3, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 390, 140, 50));
+        jPanel1.add(rSButtonMetro3, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 390, 140, 50));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -206,37 +203,51 @@ public class FrmDiaglogStrudent extends javax.swing.JDialog {
                 rSButtonMetro4ActionPerformed(evt);
             }
         });
-        jPanel1.add(rSButtonMetro4, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 390, 140, 50));
+        jPanel1.add(rSButtonMetro4, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 390, 140, 50));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 470, 460));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    List<KhoaHoc> lk;
-    List<Class> lc;
-    List<Student> ls;
+    private void initData() {
+        if (st != null) {
+            rSButtonMetro3.setVisible(false);
+            txtMaSV.setText(st.getMaSV());
+            txtName.setText(st.getName());
+            txtPhone.setText(st.getPhone());
+            txtEmail.setText(st.getEmail());
+            txtAddress.setText(st.getAddress());
+            Date date = null;
+            try {
+                date = new SimpleDateFormat("yyyy-MM-dd").parse(st.getBirthday());
+            } catch (ParseException ex) {
+                Logger.getLogger(FrmDiaglogAccount.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            jDateStudent.setDate(date);
+            if (st.getGender() == 0) {
+                gender.setSelected(true);
+            } else {
+                jRadioButton3.setSelected(true);
+            }
+            className.setSelectedIndex((st.getClass_ID()) - 1);
+
+        } else {
+            setMaSV();
+            rSButtonMetro4.setVisible(false);
+        }
+    }
 
     private void loadcombobox() {
         DefaultComboBoxModel dcm = new DefaultComboBoxModel();
 
         ClassDAO cd = new ClassDAO();
         lc = cd.getAllClass();
-        for (Class c : lc) {
+        for (ClassRoom c : lc) {
             dcm.addElement(c.getName());
         }
         className.setModel(dcm);
 
-    }
-
-    private void loadkhoahoc() {
-        DefaultComboBoxModel dcm2 = new DefaultComboBoxModel();
-        KhoaHocDAO kh = new KhoaHocDAO();
-        lk = kh.getAllKhoaHoc();
-        for (KhoaHoc k : lk) {
-            dcm2.addElement(k.getName());
-        }
-        khoaHoc.setModel(dcm2);
     }
 
     private boolean check_Mail_Phone(String mail, String phone) {
@@ -255,10 +266,15 @@ public class FrmDiaglogStrudent extends javax.swing.JDialog {
         StudentDAO sd = new StudentDAO();
         ls = sd.getAllStudent();
         int i = ls.size();
-        String masv = ls.get(i-1).getMaSV().toString();
-        masv =masv.substring(1);
-        int id = (Integer.parseInt(masv))+1;
-        txtMaSV.setText("B"+String.format("%03d",id));
+        if (i == 0) {
+            txtMaSV.setText("B" + String.format("%03d", 1));
+        } else {
+            String masv = ls.get(i - 1).getMaSV().toString();
+            masv = masv.substring(1);
+            int id = (Integer.parseInt(masv)) + 1;
+            txtMaSV.setText("B" + String.format("%03d", id));
+        }
+
     }
 
     private void rSButtonMetro3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro3ActionPerformed
@@ -276,9 +292,9 @@ public class FrmDiaglogStrudent extends javax.swing.JDialog {
         } else {
             new_gender = 1;
         }
-        
+
         int new_class_id = lc.get(className.getSelectedIndex()).getId();
-        
+
         int new_status;
         if (Status.isSelected()) {
             new_status = 0;
@@ -337,7 +353,7 @@ public class FrmDiaglogStrudent extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                FrmDiaglogStrudent dialog = new FrmDiaglogStrudent(new javax.swing.JFrame(), true);
+                FrmDiaglogStrudent dialog = new FrmDiaglogStrudent(new javax.swing.JFrame(), true, null);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -363,7 +379,6 @@ public class FrmDiaglogStrudent extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
@@ -372,7 +387,6 @@ public class FrmDiaglogStrudent extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButton jRadioButton3;
-    private javax.swing.JComboBox<String> khoaHoc;
     private rojerusan.RSButtonMetro rSButtonMetro3;
     private rojerusan.RSButtonMetro rSButtonMetro4;
     private javax.swing.JTextField txtAddress;

@@ -39,7 +39,9 @@ public class SubjectDAO {
                 String name = rs.getString("Name");
                 int credits = rs.getInt("credits");
                 int status = rs.getInt("Status");
-                lsts.add(new Subject(id, name,credits,status));
+                int KH_ID = rs.getInt("KhoaHoc_ID");
+                String KH_Name = rs.getString("KH_Name");
+                lsts.add(new Subject(id, name,credits,status,KH_ID,KH_Name));
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, ex);
@@ -48,16 +50,55 @@ public class SubjectDAO {
     }
     public int addSubject(Subject s) {
         int row = 0;
-        String sql = "{CALL insertSubject(?,?,?)}";
+        String sql = "{CALL insertSubject(?,?,?,?)}";
         try {
             CallableStatement cs = conn.prepareCall(sql);
             cs.setString(1, s.getName());
             cs.setInt(2, s.getCredits());
             cs.setInt(3, s.getStatus());
+            cs.setInt(4, s.getKH_ID());
             row = cs.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(SubjectDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return row;
     } 
+    public int updateSubject(Subject s) {
+        int row = 0;
+        String sql = "{CALL updateSubject(?,?,?,?,?)}";
+        try {
+            CallableStatement cs = conn.prepareCall(sql);
+            cs.setInt(1, s.getId());
+            cs.setString(2, s.getName());
+            cs.setInt(3, s.getCredits());
+            cs.setInt(4, s.getStatus());
+            cs.setInt(5, s.getKH_ID());
+            row = cs.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(SubjectDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return row;
+    } 
+    
+    public List<Subject> findSubject(String name1) {
+        List<Subject> lsts = new ArrayList<>();
+        String sql = "{call findSubject(?)}";
+        try {
+            CallableStatement cs = conn.prepareCall(sql);
+            cs.setString(1, name1);
+            ResultSet rs = cs.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("Name");
+                int credits = rs.getInt("credits");
+                int status = rs.getInt("Status");
+                int KH_ID = rs.getInt("KhoaHoc_ID");
+                String KH_Name = rs.getString("KH_Name");
+                lsts.add(new Subject(id, name,credits,status,KH_ID,KH_Name));
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+        return lsts;
+    }
 }

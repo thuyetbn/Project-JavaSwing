@@ -5,9 +5,13 @@
  */
 package view;
 
+import DAO.KhoaHocDAO;
 import DAO.SubjectDAO;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import jdk.nashorn.internal.scripts.JO;
+import model.KhoaHoc;
 import model.Subject;
 
 /**
@@ -19,12 +23,16 @@ public class FrmDialogSubject extends javax.swing.JDialog {
     /**
      * Creates new form FrmDialogSubject
      */
-    public FrmDialogSubject(java.awt.Frame parent, boolean modal) {
+    public FrmDialogSubject(java.awt.Frame parent, boolean modal,Subject sub) {
         super(parent, modal);
         initComponents();
         setLocationRelativeTo(null);
+        SubjectDAO sd = new SubjectDAO();
+        this.sub = sub;
+        initData();
+        loadCombo();
     }
-
+    Subject sub;
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -40,14 +48,16 @@ public class FrmDialogSubject extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         txtSub = new javax.swing.JTextField();
         txtCre = new javax.swing.JTextField();
         jRadioButton1 = new javax.swing.JRadioButton();
         status = new javax.swing.JRadioButton();
+        cbKhoaHoc = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
-        rSButtonMetro1 = new rojerusan.RSButtonMetro();
-        rSButtonMetro2 = new rojerusan.RSButtonMetro();
+        update = new rojerusan.RSButtonMetro();
+        add = new rojerusan.RSButtonMetro();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Thêm môn học");
@@ -59,18 +69,22 @@ public class FrmDialogSubject extends javax.swing.JDialog {
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel1.setText("Trạng thái:");
-        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, -1, -1));
+        jLabel1.setText("Khoá học:");
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 135, -1, -1));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setText("Tên môn học:");
-        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, -1, -1));
+        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, -1, -1));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel3.setText("Số tín chỉ:");
-        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, -1, -1));
+        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, -1, -1));
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 100, 160));
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel5.setText("Trạng thái:");
+        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, -1, -1));
+
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 100, 170));
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -91,50 +105,57 @@ public class FrmDialogSubject extends javax.swing.JDialog {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(txtSub)
             .addComponent(txtCre, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
+            .addComponent(txtSub)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(1, 1, 1)
                 .addComponent(status)
                 .addGap(18, 18, 18)
                 .addComponent(jRadioButton1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(cbKhoaHoc, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(19, 19, 19)
+                .addGap(4, 4, 4)
                 .addComponent(txtSub, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(txtCre, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(status)
                     .addComponent(jRadioButton1))
-                .addGap(30, 30, 30))
+                .addGap(18, 18, 18)
+                .addComponent(cbKhoaHoc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(28, Short.MAX_VALUE))
         );
 
-        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 80, 290, 160));
+        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 60, 290, 180));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_books_25px.png"))); // NOI18N
         jLabel4.setText("Thông tin môn học");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(83, 30, 310, -1));
 
-        rSButtonMetro1.setBackground(new java.awt.Color(51, 204, 255));
-        rSButtonMetro1.setText("Cập nhật");
-        rSButtonMetro1.setBorderPainted(false);
-        jPanel1.add(rSButtonMetro1, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 250, 120, 40));
-
-        rSButtonMetro2.setBackground(new java.awt.Color(51, 204, 255));
-        rSButtonMetro2.setText("Thêm");
-        rSButtonMetro2.setBorderPainted(false);
-        rSButtonMetro2.addActionListener(new java.awt.event.ActionListener() {
+        update.setBackground(new java.awt.Color(51, 204, 255));
+        update.setText("Cập nhật");
+        update.setBorderPainted(false);
+        update.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rSButtonMetro2ActionPerformed(evt);
+                updateActionPerformed(evt);
             }
         });
-        jPanel1.add(rSButtonMetro2, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 250, 120, 40));
+        jPanel1.add(update, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 250, 120, 40));
+
+        add.setBackground(new java.awt.Color(51, 204, 255));
+        add.setText("Thêm");
+        add.setBorderPainted(false);
+        add.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addActionPerformed(evt);
+            }
+        });
+        jPanel1.add(add, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 250, 120, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -149,8 +170,36 @@ public class FrmDialogSubject extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    List<KhoaHoc> listKH;
+    KhoaHoc KH;
+    private void loadCombo(){
+        DefaultComboBoxModel dcm = new DefaultComboBoxModel();
+        KhoaHocDAO rd = new KhoaHocDAO();
+        listKH = rd.getAllKhoaHoc();
+        for (KhoaHoc r : listKH) {
+            dcm.addElement(r.getName());
+        }
+        cbKhoaHoc.setModel(dcm);
+    }
+    private  void initData(){
+        if(sub != null){
+            add.setVisible(false);
+            txtSub.setText(sub.getName());
+            txtCre.setText(String.valueOf(sub.getCredits()));
+            int a =sub.getKH_ID();
 
-    private void rSButtonMetro2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro2ActionPerformed
+            
+            if(sub.getStatus()==0){
+                status.setSelected(true);
+            }else{
+                jRadioButton1.setSelected(true);
+            }
+            
+        }
+    }
+    
+    
+    private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
         String name = txtSub.getText();
         int credits = Integer.parseInt(txtCre.getText());
         int new_status;
@@ -159,12 +208,13 @@ public class FrmDialogSubject extends javax.swing.JDialog {
         }else{
             new_status = 1;
         }
+        int new_id_KH = listKH.get(cbKhoaHoc.getSelectedIndex()).getId();
         if(name.length() == 0 || credits == 0){
             JOptionPane.showMessageDialog(null,"Nhập đầy đủ các trường");
         }else if(credits < 0){
             JOptionPane.showMessageDialog(null,"Số tín chỉ phải lớn hơn 0");
         }else{
-            Subject new_subject = new Subject(name, credits, new_status);
+            Subject new_subject = new Subject(name, credits, new_status,new_id_KH);
             SubjectDAO sd = new SubjectDAO();
             if (sd.addSubject(new_subject) == 1) {
                 JOptionPane.showMessageDialog(null, "Bạn đã thêm môn học thành công");
@@ -174,7 +224,34 @@ public class FrmDialogSubject extends javax.swing.JDialog {
             }
         }
         
-    }//GEN-LAST:event_rSButtonMetro2ActionPerformed
+    }//GEN-LAST:event_addActionPerformed
+
+    private void updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateActionPerformed
+        int new_id = sub.getId();
+        String name = txtSub.getText();
+        int credits = Integer.parseInt(txtCre.getText());
+        int new_status;
+        if(status.isSelected()){
+            new_status =0;
+        }else{
+            new_status = 1;
+        }
+        int new_id_KH = listKH.get(cbKhoaHoc.getSelectedIndex()).getId();
+        if(name.length() == 0 || credits == 0){
+            JOptionPane.showMessageDialog(null,"Nhập đầy đủ các trường");
+        }else if(credits < 0){
+            JOptionPane.showMessageDialog(null,"Số tín chỉ phải lớn hơn 0");
+        }else{
+            Subject new_subject = new Subject(new_id,name, credits, new_status,new_id_KH);
+            SubjectDAO sd = new SubjectDAO();
+            if (sd.updateSubject(new_subject) == 1) {
+                JOptionPane.showMessageDialog(null, "Bạn đã cập nhật môn học thành công");
+                    dispose();
+            } else {
+                JOptionPane.showMessageDialog(null, "Đã có lỗi xảy ra! \nVui lòng kiểm tra lại");
+            }
+        }
+    }//GEN-LAST:event_updateActionPerformed
     
     /**
      * @param args the command line arguments
@@ -206,7 +283,7 @@ public class FrmDialogSubject extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                FrmDialogSubject dialog = new FrmDialogSubject(new javax.swing.JFrame(), true);
+                FrmDialogSubject dialog = new FrmDialogSubject(new javax.swing.JFrame(), true,null);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -219,19 +296,21 @@ public class FrmDialogSubject extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private rojerusan.RSButtonMetro add;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JComboBox<String> cbKhoaHoc;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JRadioButton jRadioButton1;
-    private rojerusan.RSButtonMetro rSButtonMetro1;
-    private rojerusan.RSButtonMetro rSButtonMetro2;
     private javax.swing.JRadioButton status;
     private javax.swing.JTextField txtCre;
     private javax.swing.JTextField txtSub;
+    private rojerusan.RSButtonMetro update;
     // End of variables declaration//GEN-END:variables
 }

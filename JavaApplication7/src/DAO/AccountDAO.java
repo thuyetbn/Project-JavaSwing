@@ -140,5 +140,33 @@ public class AccountDAO {
         }
         return lsta;
     }
-
+    
+    public List<Account> loginForm(String name1,String Pass) {
+        List<Account> lsta = new ArrayList<>();
+        String sql = "{call loginForm(?,?)}";
+        try {
+            CallableStatement cs = conn.prepareCall(sql);
+            cs.setString(1, name1);
+            cs.setString(2,Pass);
+            ResultSet rs = cs.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("Name");
+                String phone = rs.getString("Phone");
+                String email = rs.getString("Email");
+                String pass = rs.getString("Password");
+                String address = rs.getString("Address");
+                String birthday = rs.getString("Birthday");
+                int status = rs.getInt("Status");
+                int role_id = rs.getInt("RoleId");
+                String role_name = rs.getString("RoleName");
+                lsta.add(new Account(id, name, phone, email, pass, address, birthday, status, role_id, role_name));
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+        return lsta;
+        
+    }
+    
 }

@@ -63,7 +63,7 @@ public class FrmFind extends javax.swing.JDialog {
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 400, 70));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel2.setText("Tên giáo viên muốn tìm kiếm:");
+        jLabel2.setText("Tên muốn tìm kiếm:");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 370, 40));
 
         txtNamefind.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N

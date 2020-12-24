@@ -14,19 +14,42 @@ public class Subject {
     private String Name;
     private int credits;
     private int Status;
+    private int KH_ID;
+    private String KH_Name;
 
-    public Subject(int id, String Name, int credits, int Status) {
+    public Subject(int id, String Name, int credits, int Status, int KH_ID, String KH_Name) {
         this.id = id;
         this.Name = Name;
         this.credits = credits;
         this.Status = Status;
+        this.KH_ID = KH_ID;
+        this.KH_Name = KH_Name;
     }
 
-    public Subject(String Name, int credits, int Status) {
+    public Subject(String Name, int credits, int Status, int KH_ID, String KH_Name) {
         this.Name = Name;
         this.credits = credits;
         this.Status = Status;
+        this.KH_ID = KH_ID;
+        this.KH_Name = KH_Name;
     }
+
+    public Subject(String Name, int credits, int Status, int KH_ID) {
+        this.Name = Name;
+        this.credits = credits;
+        this.Status = Status;
+        this.KH_ID = KH_ID;
+    }
+
+    public Subject(int id, String Name, int credits, int Status, int KH_ID) {
+        this.id = id;
+        this.Name = Name;
+        this.credits = credits;
+        this.Status = Status;
+        this.KH_ID = KH_ID;
+    }
+    
+    
 
     public int getId() {
         return id;
@@ -46,6 +69,22 @@ public class Subject {
 
     public int getCredits() {
         return credits;
+    }
+
+    public int getKH_ID() {
+        return KH_ID;
+    }
+
+    public void setKH_ID(int KH_ID) {
+        this.KH_ID = KH_ID;
+    }
+
+    public String getKH_Name() {
+        return KH_Name;
+    }
+
+    public void setKH_Name(String KH_Name) {
+        this.KH_Name = KH_Name;
     }
 
     public void setCredits(int credits) {

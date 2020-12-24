@@ -32,7 +32,7 @@ public class ManageAccount extends javax.swing.JPanel {
     Account account;
     List<Account> listacc;
     List<Role> lr;
-    String name_find;
+
     /**
      * Creates new form NewJPanel
      */
@@ -51,8 +51,7 @@ public class ManageAccount extends javax.swing.JPanel {
             LocalDate dt = LocalDate.parse(a.getBirthday());
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
             String time = dtf.format(dt);
-            
-            
+
             dtm.addRow(new Object[]{i, a.getName(), a.getPhone(), a.getEmail(), a.getAddress(), time, a.getRolde_Name(), a.getStatus() == 0 ? "Đang giảng dạy" : "Đã nghỉ"});
             i++;
         }
@@ -72,8 +71,8 @@ public class ManageAccount extends javax.swing.JPanel {
             });
         }
     }
-    
-    void load_find(String name){
+
+    void load_find(String name) {
         AccountDAO ad = new AccountDAO();
         listacc = ad.findAccount(name);
         String columns[] = {"STT", "Tên", "Số điện thoại", "Email", "Address", "Ngày sinh", "Chức vụ", "Trạng thái"};
@@ -83,8 +82,7 @@ public class ManageAccount extends javax.swing.JPanel {
             LocalDate dt = LocalDate.parse(a.getBirthday());
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
             String time = dtf.format(dt);
-            
-            
+
             dtm.addRow(new Object[]{i, a.getName(), a.getPhone(), a.getEmail(), a.getAddress(), time, a.getRolde_Name(), a.getStatus() == 0 ? "Đang giảng dạy" : "Đã nghỉ"});
             i++;
         }
@@ -103,13 +101,9 @@ public class ManageAccount extends javax.swing.JPanel {
                 }
             });
         }
-        
-    }
-    
-    
-   
 
-    
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -362,7 +356,7 @@ public class ManageAccount extends javax.swing.JPanel {
 
     private void rSButtonMetro8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro8ActionPerformed
         JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
-        FrmDiaglogAccount facc = new FrmDiaglogAccount(frame, true,null);
+        FrmDiaglogAccount facc = new FrmDiaglogAccount(frame, true, null);
         facc.setVisible(true);
         load_data();
     }//GEN-LAST:event_rSButtonMetro8ActionPerformed
@@ -370,7 +364,7 @@ public class ManageAccount extends javax.swing.JPanel {
     private void rSButtonMetro7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro7ActionPerformed
         int pos = tbAccount.getSelectedRow();
         if (pos < 0) {
-            pos = 0;
+            JOptionPane.showMessageDialog(null, "Hãy chọn cái cần xoá !");
         }
         int id = listacc.get(pos).getId();
         String name = listacc.get(pos).getName();
@@ -397,11 +391,15 @@ public class ManageAccount extends javax.swing.JPanel {
     }//GEN-LAST:event_rSButtonMetro6ActionPerformed
 
     private void rSButtonMetro5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro5ActionPerformed
-        
-        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
-        FrmDiaglogAccount facc = new FrmDiaglogAccount(frame, true,account);
-        facc.setVisible(true);
-        load_data();
+        if (account != null) {
+            JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+            FrmDiaglogAccount facc = new FrmDiaglogAccount(frame, true, account);
+            facc.setVisible(true);
+            load_data();
+        }else{
+            JOptionPane.showMessageDialog(null, "Bạn chưa chọn !");
+        }
+
     }//GEN-LAST:event_rSButtonMetro5ActionPerformed
 
     private void rSButtonMetro9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro9ActionPerformed
@@ -410,7 +408,6 @@ public class ManageAccount extends javax.swing.JPanel {
         ff.setVisible(true);
         String a = ff.getData();
         load_find(a);
-         
 
 
     }//GEN-LAST:event_rSButtonMetro9ActionPerformed

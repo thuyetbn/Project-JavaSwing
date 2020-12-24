@@ -34,9 +34,6 @@ import model.Role;
  * @author BinDz zxczx
  */
 public class FrmDiaglogAccount extends javax.swing.JDialog {
-
-    private static final Connection conn = BConnection.getConnection();
-
     /**
      * Creates new form FrmDiaglogAccount
      */

@@ -6,31 +6,25 @@
 package view;
 
 import DAO.AccountDAO;
-import java.awt.Frame;
 import java.awt.event.KeyEvent;
 import java.util.List;
 import javax.swing.JOptionPane;
 import model.Account;
-import static view.FrmMain.maximized;
 
 /**
  *
  * @author BinDz
  */
-public class FrmLogin extends javax.swing.JFrame {
-
-    static FrmLogin login = new FrmLogin();
+public class login extends javax.swing.JDialog {
     static boolean maximized = true;
     int xMouse;
     int yMouse;
-
     /**
-     * Creates new form FrmLogin
+     * Creates new form login
      */
-    public FrmLogin() {
+    public login(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
-        setLocationRelativeTo(null);
-
     }
 
     /**
@@ -42,34 +36,31 @@ public class FrmLogin extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
         rSPanelImage1 = new rojerusan.RSPanelImage();
         jLabel1 = new javax.swing.JLabel();
         jPanel8 = new javax.swing.JPanel();
-        jPanel3 = new javax.swing.JPanel();
-        rSButtonMetro2 = new rojerusan.RSButtonMetro();
-        rSButtonMetro3 = new rojerusan.RSButtonMetro();
         jPanel4 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
+        rSButtonMetro3 = new rojerusan.RSButtonMetro();
         jPanel5 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jPanel6 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jPanel6 = new javax.swing.JPanel();
+        jPanel7 = new javax.swing.JPanel();
         txtEmail = new javax.swing.JTextField();
         txtPass = new javax.swing.JPasswordField();
         rSButtonMetro1 = new rojerusan.RSButtonMetro();
         btnLogin = new rojerusan.RSButtonMetro();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setLocationByPlatform(true);
-        setUndecorated(true);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jPanel2.setBackground(new java.awt.Color(51, 204, 255));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel3.setBackground(new java.awt.Color(51, 204, 255));
+        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         rSPanelImage1.setImagen(new javax.swing.ImageIcon(getClass().getResource("/images/home.png"))); // NOI18N
 
@@ -84,43 +75,34 @@ public class FrmLogin extends javax.swing.JFrame {
             .addGap(0, 200, Short.MAX_VALUE)
         );
 
-        jPanel2.add(rSPanelImage1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 200, 200));
+        jPanel3.add(rSPanelImage1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 200, 200));
 
         jLabel1.setBackground(new java.awt.Color(255, 255, 255));
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_Ball_Point_Pen_25px_1.png"))); // NOI18N
         jLabel1.setText("Đăng nhập");
-        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 210, 200, 110));
+        jPanel3.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 210, 200, 110));
 
         jPanel8.setBackground(new java.awt.Color(255, 255, 255));
         jPanel8.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        jPanel2.add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 210, 180, 2));
+        jPanel3.add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 210, 180, 2));
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 200, 320));
+        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 200, 320));
 
-        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel3.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-        jPanel3.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+        jPanel4.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel4.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+        jPanel4.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
-                jPanel3MouseDragged(evt);
+                jPanel4MouseDragged(evt);
             }
         });
-        jPanel3.addMouseListener(new java.awt.event.MouseAdapter() {
+        jPanel4.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                jPanel3MousePressed(evt);
+                jPanel4MousePressed(evt);
             }
         });
-        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        rSButtonMetro2.setBackground(new java.awt.Color(51, 204, 255));
-        rSButtonMetro2.setText("-");
-        rSButtonMetro2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rSButtonMetro2ActionPerformed(evt);
-            }
-        });
-        jPanel3.add(rSButtonMetro2, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 1, 30, 28));
+        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         rSButtonMetro3.setBackground(new java.awt.Color(51, 204, 255));
         rSButtonMetro3.setText("X");
@@ -129,56 +111,49 @@ public class FrmLogin extends javax.swing.JFrame {
                 rSButtonMetro3ActionPerformed(evt);
             }
         });
-        jPanel3.add(rSButtonMetro3, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 1, 30, 28));
+        jPanel4.add(rSButtonMetro3, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 1, 30, 28));
 
-        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 560, 30));
+        jPanel2.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 560, 30));
 
-        jPanel4.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel5.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_teacher_25px.png"))); // NOI18N
         jLabel2.setText("Quản lý sinh viên");
-        jPanel4.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(56, 11, 257, 38));
-
-        jPanel5.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel3.setText("Password:");
-        jPanel5.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, -1, -1));
-
-        jLabel4.setText("Email:");
-        jPanel5.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, -1, -1));
-
-        jPanel4.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 70, 80));
+        jPanel5.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(56, 11, 257, 38));
 
         jPanel6.setBackground(new java.awt.Color(255, 255, 255));
         jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        txtEmail.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txtEmail.setText("thuyetnv96@gmail.com");
-        txtEmail.setAlignmentX(0.0F);
-        txtEmail.setAlignmentY(0.0F);
-        txtEmail.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-        txtEmail.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        jPanel6.add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 250, 30));
+        jLabel3.setText("Password:");
+        jPanel6.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, -1, -1));
 
-        txtPass.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txtPass.setText("Thuyet123");
+        jLabel4.setText("Email:");
+        jPanel6.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, -1, -1));
+
+        jPanel5.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 70, 80));
+
+        jPanel7.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel7.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        txtEmail.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+        jPanel7.add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 250, 30));
+
         txtPass.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
         txtPass.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtPassKeyPressed(evt);
             }
         });
-        jPanel6.add(txtPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 250, 30));
+        jPanel7.add(txtPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 250, 30));
 
-        jPanel4.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 86, 270, 90));
+        jPanel5.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 86, 270, 90));
 
         rSButtonMetro1.setBackground(new java.awt.Color(51, 204, 255));
         rSButtonMetro1.setText("Quên mật khẩu");
-        jPanel4.add(rSButtonMetro1, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 230, 120, 40));
+        jPanel5.add(rSButtonMetro1, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 230, 120, 40));
 
         btnLogin.setBackground(new java.awt.Color(51, 204, 255));
         btnLogin.setText("Đăng nhập");
@@ -187,58 +162,31 @@ public class FrmLogin extends javax.swing.JFrame {
                 btnLoginActionPerformed(evt);
             }
         });
-        jPanel4.add(btnLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 230, 120, 40));
+        jPanel5.add(btnLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 230, 120, 40));
 
-        jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 30, 360, 320));
+        jPanel2.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 30, 360, 320));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 560, 350));
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 580, 370));
 
         pack();
-        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void rSButtonMetro2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro2ActionPerformed
-
-    }//GEN-LAST:event_rSButtonMetro2ActionPerformed
 
     private void rSButtonMetro3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro3ActionPerformed
         System.exit(0);
     }//GEN-LAST:event_rSButtonMetro3ActionPerformed
 
-    private void jPanel3MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel3MousePressed
-        xMouse = evt.getX();
-        yMouse = evt.getY();
-    }//GEN-LAST:event_jPanel3MousePressed
-
-    private void jPanel3MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel3MouseDragged
+    private void jPanel4MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel4MouseDragged
         if (maximized) {
             int x = evt.getXOnScreen();
             int y = evt.getYOnScreen();
             this.setLocation(x - xMouse, y - yMouse);
         }
-    }//GEN-LAST:event_jPanel3MouseDragged
+    }//GEN-LAST:event_jPanel4MouseDragged
 
-    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-        String email = txtEmail.getText();
-        String pass = String.valueOf(txtPass.getPassword());
-        AccountDAO ad = new AccountDAO();
-        List<Account> lsta;
-        lsta = ad.loginForm(email, pass);
-        Account acc;
-        acc = lsta.get(0);
-        if (lsta.size() == 1) {
-            JOptionPane.showMessageDialog(null, "Đăng nhập thành công");
-            FrmMain fm = new FrmMain(acc);
-            fm.setVisible(true);
-            login.setVisible(false);
-            dispose();
-
-        } else {
-            JOptionPane.showMessageDialog(null, "Đăng nhập thất bại");
-        }
-
-
-    }//GEN-LAST:event_btnLoginActionPerformed
+    private void jPanel4MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel4MousePressed
+        xMouse = evt.getX();
+        yMouse = evt.getY();
+    }//GEN-LAST:event_jPanel4MousePressed
 
     private void txtPassKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPassKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -253,15 +201,30 @@ public class FrmLogin extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Đăng nhập thành công");
                 FrmMain fm = new FrmMain(acc);
                 fm.setVisible(true);
-                login.setVisible(false);
-                dispose();
 
             } else {
                 JOptionPane.showMessageDialog(null, "Đăng nhập thất bại");
             }
         }
-
     }//GEN-LAST:event_txtPassKeyPressed
+
+    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
+        String email = txtEmail.getText();
+        String pass = String.valueOf(txtPass.getPassword());
+        AccountDAO ad = new AccountDAO();
+        List<Account> lsta;
+        lsta = ad.loginForm(email, pass);
+        Account acc;
+        acc = lsta.get(0);
+        if (lsta.size() == 1) {
+            JOptionPane.showMessageDialog(null, "Đăng nhập thành công");
+            FrmMain fm = new FrmMain(acc);
+            fm.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Đăng nhập thất bại");
+        }
+
+    }//GEN-LAST:event_btnLoginActionPerformed
 
     /**
      * @param args the command line arguments
@@ -280,20 +243,27 @@ public class FrmLogin extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FrmLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FrmLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FrmLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FrmLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
-        /* Create and display the form */
+        /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new FrmLogin().setVisible(true);
+                login dialog = new login(new javax.swing.JFrame(), true);
+                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        System.exit(0);
+                    }
+                });
+                dialog.setVisible(true);
             }
         });
     }
@@ -304,15 +274,14 @@ public class FrmLogin extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private rojerusan.RSButtonMetro rSButtonMetro1;
-    private rojerusan.RSButtonMetro rSButtonMetro2;
     private rojerusan.RSButtonMetro rSButtonMetro3;
     private rojerusan.RSPanelImage rSPanelImage1;
     private javax.swing.JTextField txtEmail;

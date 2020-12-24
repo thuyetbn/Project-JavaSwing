@@ -1,5 +1,4 @@
 ﻿
-
 CREATE DATABASE QuanLySinhVien
 GO
 
@@ -81,15 +80,12 @@ CREATE TABLE tbl_Mark
 )
 GO
 
-INSERT INTO dbo.tbl_KhoaHoc
-(
-    Name,
-    Begin_date,
-    End_data
-)
+ALTER TABLE dbo.tbl_Subject add KhoaHoc_ID INT FOREIGN KEY REFERENCES dbo.tbl_KhoaHoc(id)
+
+INSERT INTO dbo.tbl_KhoaHoc(Name,Begin_date,End_data)
 VALUES
-(   N'Lập trình',2020-01-12,2020-01-12),
-(   N'Quản trị viên',2020-02-12,2020-01-12)
+(   N'Lập trình','2018-01-12','2020-01-12'),
+(   N'Quản trị viên','2012-02-12','2020-01-12')
 GO
 
 insert into tbl_Role values
@@ -99,8 +95,6 @@ insert into tbl_Role values
 (N'Giảng viên thực tập')
 GO
 
-SELECT * FROM dbo.tbl_KhoaHoc
-GO
 
 CREATE PROC getAllRole
 AS
@@ -114,31 +108,12 @@ EXEC getAllRole;
 GO
 
 insert into tbl_Subject(Name,credits,Status) values
-(N'Kinh Tế Vĩ Mô',2,1),
-(N'Kinh tế phát triển',2,1),
-(N'Kinh tế môi trường',2,1),
-(N'Lịch sử các học thuyết kinh tế',2,1),
-(N'Toán cao cấp',2,1),
-(N'Triết học Mác Lênin',2,1),
-(N'Tư tưởng Hồ Chí Minh',2,1),
-(N'Quan hệ kinh tế quốc tế',2,1),
-(N'Nguyên lý thống kê kinh tế',2,1),
-(N'Giao nhận vận tải',2,1),
-(N'Tin học đại cương',2,1),
-(N'Tiếng Anh giao tiếp',2,1)
+(N'Java',2,1),
+(N'PHP',2,1),
+(N'Android',2,1)
 GO
 
-INSERT INTO dbo.tbl_Teacher
-(
-    Name,
-    Phone,
-    Email,
-    Password,
-    Address,
-    Birthday,
-    Status,
-    Role_ID
-)
+INSERT INTO dbo.tbl_Teacher(Name,Phone,Email,Password,Address,Birthday,Status,Role_ID)
 VALUES
 (   N'Ngô Văn Thuyết',       -- Name - nvarchar(100)
     N'0973086596',       -- Phone - nvarchar(10)
@@ -151,8 +126,6 @@ VALUES
     )
 
 GO
-
-
 
 CREATE PROC getAllAccount
 AS
@@ -193,14 +166,10 @@ CREATE PROC findAccount
 AS
 BEGIN
 	SELECT tbl_Teacher.id,tbl_Teacher.Name,dbo.tbl_Role.id 'RoleId',tbl_Role.Name 'RoleName',Phone,Email,Password,Address,Birthday,Status FROM dbo.tbl_Teacher INNER JOIN dbo.tbl_Role ON tbl_Role.id = tbl_Teacher.Role_ID
-	WHERE tbl_Teacher.Name LIKE N'name'
+	WHERE tbl_Teacher.Name LIKE N'%'+@name+N'%'
 	
 END
 GO
-
-
-EXEC dbo.findAccount @name = 0 -- int
-
 
 
 CREATE PROC updateAccount
@@ -219,16 +188,30 @@ BEGIN
 END
 GO
 
-
-
 CREATE PROC getAllStudent
 AS
 BEGIN
-    SELECT *,tbl_Class.Name'ClassName' FROM dbo.tbl_Students LEFT JOIN dbo.tbl_Class ON tbl_Class.id = tbl_Students.Class_ID ORDER BY MaSV ASC
+    SELECT S.*, C.Name 'ClassName',T.id 'TeacherID',T.Name'TeacherName',KH.id'KH_ID',KH.Name'KH_Name' FROM dbo.tbl_Students S
+	LEFT JOIN dbo.tbl_Class C ON C.id = S.Class_ID 
+	LEFT JOIN dbo.tbl_Teacher T ON T.id = C.GiaoVien_ID
+	LEFT JOIN dbo.tbl_KhoaHoc KH ON KH.id = C.KhoaHoc_ID
+	ORDER BY MaSV ASC
 END
 GO
 
-EXEC dbo.getAllStudent
+CREATE PROC findStudent
+@name NVARCHAR(100)
+AS
+BEGIN
+	SELECT S.*, C.Name 'ClassName',T.id 'TeacherID',T.Name'TeacherName',KH.id'KH_ID',KH.Name'KH_Name' FROM dbo.tbl_Students S
+	LEFT JOIN dbo.tbl_Class C ON C.id = S.Class_ID 
+	LEFT JOIN dbo.tbl_Teacher T ON T.id = C.GiaoVien_ID
+	LEFT JOIN dbo.tbl_KhoaHoc KH ON KH.id = C.KhoaHoc_ID
+	WHERE S.Name LIKE N'%'+@name+N'%'
+	
+END
+GO
+
 
 CREATE PROC insertStudent
 	@MaSV NVARCHAR(4),
@@ -257,34 +240,141 @@ GO
 CREATE PROC getAllSubject
 AS
 BEGIN
-	SELECT * FROM dbo.tbl_Subject
+	SELECT S.*,KH.id,KH.Name'KH_Name' FROM dbo.tbl_Subject S INNER JOIN dbo.tbl_KhoaHoc KH ON KH.id = S.KhoaHoc_ID
 END
 GO
+
+
 
 CREATE PROC insertSubject
 @Name NVARCHAR(100),
 @credits INT,
-@Status
- TINYINT
+@Status TINYINT,
+@KH_ID INT
 AS
 BEGIN
-    INSERT INTO tbl_Subject(Name,credits,Status) VALUES (@Name,@credits,@Status)
+    INSERT INTO tbl_Subject(Name,credits,Status,KhoaHoc_ID) VALUES (@Name,@credits,@Status,@KH_ID)
+END
+GO
+
+
+CREATE PROC updateSubject
+@id INT,
+@Name NVARCHAR(100),
+@credits INT,
+@Status TINYINT,
+@KH_ID INT
+AS
+BEGIN
+    UPDATE dbo.tbl_Subject SET Name=@Name,credits=@credits,Status=@Status,KhoaHoc_ID=@KH_ID WHERE id = @id
 END
 GO
 
 
 
-EXEC getAllStudent
-
-SELECT * FROM dbo.tbl_Class
-
-insert into tbl_KhoaHoc(Name,Begin_date,End_data) values
-(N'Lập trình','2019-05-09','2020-05-25'),
-(N'Quản trị mạng','2018-09-05','2021-05-25'),
-(N'Tiếng Anh','2018-09-05','2022-05-25'),
-(N'PHP','2019-09-05','2023-05-25'),
-(N'Java','2020-09-05','2024-05-25')
+CREATE PROC findSubject
+@name NVARCHAR(100)
+AS
+BEGIN
+	SELECT S.*,KH.id,KH.Name'KH_Name' FROM dbo.tbl_Subject S INNER JOIN dbo.tbl_KhoaHoc KH ON KH.id = S.KhoaHoc_ID
+	WHERE S.Name LIKE N'%'+@name+N'%'
+END
 GO
+
+
+CREATE PROC loginForm
+@Email NVARCHAR(100),
+@Password NVARCHAR(1000)
+AS
+BEGIN
+    SELECT tbl_Teacher.id,tbl_Teacher.Name,dbo.tbl_Role.id 'RoleId',tbl_Role.Name 'RoleName',Phone,Email,Password,Address,Birthday,Status FROM dbo.tbl_Teacher INNER JOIN dbo.tbl_Role ON tbl_Role.id = tbl_Teacher.Role_ID WHERE Email = @Email AND Password = @Password
+END
+GO
+
+EXEC dbo.getAllAccount
+
+
+CREATE PROC getAllClass
+AS
+BEGIN
+    SELECT C.*,KH.Name 'KH_Name',T.Name 'Teacher_Name' FROM dbo.tbl_Class C LEFT JOIN dbo.tbl_KhoaHoc KH ON KH.id = C.KhoaHoc_ID
+									LEFT JOIN dbo.tbl_Teacher T  ON T.id = C.GiaoVien_ID 
+END
+GO
+
+
+GO
+
+CREATE PROC addClassRoom
+@Name NVARCHAR(100),
+@KhoaHoc_ID INT,
+@GiaoVien_ID INT
+AS
+BEGIN
+	INSERT INTO tbl_Class(Name,KhoaHoc_ID,GiaoVien_ID) VALUES (@Name,@KhoaHoc_ID,@GiaoVien_ID)
+END
+GO
+
+
+
+
+CREATE PROC updateClassRoom
+@id INT,
+@Name NVARCHAR(100),
+@KhoaHoc_ID INT,
+@GiaoVien_ID INT
+AS
+BEGIN
+	UPDATE dbo.tbl_Class SET Name=@Name, KhoaHoc_ID=@KhoaHoc_ID, GiaoVien_ID=@GiaoVien_ID WHERE id =@id
+END
+GO
+
+CREATE PROC getAllMark
+AS
+BEGIN
+	SELECT M.*,s.id'Student_Id',s.Name'Student_Name',SJ.id'SJ_ID',SJ.Name'SJ_Name' FROM dbo.tbl_Mark M 
+	LEFT JOIN dbo.tbl_Students S ON S.id = M.Student_ID
+	LEFT JOIN dbo.tbl_Subject SJ ON SJ.id = M.MonHoc_ID
+END
+GO
+
+CREATE PROC addMark
+@Student_ID INT,
+@MonHoc_ID INT,
+@Diem INT,
+@Ex_Date DATE,
+@Status TINYINT,
+@Note TEXT
+AS
+BEGIN
+    INSERT INTO tbl_Mark(Student_ID,MonHoc_ID,Diem,Ex_Date,Status,Note) VALUES (@Student_ID,@MonHoc_ID,@Diem,@Ex_Date,@Status,@Note)
+END
+GO
+
+CREATE PROC findStudentMark
+@name NVARCHAR(100)
+AS
+BEGIN
+    SELECT M.*,S.id'Student_Id',S.Name'Student_Name',SJ.id'SJ_ID',SJ.Name'SJ_Name' FROM dbo.tbl_Mark M 
+	LEFT JOIN dbo.tbl_Students S ON S.id = M.Student_ID
+	LEFT JOIN dbo.tbl_Subject SJ ON SJ.id = M.MonHoc_ID WHERE S.Name LIKE N'%'+@name+N'%'
+END
+GO
+
+CREATE PROC updateMark
+@Student_ID INT,
+@MonHoc_ID INT,
+@Diem INT,
+@Ex_Date DATE,
+@Status TINYINT,
+@Note TEXT
+AS
+BEGIN
+    UPDATE dbo.tbl_Mark SET MonHoc_ID=@Student_ID,Diem=@Diem,Ex_Date=@Ex_Date,Status=@Status,Note=@Note WHERE Student_ID=@Student_ID
+END
+GO
+
+
 
 insert into tbl_Class(Name,KhoaHoc_ID,GiaoVien_ID) values
 (N'C1905M',1,5),
@@ -303,10 +393,7 @@ insert into tbl_Students(MaSV,Name,Phone,Email,Address,Birthday,Gender,Status,Cl
 ('B004',N'Trịnh Văn Mạnh','0973086528 ','qeqwe@gmail.com',N'Âu Cơ, Bắc Từ Liêm, Hà Nội','1993-02-27',1,1,4)
 GO
 
-SELECT * FROM dbo.tbl_Teacher LEFT JOIN dbo.tbl_Role ON tbl_Role.id = tbl_Teacher.Role_ID
 EXEC dbo.getAllAccount
-
-
 GO
 
-SELECT * FROM dbo.tbl_Subject
+SELECT * FROM dbo.tbl_Teacher

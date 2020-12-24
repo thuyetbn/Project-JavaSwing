@@ -24,39 +24,39 @@ import model.Account;
 import DAO.AccountDAO;
 import java.util.List;
 import java.util.Vector;
+import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import model.Role;
+import static view.FrmLogin.login;
+
 /**
  *
  * @author BinDz
  */
 public class FrmMain extends javax.swing.JFrame {
-    
     static boolean maximized = true;
     int xMouse;
     int yMouse;
     Account account;
     List<Account> listacc;
     List<Role> lr;
+
     /**
      * Creates new form FrmMain
      */
-    public FrmMain() {
+    public FrmMain(Account account) {
         initComponents();
         setLocationRelativeTo(null);
         Home h = new Home();
         Body.add(h);
         Body.repaint();
         Body.revalidate();
-
+        this.account = account;
+        labelName.setText(account.getName());
 //        show_table();
 //        load_data();
     }
-    
-    
-    
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -67,7 +67,7 @@ public class FrmMain extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
+        Main = new javax.swing.JPanel();
         Header = new javax.swing.JPanel();
         rSMaterialButtonCircle1 = new rojerusan.RSMaterialButtonCircle();
         rSMaterialButtonCircle2 = new rojerusan.RSMaterialButtonCircle();
@@ -77,7 +77,7 @@ public class FrmMain extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jPanel12 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
+        labelName = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         btnHome1 = new rojerusan.RSButtonMetro();
@@ -92,11 +92,11 @@ public class FrmMain extends javax.swing.JFrame {
         setUndecorated(true);
         setResizable(false);
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel1.setMaximumSize(new java.awt.Dimension(1000, 600));
-        jPanel1.setMinimumSize(new java.awt.Dimension(1000, 600));
-        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        Main.setBackground(new java.awt.Color(255, 255, 255));
+        Main.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        Main.setMaximumSize(new java.awt.Dimension(1000, 600));
+        Main.setMinimumSize(new java.awt.Dimension(1000, 600));
+        Main.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         Header.setBackground(new java.awt.Color(255, 255, 255));
         Header.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 0, 1, 0, new java.awt.Color(0, 0, 0)));
@@ -147,7 +147,7 @@ public class FrmMain extends javax.swing.JFrame {
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
-        jPanel1.add(Header, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 30));
+        Main.add(Header, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 30));
 
         Left.setBackground(new java.awt.Color(255, 255, 255));
         Left.setForeground(new java.awt.Color(255, 255, 255));
@@ -177,15 +177,20 @@ public class FrmMain extends javax.swing.JFrame {
         jPanel12.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel4.setText("Xin Chào! ");
-        jPanel12.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, -1, 30));
+        jPanel12.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 25, -1, 20));
 
-        jLabel11.setForeground(new java.awt.Color(255, 0, 0));
-        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_person_25px.png"))); // NOI18N
-        jLabel11.setText("Admin");
-        jPanel12.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 40, 100, -1));
+        labelName.setForeground(new java.awt.Color(255, 0, 0));
+        labelName.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_person_25px.png"))); // NOI18N
+        labelName.setText("Admin");
+        jPanel12.add(labelName, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 160, 20));
 
         jLabel12.setText("Đăng xuất");
-        jPanel12.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 80, -1, 30));
+        jLabel12.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel12MouseClicked(evt);
+            }
+        });
+        jPanel12.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 90, -1, 20));
 
         jLabel2.setText("- Thông tin:");
         jPanel12.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 5, 90, -1));
@@ -193,7 +198,7 @@ public class FrmMain extends javax.swing.JFrame {
         Left.add(jPanel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 120, 180, 110));
 
         btnHome1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_settings_25px.png"))); // NOI18N
-        btnHome1.setText("Trang Chủ");
+        btnHome1.setText("Cài đặt");
         btnHome1.setBorderPainted(false);
         btnHome1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnHome1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -288,7 +293,7 @@ public class FrmMain extends javax.swing.JFrame {
         Left.add(btnHome10, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 399, 180, 55));
 
         btnHome11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_graph_report_25px.png"))); // NOI18N
-        btnHome11.setText("Thống kê");
+        btnHome11.setText("Quản lý điểm");
         btnHome11.setBorderPainted(false);
         btnHome11.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnHome11.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -306,30 +311,26 @@ public class FrmMain extends javax.swing.JFrame {
         });
         Left.add(btnHome11, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 455, 180, 59));
 
-        jPanel1.add(Left, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 180, 570));
+        Main.add(Left, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 180, 570));
 
         Body.setLayout(new java.awt.BorderLayout());
-        jPanel1.add(Body, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 30, 820, 570));
+        Main.add(Body, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 30, 820, 570));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(Main, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(Main, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    
-    
-    
-    
-    
-    
+
+
     private void rSMaterialButtonCircle1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSMaterialButtonCircle1ActionPerformed
         System.exit(0);
     }//GEN-LAST:event_rSMaterialButtonCircle1ActionPerformed
@@ -365,8 +366,8 @@ public class FrmMain extends javax.swing.JFrame {
         Body.add(ma);
         Body.repaint();
         Body.revalidate();
-        
-        
+
+
     }//GEN-LAST:event_btnHome4ActionPerformed
 
     private void btnHome9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHome9ActionPerformed
@@ -386,11 +387,15 @@ public class FrmMain extends javax.swing.JFrame {
     }//GEN-LAST:event_btnHome10ActionPerformed
 
     private void btnHome11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHome11ActionPerformed
-        // TODO add your handling code here:
+        Body.removeAll();
+        ManageMark mk = new ManageMark();
+        Body.add(mk);
+        Body.repaint();
+        Body.revalidate();
     }//GEN-LAST:event_btnHome11ActionPerformed
 
     private void rSMaterialButtonCircle2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSMaterialButtonCircle2ActionPerformed
-       this.setState(Frame.ICONIFIED);
+        this.setState(Frame.ICONIFIED);
     }//GEN-LAST:event_rSMaterialButtonCircle2ActionPerformed
 
     private void btnHome3MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnHome3MouseEntered
@@ -406,7 +411,7 @@ public class FrmMain extends javax.swing.JFrame {
     }//GEN-LAST:event_btnHome4MouseEntered
 
     private void btnHome4MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnHome4MouseExited
-       btnHome4.setBackground(new Color(0, 112, 192));
+        btnHome4.setBackground(new Color(0, 112, 192));
     }//GEN-LAST:event_btnHome4MouseExited
 
     private void btnHome9MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnHome9MouseEntered
@@ -414,7 +419,7 @@ public class FrmMain extends javax.swing.JFrame {
     }//GEN-LAST:event_btnHome9MouseEntered
 
     private void btnHome9MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnHome9MouseExited
-       btnHome9.setBackground(new Color(0, 112, 192));
+        btnHome9.setBackground(new Color(0, 112, 192));
     }//GEN-LAST:event_btnHome9MouseExited
 
     private void btnHome10MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnHome10MouseExited
@@ -440,6 +445,15 @@ public class FrmMain extends javax.swing.JFrame {
     private void btnHome1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnHome1MouseEntered
         btnHome1.setBackground(new Color(85, 159, 213));
     }//GEN-LAST:event_btnHome1MouseEntered
+
+    private void jLabel12MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel12MouseClicked
+        int choose = JOptionPane.showConfirmDialog(null, "Bạn chắc chắn muốn đăng xuất!", "Đăng xuất", JOptionPane.YES_NO_OPTION);
+        if (choose == JOptionPane.YES_OPTION) {
+            FrmLogin login = new FrmLogin();
+            login.setVisible(true);
+            dispose();
+        }
+    }//GEN-LAST:event_jLabel12MouseClicked
 
     /**
      * @param args the command line arguments
@@ -471,7 +485,7 @@ public class FrmMain extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new FrmMain().setVisible(true);
+                new FrmMain(null).setVisible(true);
             }
         });
     }
@@ -480,6 +494,7 @@ public class FrmMain extends javax.swing.JFrame {
     private javax.swing.JPanel Body;
     private javax.swing.JPanel Header;
     private javax.swing.JPanel Left;
+    private javax.swing.JPanel Main;
     private rojerusan.RSButtonMetro btnHome1;
     private rojerusan.RSButtonMetro btnHome10;
     private rojerusan.RSButtonMetro btnHome11;
@@ -487,14 +502,13 @@ public class FrmMain extends javax.swing.JFrame {
     private rojerusan.RSButtonMetro btnHome4;
     private rojerusan.RSButtonMetro btnHome9;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel labelName;
     private rojerusan.RSMaterialButtonCircle rSMaterialButtonCircle1;
     private rojerusan.RSMaterialButtonCircle rSMaterialButtonCircle2;
     // End of variables declaration//GEN-END:variables

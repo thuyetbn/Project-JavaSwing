@@ -5,89 +5,88 @@
  */
 package view;
 
-import DAO.SubjectDAO;
+import DAO.MarkDAO;
 import java.awt.Color;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
-import model.Subject;
+import model.Account;
+import model.Mark;
+
 /**
  *
  * @author BinDz
  */
-public class ManageSubject extends javax.swing.JPanel {
+public class ManageMark extends javax.swing.JPanel {
 
     /**
-     * Creates new form NewJPanel1
+     * Creates new form ManageMark
      */
-    public ManageSubject() {
+    public ManageMark() {
         initComponents();
         load_data();
     }
-    Subject sub;
-    List<Subject> listsub;
+    List<Mark> listm;
+    Mark mark;
     private void load_data() {
-        SubjectDAO sd = new SubjectDAO();
-        listsub = sd.getAllSubject();
-        String columns[] = {"STT", "Tên", "Số tín chỉ","Khoá học", "Trạng thái"};
+        MarkDAO ad = new MarkDAO();
+        listm = ad.getAllMark();
+        String columns[] = {"STT", "Tên", "Môn học", "Điểm","Trạng thái","Ghi chú","Ngày kêt thúc môn"};
         DefaultTableModel dtm = new DefaultTableModel(columns, 0);
-        DateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         Integer i = 1;
-        for (Subject s : listsub) {
-            dtm.addRow(new Object[]{i, s.getName(),s.getCredits(),s.getKH_Name(), s.getStatus() == 0 ? "Đang hoạt động" : "Đã ngừng dạy"});
+        for (Mark m : listm) {
+            dtm.addRow(new Object[]{i,m.getS_name(),m.getSJ_name(),m.getMark(),m.getStatus()==0?"Đã đạt":"Trượt",m.getNote(),m.getEx_date()});
             i++;
         }
-        tbSubject.setModel(dtm);
-        tbSubject.setRowHeight(25);
-        if (listsub.size() > 0) {
-            tbSubject.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+        tbMark.setModel(dtm);
+        tbMark.setRowHeight(25);
+        if (listm.size() > 0) {
+            tbMark.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
                 @Override
                 public void valueChanged(ListSelectionEvent lse) {
-                    int pos = tbSubject.getSelectedRow();
+                    int pos = tbMark.getSelectedRow();
                     if (pos < 0) {
                         pos = 0;
                     }
 
-                    sub = listsub.get(pos);
+                    mark = listm.get(pos);
                 }
             });
         }
     }
+
     void load_find(String name) {
-        SubjectDAO ad = new SubjectDAO();
-        listsub = ad.findSubject(name);
-        String columns[] = {"STT", "Tên", "Số tín chỉ", "Trạng thái"};
+        MarkDAO ad = new MarkDAO();
+        listm = ad.findStudentMark(name);
+        String columns[] = {"STT", "Tên", "Môn học", "Điểm","Trạng thái","Ghi chú","Ngày kêt thúc môn"};
         DefaultTableModel dtm = new DefaultTableModel(columns, 0);
-        DateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         Integer i = 1;
-        for (Subject s : listsub) {
-            dtm.addRow(new Object[]{i, s.getName(),s.getCredits(), s.getStatus() == 0 ? "Đang hoạt động" : "Đã ngừng dạy"});
+        for (Mark m : listm) {
+            dtm.addRow(new Object[]{i,m.getS_name(),m.getSJ_name(),m.getMark(),m.getStatus()==0?"Đã đạt":"Trượt",m.getNote(),m.getEx_date()});
             i++;
         }
-        tbSubject.setModel(dtm);
-        tbSubject.setRowHeight(25);
-        if (listsub.size() > 0) {
-            tbSubject.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+        tbMark.setModel(dtm);
+        tbMark.setRowHeight(25);
+        if (listm.size() > 0) {
+            tbMark.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
                 @Override
                 public void valueChanged(ListSelectionEvent lse) {
-                    int pos = tbSubject.getSelectedRow();
+                    int pos = tbMark.getSelectedRow();
                     if (pos < 0) {
                         pos = 0;
                     }
 
-                    sub = listsub.get(pos);
+                    mark = listm.get(pos);
                 }
             });
         }
 
     }
-    
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -98,6 +97,7 @@ public class ManageSubject extends javax.swing.JPanel {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
         jPanel20 = new javax.swing.JPanel();
         rSButtonMetro13 = new rojerusan.RSButtonMetro();
         rSButtonMetro14 = new rojerusan.RSButtonMetro();
@@ -108,7 +108,7 @@ public class ManageSubject extends javax.swing.JPanel {
         rSButtonMetro6 = new rojerusan.RSButtonMetro();
         jPanel22 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        tbSubject = new javax.swing.JTable();
+        tbMark = new javax.swing.JTable();
 
         jPanel20.setBackground(new java.awt.Color(255, 255, 255));
         jPanel20.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
@@ -206,8 +206,8 @@ public class ManageSubject extends javax.swing.JPanel {
         jPanel21.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 20)); // NOI18N
-        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_books_50px.png"))); // NOI18N
-        jLabel10.setText("Quản lý môn học");
+        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_graph_report_50px.png"))); // NOI18N
+        jLabel10.setText("Quản lý điểm");
         jPanel21.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 1, 260, 110));
 
         jPanel20.add(jPanel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 2, 260, 110));
@@ -237,7 +237,7 @@ public class ManageSubject extends javax.swing.JPanel {
 
         jPanel22.setBackground(new java.awt.Color(255, 255, 255));
 
-        tbSubject.setModel(new javax.swing.table.DefaultTableModel(
+        tbMark.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -248,9 +248,9 @@ public class ManageSubject extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tbSubject.setGridColor(new java.awt.Color(0, 0, 0));
-        tbSubject.setSelectionBackground(new java.awt.Color(51, 204, 255));
-        jScrollPane4.setViewportView(tbSubject);
+        tbMark.setGridColor(new java.awt.Color(0, 0, 0));
+        tbMark.setSelectionBackground(new java.awt.Color(51, 204, 255));
+        jScrollPane4.setViewportView(tbMark);
 
         javax.swing.GroupLayout jPanel22Layout = new javax.swing.GroupLayout(jPanel22);
         jPanel22.setLayout(jPanel22Layout);
@@ -263,31 +263,46 @@ public class ManageSubject extends javax.swing.JPanel {
             .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
         );
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 820, Short.MAX_VALUE)
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel1Layout.createSequentialGroup()
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jPanel20, javax.swing.GroupLayout.PREFERRED_SIZE, 820, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jPanel22, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGap(0, 0, Short.MAX_VALUE)))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 568, Short.MAX_VALUE)
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel1Layout.createSequentialGroup()
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jPanel20, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createSequentialGroup()
                             .addGap(118, 118, 118)
                             .addComponent(jPanel22, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGap(0, 0, Short.MAX_VALUE)))
+        );
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -314,6 +329,14 @@ public class ManageSubject extends javax.swing.JPanel {
         rSButtonMetro13.setBackground(new Color(255, 255, 255));
     }//GEN-LAST:event_rSButtonMetro13MouseExited
 
+    private void rSButtonMetro13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro13ActionPerformed
+        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+        FrmDialogSubject fsub = new FrmDialogSubject(frame, true,sub);
+
+        fsub.setVisible(true);
+        load_data();
+    }//GEN-LAST:event_rSButtonMetro13ActionPerformed
+
     private void rSButtonMetro14MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSButtonMetro14MouseEntered
         rSButtonMetro14.setBackground(new Color(85, 159, 213));
     }//GEN-LAST:event_rSButtonMetro14MouseEntered
@@ -322,6 +345,15 @@ public class ManageSubject extends javax.swing.JPanel {
         rSButtonMetro14.setBackground(new Color(255, 255, 255));
     }//GEN-LAST:event_rSButtonMetro14MouseExited
 
+    private void rSButtonMetro14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro14ActionPerformed
+        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+        FrmFind ff = new FrmFind(frame, true);
+        ff.setTitle("Tìm kiếm môn học theo tên");
+        ff.setVisible(true);
+        String a = ff.getData();
+        load_find(a);
+    }//GEN-LAST:event_rSButtonMetro14ActionPerformed
+
     private void rSButtonMetro15MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSButtonMetro15MouseEntered
         rSButtonMetro15.setBackground(new Color(85, 159, 213));
     }//GEN-LAST:event_rSButtonMetro15MouseEntered
@@ -329,6 +361,10 @@ public class ManageSubject extends javax.swing.JPanel {
     private void rSButtonMetro15MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSButtonMetro15MouseExited
         rSButtonMetro15.setBackground(new Color(255, 255, 255));
     }//GEN-LAST:event_rSButtonMetro15MouseExited
+
+    private void rSButtonMetro15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro15ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_rSButtonMetro15ActionPerformed
 
     private void rSButtonMetro16MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSButtonMetro16MouseEntered
         rSButtonMetro16.setBackground(new Color(85, 159, 213));
@@ -345,18 +381,6 @@ public class ManageSubject extends javax.swing.JPanel {
         load_data();
     }//GEN-LAST:event_rSButtonMetro16ActionPerformed
 
-    private void rSButtonMetro13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro13ActionPerformed
-        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
-        FrmDialogSubject fsub = new FrmDialogSubject(frame, true,sub);
-        
-        fsub.setVisible(true);
-        load_data();
-    }//GEN-LAST:event_rSButtonMetro13ActionPerformed
-
-    private void rSButtonMetro15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro15ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_rSButtonMetro15ActionPerformed
-
     private void rSButtonMetro6MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSButtonMetro6MouseEntered
         rSButtonMetro6.setBackground(new Color(85, 159, 213));
     }//GEN-LAST:event_rSButtonMetro6MouseEntered
@@ -369,19 +393,11 @@ public class ManageSubject extends javax.swing.JPanel {
         load_data();
     }//GEN-LAST:event_rSButtonMetro6ActionPerformed
 
-    private void rSButtonMetro14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro14ActionPerformed
-       JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
-        FrmFind ff = new FrmFind(frame, true);
-        ff.setTitle("Tìm kiếm môn học theo tên");
-        ff.setVisible(true);
-        String a = ff.getData();
-        load_find(a);
-    }//GEN-LAST:event_rSButtonMetro14ActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel10;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel20;
     private javax.swing.JPanel jPanel21;
     private javax.swing.JPanel jPanel22;
@@ -391,6 +407,6 @@ public class ManageSubject extends javax.swing.JPanel {
     private rojerusan.RSButtonMetro rSButtonMetro15;
     private rojerusan.RSButtonMetro rSButtonMetro16;
     private rojerusan.RSButtonMetro rSButtonMetro6;
-    private javax.swing.JTable tbSubject;
+    private javax.swing.JTable tbMark;
     // End of variables declaration//GEN-END:variables
 }
