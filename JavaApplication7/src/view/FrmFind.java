@@ -47,8 +47,10 @@ public class FrmFind extends javax.swing.JDialog {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        txtNamefind = new javax.swing.JTextField();
         rSButtonMetro1 = new rojerusan.RSButtonMetro();
+        txtNamefind = new javax.swing.JTextField();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Tìm kiếm thông tin giáo viên");
@@ -63,22 +65,8 @@ public class FrmFind extends javax.swing.JDialog {
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 400, 70));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel2.setText("Tên muốn tìm kiếm:");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 370, 40));
-
-        txtNamefind.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtNamefind.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-        txtNamefind.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNamefindActionPerformed(evt);
-            }
-        });
-        txtNamefind.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtNamefindKeyPressed(evt);
-            }
-        });
-        jPanel1.add(txtNamefind, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, 360, 30));
+        jLabel2.setText("Tìm kiếm theo:");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, 360, 20));
 
         rSButtonMetro1.setBackground(new java.awt.Color(0, 204, 255));
         rSButtonMetro1.setText("Tìm kiếm");
@@ -92,7 +80,28 @@ public class FrmFind extends javax.swing.JDialog {
                 rSButtonMetro1KeyTyped(evt);
             }
         });
-        jPanel1.add(rSButtonMetro1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 170, -1, 60));
+        jPanel1.add(rSButtonMetro1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 200, -1, 60));
+
+        txtNamefind.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtNamefind.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+        txtNamefind.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNamefindActionPerformed(evt);
+            }
+        });
+        txtNamefind.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtNamefindKeyPressed(evt);
+            }
+        });
+        jPanel1.add(txtNamefind, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, 360, 20));
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mặc định", "Item 2", "Item 3", "Item 4" }));
+        jPanel1.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, 360, 20));
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel3.setText("Tên muốn tìm kiếm:");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 370, 20));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -102,7 +111,7 @@ public class FrmFind extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -122,13 +131,11 @@ public class FrmFind extends javax.swing.JDialog {
     }//GEN-LAST:event_rSButtonMetro1KeyTyped
 
     private void txtNamefindActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNamefindActionPerformed
-        
+        // TODO add your handling code here:
     }//GEN-LAST:event_txtNamefindActionPerformed
 
     private void txtNamefindKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNamefindKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            dispose();
-        }
+        // TODO add your handling code here:
     }//GEN-LAST:event_txtNamefindKeyPressed
 
     /**
@@ -174,8 +181,10 @@ public class FrmFind extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private rojerusan.RSButtonMetro rSButtonMetro1;
     private javax.swing.JTextField txtNamefind;

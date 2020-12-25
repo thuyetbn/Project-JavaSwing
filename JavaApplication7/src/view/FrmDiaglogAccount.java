@@ -42,7 +42,6 @@ public class FrmDiaglogAccount extends javax.swing.JDialog {
         initComponents();
         AccountDAO ad = new AccountDAO();
         this.account = account;
-        setLocationRelativeTo(null);
         fillCombobox();
         initData();
     }

@@ -25,9 +25,35 @@ public class Student {
     private String Teacher_Name;
     private int KH_ID;
     private String KH_Name;
+    private String KH_begin_date;
+    private String KH_end_date;
+    private int Diem;
+    private String SJ_Name;
+
+    public Student(int id, String MaSV, String Name, String Phone, String Email, String Address, String Birthday, int Gender, int Status, int Class_ID, String Class_name, String Teacher_Name, String KH_Name, String KH_begin_date, String KH_end_date, int Diem, String SJ_Name) {
+        this.id = id;
+        this.MaSV = MaSV;
+        this.Name = Name;
+        this.Phone = Phone;
+        this.Email = Email;
+        this.Address = Address;
+        this.Birthday = Birthday;
+        this.Gender = Gender;
+        this.Status = Status;
+        this.Class_ID = Class_ID;
+        this.Class_name = Class_name;
+        this.Teacher_Name = Teacher_Name;
+        this.KH_Name = KH_Name;
+        this.KH_begin_date = KH_begin_date;
+        this.KH_end_date = KH_end_date;
+        this.Diem = Diem;
+        this.SJ_Name = SJ_Name;
+    }
+
     
     
     
+
     public Student(int id, String MaSV, String Name, String Phone, String Email, String Address, String Birthday, int Gender, int Status, int Class_ID,String Class_name) {
         this.id = id;
         this.MaSV = MaSV;
@@ -72,9 +98,23 @@ public class Student {
         this.Class_ID = Class_ID;
     }
 
-    
-    
-    
+    public Student(int id, String MaSV, String Name, String Phone, String Email, String Address, String Birthday, int Gender, int Status, int Class_ID) {
+        this.id = id;
+        this.MaSV = MaSV;
+        this.Name = Name;
+        this.Phone = Phone;
+        this.Email = Email;
+        this.Address = Address;
+        this.Birthday = Birthday;
+        this.Gender = Gender;
+        this.Status = Status;
+        this.Class_ID = Class_ID;
+    }
+
+
+
+
+
     public int getId() {
         return id;
     }
@@ -194,12 +234,45 @@ public class Student {
     public void setKH_Name(String KH_Name) {
         this.KH_Name = KH_Name;
     }
+
+    public String getKH_begin_date() {
+        return KH_begin_date;
+    }
+
+    public void setKH_begin_date(String KH_begin_date) {
+        this.KH_begin_date = KH_begin_date;
+    }
+
+    public String getKH_end_date() {
+        return KH_end_date;
+    }
+
+    public void setKH_end_date(String KH_end_date) {
+        this.KH_end_date = KH_end_date;
+    }
+
+    public int getDiem() {
+        return Diem;
+    }
+
+    public void setDiem(int Diem) {
+        this.Diem = Diem;
+    }
+
+    public String getSJ_Name() {
+        return SJ_Name;
+    }
+
+    public void setSJ_Name(String SJ_Name) {
+        this.SJ_Name = SJ_Name;
+    }
     
+
 
     @Override
     public String toString() {
         return "Student{" + "id=" + id + ", MaSV=" + MaSV + ", Name=" + Name + ", Phone=" + Phone + ", Email=" + Email + ", Address=" + Address + ", Birthday=" + Birthday + ", Gender=" + Gender + ", Status=" + Status + ", Class_ID=" + Class_ID + '}';
     }
-    
-    
+
+
 }

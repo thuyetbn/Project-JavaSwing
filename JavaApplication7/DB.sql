@@ -76,11 +76,14 @@ CREATE TABLE tbl_Mark
 	Ex_Date date default(GetDate()) not null,
 	Status TINYINT,
 	Note NVARCHAR(1000),
-	primary key (Student_ID,MonHoc_ID, Ex_Date)
+	primary key (Student_ID,MonHoc_ID)
 )
 GO
 
+
+
 ALTER TABLE dbo.tbl_Subject add KhoaHoc_ID INT FOREIGN KEY REFERENCES dbo.tbl_KhoaHoc(id)
+
 
 INSERT INTO dbo.tbl_KhoaHoc(Name,Begin_date,End_data)
 VALUES
@@ -229,6 +232,24 @@ BEGIN
 END
 GO
 
+CREATE PROC updateStudent
+	@id INT,
+	@MaSV NVARCHAR(4),
+	@Name NVARCHAR(100),
+	@Phone NVARCHAR(10),
+	@Email NVARCHAR(100),
+	@Address NVARCHAR(1000),
+	@Birthday DATE ,
+	@Gender TINYINT,
+	@Status TINYINT,
+	@Class_ID INT
+AS
+BEGIN
+    UPDATE dbo.tbl_Students SET MaSV=@MaSV,Name=@Name,Phone=@Phone,Email=@Email,Address=@Address,Birthday=@Birthday,Gender=@Gender,Status=@Status,Class_ID=@Class_ID WHERE id =@id
+END
+GO
+
+
 CREATE PROC deleteStudent
 @id INT
 AS
@@ -315,9 +336,6 @@ BEGIN
 END
 GO
 
-
-
-
 CREATE PROC updateClassRoom
 @id INT,
 @Name NVARCHAR(100),
@@ -325,14 +343,14 @@ CREATE PROC updateClassRoom
 @GiaoVien_ID INT
 AS
 BEGIN
-	UPDATE dbo.tbl_Class SET Name=@Name, KhoaHoc_ID=@KhoaHoc_ID, GiaoVien_ID=@GiaoVien_ID WHERE id =@id
+	UPDATE dbo.tbl_Class SET Name=@Name, KhoaHoc_ID=@KhoaHoc_ID, GiaoVien_ID = @GiaoVien_ID WHERE id = @id
 END
 GO
 
 CREATE PROC getAllMark
 AS
 BEGIN
-	SELECT M.*,s.id'Student_Id',s.Name'Student_Name',SJ.id'SJ_ID',SJ.Name'SJ_Name' FROM dbo.tbl_Mark M 
+	SELECT M.*,s.id'Student_Id',s.Name'Student_Name',s.MaSV'S_MSV',SJ.id'SJ_ID',SJ.Name'SJ_Name' FROM dbo.tbl_Mark M 
 	LEFT JOIN dbo.tbl_Students S ON S.id = M.Student_ID
 	LEFT JOIN dbo.tbl_Subject SJ ON SJ.id = M.MonHoc_ID
 END
@@ -344,12 +362,22 @@ CREATE PROC addMark
 @Diem INT,
 @Ex_Date DATE,
 @Status TINYINT,
-@Note TEXT
+@Note NVARCHAR(1000)
 AS
 BEGIN
     INSERT INTO tbl_Mark(Student_ID,MonHoc_ID,Diem,Ex_Date,Status,Note) VALUES (@Student_ID,@MonHoc_ID,@Diem,@Ex_Date,@Status,@Note)
 END
 GO
+
+EXEC dbo.addMark @Student_ID =3,         -- int
+                 @MonHoc_ID = 4,          -- int
+                 @Diem = 5,               -- int
+                 @Ex_Date = '2020-12-25', -- date
+                 @Status = 1,             -- tinyint
+                 @Note = N'Trượt'              -- nvarchar(1000)
+EXEC getAllMark
+GO
+
 
 CREATE PROC findStudentMark
 @name NVARCHAR(100)
@@ -374,6 +402,25 @@ BEGIN
 END
 GO
 
+EXEC getAllMark
+GO
+
+CREATE PROC getInfoStudent
+@id INT
+AS
+BEGIN
+    SELECT s.*,c.Name'C_Name',t.Name'T_Name',kh.Name'KH_Name',
+	kh.Begin_date'KH_begin_date',kh.End_data'KH_end_date',m.Diem'Diem',m.Status'M_Status',sj.Name'SJ_Name'
+	FROM dbo.tbl_Students s 
+	LEFT JOIN dbo.tbl_Class c ON c.id = s.Class_ID
+	LEFT JOIN dbo.tbl_Teacher t ON t.id = c.GiaoVien_ID
+	LEFT JOIN dbo.tbl_KhoaHoc kh ON kh.id = c.KhoaHoc_ID
+	LEFT JOIN dbo.tbl_Mark m ON  m.Student_ID = s.id
+	LEFT JOIN dbo.tbl_Subject sj ON sj.id = m.MonHoc_ID
+	WHERE s.id = @id							    
+END
+
+EXEC dbo.getAllStudent
 
 
 insert into tbl_Class(Name,KhoaHoc_ID,GiaoVien_ID) values

@@ -227,7 +227,7 @@ public class FrmLogin extends javax.swing.JFrame {
         Account acc;
         acc = lsta.get(0);
         if (lsta.size() == 1) {
-            JOptionPane.showMessageDialog(null, "Đăng nhập thành công");
+//            JOptionPane.showMessageDialog(null, "Đăng nhập thành công");
             FrmMain fm = new FrmMain(acc);
             fm.setVisible(true);
             login.setVisible(false);
@@ -250,7 +250,7 @@ public class FrmLogin extends javax.swing.JFrame {
             Account acc;
             acc = lsta.get(0);
             if (lsta.size() == 1) {
-                JOptionPane.showMessageDialog(null, "Đăng nhập thành công");
+//                JOptionPane.showMessageDialog(null, "Đăng nhập thành công");
                 FrmMain fm = new FrmMain(acc);
                 fm.setVisible(true);
                 login.setVisible(false);

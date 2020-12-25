@@ -79,9 +79,9 @@ public class FrmDiaglogStrudent extends javax.swing.JDialog {
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
-        rSButtonMetro3 = new rojerusan.RSButtonMetro();
+        add = new rojerusan.RSButtonMetro();
         jLabel1 = new javax.swing.JLabel();
-        rSButtonMetro4 = new rojerusan.RSButtonMetro();
+        update = new rojerusan.RSButtonMetro();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Thêm sinh viên");
@@ -181,14 +181,14 @@ public class FrmDiaglogStrudent extends javax.swing.JDialog {
 
         jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 90, 290));
 
-        rSButtonMetro3.setBackground(new java.awt.Color(51, 204, 255));
-        rSButtonMetro3.setText("Thêm");
-        rSButtonMetro3.addActionListener(new java.awt.event.ActionListener() {
+        add.setBackground(new java.awt.Color(51, 204, 255));
+        add.setText("Thêm");
+        add.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rSButtonMetro3ActionPerformed(evt);
+                addActionPerformed(evt);
             }
         });
-        jPanel1.add(rSButtonMetro3, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 390, 140, 50));
+        jPanel1.add(add, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 390, 140, 50));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -196,14 +196,14 @@ public class FrmDiaglogStrudent extends javax.swing.JDialog {
         jLabel1.setText("Thông tin sinh viên");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 10, 370, 40));
 
-        rSButtonMetro4.setBackground(new java.awt.Color(51, 204, 255));
-        rSButtonMetro4.setText("Cập nhật");
-        rSButtonMetro4.addActionListener(new java.awt.event.ActionListener() {
+        update.setBackground(new java.awt.Color(51, 204, 255));
+        update.setText("Cập nhật");
+        update.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rSButtonMetro4ActionPerformed(evt);
+                updateActionPerformed(evt);
             }
         });
-        jPanel1.add(rSButtonMetro4, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 390, 140, 50));
+        jPanel1.add(update, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 390, 140, 50));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 470, 460));
 
@@ -212,7 +212,7 @@ public class FrmDiaglogStrudent extends javax.swing.JDialog {
 
     private void initData() {
         if (st != null) {
-            rSButtonMetro3.setVisible(false);
+            add.setVisible(false);
             txtMaSV.setText(st.getMaSV());
             txtName.setText(st.getName());
             txtPhone.setText(st.getPhone());
@@ -234,7 +234,7 @@ public class FrmDiaglogStrudent extends javax.swing.JDialog {
 
         } else {
             setMaSV();
-            rSButtonMetro4.setVisible(false);
+            update.setVisible(false);
         }
     }
 
@@ -277,9 +277,8 @@ public class FrmDiaglogStrudent extends javax.swing.JDialog {
 
     }
 
-    private void rSButtonMetro3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro3ActionPerformed
+    private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
         String regex_Phone = "^0[0-9]{9,10}$";
-
         String new_masv = txtMaSV.getText();
         String new_name = txtName.getText();
         String new_phone = txtPhone.getText();
@@ -317,11 +316,52 @@ public class FrmDiaglogStrudent extends javax.swing.JDialog {
                 JOptionPane.showMessageDialog(null, "Đã có lỗi xảy ra, vui lòng kiểm tra lại");
             }
         }
-    }//GEN-LAST:event_rSButtonMetro3ActionPerformed
+    }//GEN-LAST:event_addActionPerformed
 
-    private void rSButtonMetro4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro4ActionPerformed
+    private void updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateActionPerformed
+        int new_id = st.getId();
+        String regex_Phone = "^0[0-9]{9,10}$";
+        String new_masv = txtMaSV.getText();
+        String new_name = txtName.getText();
+        String new_phone = txtPhone.getText();
+        String new_email = txtEmail.getText();
+        String new_address = txtAddress.getText();
+        String birthday = String.valueOf(new SimpleDateFormat("yyyy/MM/dd").format(jDateStudent.getDate()));
+        int new_gender;
+        if (gender.isSelected()) {
+            new_gender = 0;
+        } else {
+            new_gender = 1;
+        }
 
-    }//GEN-LAST:event_rSButtonMetro4ActionPerformed
+        int new_class_id = lc.get(className.getSelectedIndex()).getId();
+
+        int new_status;
+        if (Status.isSelected()) {
+            new_status = 0;
+        } else {
+            new_status = 1;
+        }
+        if (new_name.length() == 0 || new_phone.length() == 0 || new_email.length() == 0 || new_address.length() == 0) {
+            JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ thông tin vào các trường để tiến hành thêm mới");
+        } else if (new_phone.length() > 11 || new_phone.length() < 10 || regex_Phone.matches(new_phone)) {
+            JOptionPane.showMessageDialog(null, "Vui lòng điển đúng số điện thoại để tiếp tục!");
+        } 
+//        else if (check_Mail_Phone(new_email, new_phone)) {
+//            JOptionPane.showMessageDialog(null, "Email hoặc Số điện thoại đã được sử dụng!");
+//        } 
+        else {
+            Student new_Student = new Student(new_id,new_masv, new_name, new_phone, new_email, new_address, birthday, new_gender, new_status, new_class_id);
+            StudentDAO SC = new StudentDAO();
+            if (SC.updateAccount(new_Student) == 1) {
+                JOptionPane.showMessageDialog(null, "Bạn đã thêm học sinh mới thành công");
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(null, "Đã có lỗi xảy ra, vui lòng kiểm tra lại");
+            }
+        }
+        
+    }//GEN-LAST:event_updateActionPerformed
 
     /**
      * @param args the command line arguments
@@ -367,6 +407,7 @@ public class FrmDiaglogStrudent extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JRadioButton Status;
+    private rojerusan.RSButtonMetro add;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.JComboBox<String> className;
@@ -387,12 +428,11 @@ public class FrmDiaglogStrudent extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButton jRadioButton3;
-    private rojerusan.RSButtonMetro rSButtonMetro3;
-    private rojerusan.RSButtonMetro rSButtonMetro4;
     private javax.swing.JTextField txtAddress;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtMaSV;
     private javax.swing.JTextField txtName;
     private javax.swing.JTextField txtPhone;
+    private rojerusan.RSButtonMetro update;
     // End of variables declaration//GEN-END:variables
 }

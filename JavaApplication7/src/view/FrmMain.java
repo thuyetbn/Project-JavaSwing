@@ -179,6 +179,7 @@ public class FrmMain extends javax.swing.JFrame {
         jLabel4.setText("Xin Chào! ");
         jPanel12.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 25, -1, 20));
 
+        labelName.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         labelName.setForeground(new java.awt.Color(255, 0, 0));
         labelName.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_person_25px.png"))); // NOI18N
         labelName.setText("Admin");
@@ -372,8 +373,8 @@ public class FrmMain extends javax.swing.JFrame {
 
     private void btnHome9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHome9ActionPerformed
         Body.removeAll();
-        ManageStudent ms = new ManageStudent();
-        Body.add(ms);
+        ManageStudent mss = new ManageStudent();
+        Body.add(mss);
         Body.repaint();
         Body.revalidate();
     }//GEN-LAST:event_btnHome9ActionPerformed

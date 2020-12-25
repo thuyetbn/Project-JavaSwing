@@ -26,6 +26,23 @@ public class MarkDAO {
         this.conn = BConnection.getConnection();
     }
     
+    public int addMark(Mark s){
+        int row =0;
+        List<Mark> lstm = new ArrayList<>();
+        String sql = "{CALL addMark(?,?,?,?)}";
+        try {
+            CallableStatement cs = conn.prepareCall(sql);
+            cs.setInt(1, s.getStudent_ID());
+            cs.setInt(2, s.getSubject_ID());
+            cs.setInt(3, (int) s.getMark());
+            cs.setString(4, s.getNote());
+            row = cs.executeUpdate();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+        return row;
+    }
+    
     public List<Mark> getAllMark() {
         List<Mark> lstm = new ArrayList<>();
         String sql = "{CALL getAllMark}";
@@ -39,7 +56,12 @@ public class MarkDAO {
                 String Ex_Date = rs.getString("Ex_Date");
                 int Status = rs.getInt("Status");
                 String Note = rs.getString("Note");
-                lstm.add(new Mark(Student_ID, MonHoc_ID, Diem,Status, Note,Ex_Date));
+                String S_name = rs.getString("Student_Name");
+                String SJ_name = rs.getString("SJ_Name");
+                int S_id = rs.getInt("Student_Id");
+                int SJ_id = rs.getInt("SJ_ID");
+                String S_MSV = rs.getString("S_MSV");
+                lstm.add(new Mark(Student_ID, MonHoc_ID, Diem, Note,Ex_Date,S_id,S_name,SJ_id,SJ_name,S_MSV));
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, ex);
@@ -60,7 +82,8 @@ public class MarkDAO {
                 String Ex_Date = rs.getString("Ex_Date");
                 int Status = rs.getInt("Status");
                 String Note = rs.getString("Note");
-                lstm.add(new Mark(Student_ID, MonHoc_ID, Diem,Status, Note,Ex_Date));
+                String S_MSV = rs.getString("S_MSV");
+                lstm.add(new Mark(Student_ID, MonHoc_ID, Diem, Note,Ex_Date,S_MSV));
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, ex);

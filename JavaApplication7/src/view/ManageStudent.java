@@ -117,10 +117,12 @@ public class ManageStudent extends javax.swing.JPanel {
         jPanel18 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
         rSButtonMetro13 = new rojerusan.RSButtonMetro();
-        rSButtonMetro14 = new rojerusan.RSButtonMetro();
+        rSButtonMetro15 = new rojerusan.RSButtonMetro();
         jPanel19 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         tbStudent = new javax.swing.JTable();
+
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel17.setBackground(new java.awt.Color(255, 255, 255));
         jPanel17.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
@@ -146,7 +148,7 @@ public class ManageStudent extends javax.swing.JPanel {
                 rSButtonMetro9ActionPerformed(evt);
             }
         });
-        jPanel17.add(rSButtonMetro9, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 20, 60, 70));
+        jPanel17.add(rSButtonMetro9, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 20, 60, 70));
 
         rSButtonMetro10.setBackground(new java.awt.Color(255, 255, 255));
         rSButtonMetro10.setForeground(new java.awt.Color(0, 0, 0));
@@ -168,7 +170,7 @@ public class ManageStudent extends javax.swing.JPanel {
                 rSButtonMetro10ActionPerformed(evt);
             }
         });
-        jPanel17.add(rSButtonMetro10, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 20, 100, 70));
+        jPanel17.add(rSButtonMetro10, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 20, 100, 70));
 
         rSButtonMetro11.setBackground(new java.awt.Color(255, 255, 255));
         rSButtonMetro11.setForeground(new java.awt.Color(0, 0, 0));
@@ -190,7 +192,7 @@ public class ManageStudent extends javax.swing.JPanel {
                 rSButtonMetro11ActionPerformed(evt);
             }
         });
-        jPanel17.add(rSButtonMetro11, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 20, 60, 70));
+        jPanel17.add(rSButtonMetro11, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 20, 60, 70));
 
         rSButtonMetro12.setBackground(new java.awt.Color(255, 255, 255));
         rSButtonMetro12.setForeground(new java.awt.Color(0, 0, 0));
@@ -212,7 +214,7 @@ public class ManageStudent extends javax.swing.JPanel {
                 rSButtonMetro12ActionPerformed(evt);
             }
         });
-        jPanel17.add(rSButtonMetro12, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 20, 60, 70));
+        jPanel17.add(rSButtonMetro12, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 20, 60, 70));
 
         jPanel18.setBackground(new java.awt.Color(255, 255, 255));
         jPanel18.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -244,31 +246,35 @@ public class ManageStudent extends javax.swing.JPanel {
                 rSButtonMetro13ActionPerformed(evt);
             }
         });
-        jPanel17.add(rSButtonMetro13, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 20, 70, 70));
+        jPanel17.add(rSButtonMetro13, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 20, 80, 70));
 
-        rSButtonMetro14.setBackground(new java.awt.Color(255, 255, 255));
-        rSButtonMetro14.setForeground(new java.awt.Color(0, 0, 0));
-        rSButtonMetro14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_refresh_50px.png"))); // NOI18N
-        rSButtonMetro14.setText("Refesh");
-        rSButtonMetro14.setBorderPainted(false);
-        rSButtonMetro14.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        rSButtonMetro14.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        rSButtonMetro14.addMouseListener(new java.awt.event.MouseAdapter() {
+        rSButtonMetro15.setBackground(new java.awt.Color(255, 255, 255));
+        rSButtonMetro15.setForeground(new java.awt.Color(0, 0, 0));
+        rSButtonMetro15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_refresh_50px.png"))); // NOI18N
+        rSButtonMetro15.setText("Refesh");
+        rSButtonMetro15.setBorderPainted(false);
+        rSButtonMetro15.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        rSButtonMetro15.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        rSButtonMetro15.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                rSButtonMetro14MouseEntered(evt);
+                rSButtonMetro15MouseEntered(evt);
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                rSButtonMetro14MouseExited(evt);
+                rSButtonMetro15MouseExited(evt);
             }
         });
-        rSButtonMetro14.addActionListener(new java.awt.event.ActionListener() {
+        rSButtonMetro15.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rSButtonMetro14ActionPerformed(evt);
+                rSButtonMetro15ActionPerformed(evt);
             }
         });
-        jPanel17.add(rSButtonMetro14, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 20, 70, 70));
+        jPanel17.add(rSButtonMetro15, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 20, 70, 70));
+
+        jPanel1.add(jPanel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 820, 120));
 
         jPanel19.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel19.setPreferredSize(new java.awt.Dimension(820, 450));
+        jPanel19.setLayout(new java.awt.BorderLayout());
 
         tbStudent.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -285,57 +291,19 @@ public class ManageStudent extends javax.swing.JPanel {
         tbStudent.setSelectionBackground(new java.awt.Color(51, 204, 255));
         jScrollPane3.setViewportView(tbStudent);
 
-        javax.swing.GroupLayout jPanel19Layout = new javax.swing.GroupLayout(jPanel19);
-        jPanel19.setLayout(jPanel19Layout);
-        jPanel19Layout.setHorizontalGroup(
-            jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 820, Short.MAX_VALUE)
-        );
-        jPanel19Layout.setVerticalGroup(
-            jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
-        );
+        jPanel19.add(jScrollPane3, java.awt.BorderLayout.CENTER);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 820, Short.MAX_VALUE)
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jPanel19, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jPanel17, javax.swing.GroupLayout.PREFERRED_SIZE, 820, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGap(0, 0, Short.MAX_VALUE)))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 568, Short.MAX_VALUE)
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addGap(118, 118, 118)
-                            .addComponent(jPanel19, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(jPanel17, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGap(0, 0, Short.MAX_VALUE)))
-        );
+        jPanel1.add(jPanel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 120, 820, 450));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 821, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -431,17 +399,17 @@ public class ManageStudent extends javax.swing.JPanel {
         load_find(a);
     }//GEN-LAST:event_rSButtonMetro13ActionPerformed
 
-    private void rSButtonMetro14MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSButtonMetro14MouseEntered
-        rSButtonMetro14.setBackground(new Color(85, 159, 213));
-    }//GEN-LAST:event_rSButtonMetro14MouseEntered
+    private void rSButtonMetro15MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSButtonMetro15MouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_rSButtonMetro15MouseEntered
 
-    private void rSButtonMetro14MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSButtonMetro14MouseExited
-         rSButtonMetro14.setBackground(new Color(255, 255, 255));
-    }//GEN-LAST:event_rSButtonMetro14MouseExited
+    private void rSButtonMetro15MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSButtonMetro15MouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_rSButtonMetro15MouseExited
 
-    private void rSButtonMetro14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro14ActionPerformed
-        load_data();
-    }//GEN-LAST:event_rSButtonMetro14ActionPerformed
+    private void rSButtonMetro15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro15ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_rSButtonMetro15ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -455,7 +423,7 @@ public class ManageStudent extends javax.swing.JPanel {
     private rojerusan.RSButtonMetro rSButtonMetro11;
     private rojerusan.RSButtonMetro rSButtonMetro12;
     private rojerusan.RSButtonMetro rSButtonMetro13;
-    private rojerusan.RSButtonMetro rSButtonMetro14;
+    private rojerusan.RSButtonMetro rSButtonMetro15;
     private rojerusan.RSButtonMetro rSButtonMetro9;
     private javax.swing.JTable tbStudent;
     // End of variables declaration//GEN-END:variables

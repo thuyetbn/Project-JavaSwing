@@ -6,17 +6,21 @@
 package view;
 
 import DAO.MarkDAO;
+import DAO.StudentDAO;
 import java.awt.Color;
+import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import model.Account;
 import model.Mark;
+import model.Student;
 
 /**
  *
@@ -33,14 +37,16 @@ public class ManageMark extends javax.swing.JPanel {
     }
     List<Mark> listm;
     Mark mark;
+
     private void load_data() {
         MarkDAO ad = new MarkDAO();
         listm = ad.getAllMark();
-        String columns[] = {"STT", "Tên", "Môn học", "Điểm","Trạng thái","Ghi chú","Ngày kêt thúc môn"};
+        String columns[] = {"STT", "Tên", "Môn học", "Điểm", "Trạng thái", "Ghi chú", "Ngày kêt thúc môn"};
         DefaultTableModel dtm = new DefaultTableModel(columns, 0);
         Integer i = 1;
         for (Mark m : listm) {
-            dtm.addRow(new Object[]{i,m.getS_name(),m.getSJ_name(),m.getMark(),m.getStatus()==0?"Đã đạt":"Trượt",m.getNote(),m.getEx_date()});
+            int diem = (int) m.getMark();
+            dtm.addRow(new Object[]{i,m.getS_MSV(), m.getS_name(), m.getSJ_name(), m.getMark(),diem <= 10 &&diem > 8  ? "Tốt" : diem > 7 ? "Khá" : diem >= 5 ? "Đạt" : "Trượt", m.getNote(), m.getEx_date()});
             i++;
         }
         tbMark.setModel(dtm);
@@ -63,11 +69,12 @@ public class ManageMark extends javax.swing.JPanel {
     void load_find(String name) {
         MarkDAO ad = new MarkDAO();
         listm = ad.findStudentMark(name);
-        String columns[] = {"STT", "Tên", "Môn học", "Điểm","Trạng thái","Ghi chú","Ngày kêt thúc môn"};
+        String columns[] = {"STT","Mã SV", "Tên", "Môn học", "Điểm", "Trạng thái", "Ghi chú", "Ngày kêt thúc môn"};
         DefaultTableModel dtm = new DefaultTableModel(columns, 0);
         Integer i = 1;
         for (Mark m : listm) {
-            dtm.addRow(new Object[]{i,m.getS_name(),m.getSJ_name(),m.getMark(),m.getStatus()==0?"Đã đạt":"Trượt",m.getNote(),m.getEx_date()});
+            int diem = (int) m.getMark();
+            dtm.addRow(new Object[]{i,m.getS_MSV(), m.getS_name(), m.getSJ_name(), m.getMark(),diem <= 10 &&diem > 8  ? "Tốt" : diem > 7 ? "Khá" : diem >= 5 ? "Đạt" : "Trượt", m.getNote(), m.getEx_date()});
             i++;
         }
         tbMark.setModel(dtm);
@@ -80,13 +87,13 @@ public class ManageMark extends javax.swing.JPanel {
                     if (pos < 0) {
                         pos = 0;
                     }
-
                     mark = listm.get(pos);
                 }
             });
         }
 
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -96,10 +103,11 @@ public class ManageMark extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPopupMark = new javax.swing.JPopupMenu();
+        View_mark = new javax.swing.JMenuItem();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jPanel20 = new javax.swing.JPanel();
-        rSButtonMetro13 = new rojerusan.RSButtonMetro();
         rSButtonMetro14 = new rojerusan.RSButtonMetro();
         rSButtonMetro15 = new rojerusan.RSButtonMetro();
         rSButtonMetro16 = new rojerusan.RSButtonMetro();
@@ -110,31 +118,17 @@ public class ManageMark extends javax.swing.JPanel {
         jScrollPane4 = new javax.swing.JScrollPane();
         tbMark = new javax.swing.JTable();
 
+        View_mark.setText("Xem chi tiết");
+        View_mark.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                View_markActionPerformed(evt);
+            }
+        });
+        jPopupMark.add(View_mark);
+
         jPanel20.setBackground(new java.awt.Color(255, 255, 255));
         jPanel20.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
         jPanel20.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        rSButtonMetro13.setBackground(new java.awt.Color(255, 255, 255));
-        rSButtonMetro13.setForeground(new java.awt.Color(0, 0, 0));
-        rSButtonMetro13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_update_50px.png"))); // NOI18N
-        rSButtonMetro13.setText("Sửa");
-        rSButtonMetro13.setBorderPainted(false);
-        rSButtonMetro13.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        rSButtonMetro13.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        rSButtonMetro13.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                rSButtonMetro13MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                rSButtonMetro13MouseExited(evt);
-            }
-        });
-        rSButtonMetro13.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rSButtonMetro13ActionPerformed(evt);
-            }
-        });
-        jPanel20.add(rSButtonMetro13, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 20, 70, 70));
 
         rSButtonMetro14.setBackground(new java.awt.Color(255, 255, 255));
         rSButtonMetro14.setForeground(new java.awt.Color(0, 0, 0));
@@ -156,7 +150,7 @@ public class ManageMark extends javax.swing.JPanel {
                 rSButtonMetro14ActionPerformed(evt);
             }
         });
-        jPanel20.add(rSButtonMetro14, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 20, 70, 70));
+        jPanel20.add(rSButtonMetro14, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 20, 70, 70));
 
         rSButtonMetro15.setBackground(new java.awt.Color(255, 255, 255));
         rSButtonMetro15.setForeground(new java.awt.Color(0, 0, 0));
@@ -178,12 +172,12 @@ public class ManageMark extends javax.swing.JPanel {
                 rSButtonMetro15ActionPerformed(evt);
             }
         });
-        jPanel20.add(rSButtonMetro15, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 20, 70, 70));
+        jPanel20.add(rSButtonMetro15, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 20, 70, 70));
 
         rSButtonMetro16.setBackground(new java.awt.Color(255, 255, 255));
         rSButtonMetro16.setForeground(new java.awt.Color(0, 0, 0));
         rSButtonMetro16.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_ball_point_pen_50px.png"))); // NOI18N
-        rSButtonMetro16.setText("Thêm");
+        rSButtonMetro16.setText("Thêm & Cập nhật");
         rSButtonMetro16.setBorderPainted(false);
         rSButtonMetro16.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         rSButtonMetro16.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -200,7 +194,7 @@ public class ManageMark extends javax.swing.JPanel {
                 rSButtonMetro16ActionPerformed(evt);
             }
         });
-        jPanel20.add(rSButtonMetro16, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 20, 70, 70));
+        jPanel20.add(rSButtonMetro16, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 20, 130, 70));
 
         jPanel21.setBackground(new java.awt.Color(255, 255, 255));
         jPanel21.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -233,7 +227,7 @@ public class ManageMark extends javax.swing.JPanel {
                 rSButtonMetro6ActionPerformed(evt);
             }
         });
-        jPanel20.add(rSButtonMetro6, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 20, 70, 70));
+        jPanel20.add(rSButtonMetro6, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 20, 70, 70));
 
         jPanel22.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -250,6 +244,11 @@ public class ManageMark extends javax.swing.JPanel {
         ));
         tbMark.setGridColor(new java.awt.Color(0, 0, 0));
         tbMark.setSelectionBackground(new java.awt.Color(51, 204, 255));
+        tbMark.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbMarkMouseClicked(evt);
+            }
+        });
         jScrollPane4.setViewportView(tbMark);
 
         javax.swing.GroupLayout jPanel22Layout = new javax.swing.GroupLayout(jPanel22);
@@ -321,22 +320,6 @@ public class ManageMark extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void rSButtonMetro13MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSButtonMetro13MouseEntered
-        rSButtonMetro13.setBackground(new Color(85, 159, 213));
-    }//GEN-LAST:event_rSButtonMetro13MouseEntered
-
-    private void rSButtonMetro13MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSButtonMetro13MouseExited
-        rSButtonMetro13.setBackground(new Color(255, 255, 255));
-    }//GEN-LAST:event_rSButtonMetro13MouseExited
-
-    private void rSButtonMetro13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro13ActionPerformed
-        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
-        FrmDialogSubject fsub = new FrmDialogSubject(frame, true,sub);
-
-        fsub.setVisible(true);
-        load_data();
-    }//GEN-LAST:event_rSButtonMetro13ActionPerformed
-
     private void rSButtonMetro14MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSButtonMetro14MouseEntered
         rSButtonMetro14.setBackground(new Color(85, 159, 213));
     }//GEN-LAST:event_rSButtonMetro14MouseEntered
@@ -376,8 +359,9 @@ public class ManageMark extends javax.swing.JPanel {
 
     private void rSButtonMetro16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro16ActionPerformed
         JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
-        FrmDialogSubject fsub = new FrmDialogSubject(frame, true,null);
-        fsub.setVisible(true);
+        FrmDialogMark fmark = new FrmDialogMark(frame, true, mark);
+        fmark.setLocationRelativeTo(this);
+        fmark.setVisible(true);
         load_data();
     }//GEN-LAST:event_rSButtonMetro16ActionPerformed
 
@@ -393,16 +377,33 @@ public class ManageMark extends javax.swing.JPanel {
         load_data();
     }//GEN-LAST:event_rSButtonMetro6ActionPerformed
 
+    private void tbMarkMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbMarkMouseClicked
+        if (evt.getButton() == MouseEvent.BUTTON3) {
+            jPopupMark.show(tbMark, evt.getX(), evt.getY());
+        }
+    }//GEN-LAST:event_tbMarkMouseClicked
+
+    private void View_markActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_View_markActionPerformed
+
+        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+        viewInfoMark fview = new viewInfoMark(frame, true, mark);
+        fview.setLocationRelativeTo(this);
+        fview.setTitle("Thông tin sinh viên");
+        fview.setVisible(true);
+        load_data();
+    }//GEN-LAST:event_View_markActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem View_mark;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel20;
     private javax.swing.JPanel jPanel21;
     private javax.swing.JPanel jPanel22;
+    private javax.swing.JPopupMenu jPopupMark;
     private javax.swing.JScrollPane jScrollPane4;
-    private rojerusan.RSButtonMetro rSButtonMetro13;
     private rojerusan.RSButtonMetro rSButtonMetro14;
     private rojerusan.RSButtonMetro rSButtonMetro15;
     private rojerusan.RSButtonMetro rSButtonMetro16;

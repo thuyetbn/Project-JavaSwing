@@ -151,7 +151,7 @@ public class ManageAccount extends javax.swing.JPanel {
                 rSButtonMetro5ActionPerformed(evt);
             }
         });
-        jPanel8.add(rSButtonMetro5, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 20, 70, 70));
+        jPanel8.add(rSButtonMetro5, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 10, 70, 70));
 
         rSButtonMetro6.setBackground(new java.awt.Color(255, 255, 255));
         rSButtonMetro6.setForeground(new java.awt.Color(0, 0, 0));
@@ -174,7 +174,7 @@ public class ManageAccount extends javax.swing.JPanel {
                 rSButtonMetro6ActionPerformed(evt);
             }
         });
-        jPanel8.add(rSButtonMetro6, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 20, 70, 70));
+        jPanel8.add(rSButtonMetro6, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 10, 70, 70));
 
         rSButtonMetro7.setBackground(new java.awt.Color(255, 255, 255));
         rSButtonMetro7.setForeground(new java.awt.Color(0, 0, 0));
@@ -197,7 +197,7 @@ public class ManageAccount extends javax.swing.JPanel {
                 rSButtonMetro7ActionPerformed(evt);
             }
         });
-        jPanel8.add(rSButtonMetro7, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 20, 70, 70));
+        jPanel8.add(rSButtonMetro7, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 10, 70, 70));
 
         rSButtonMetro8.setBackground(new java.awt.Color(255, 255, 255));
         rSButtonMetro8.setForeground(new java.awt.Color(0, 0, 0));
@@ -220,7 +220,7 @@ public class ManageAccount extends javax.swing.JPanel {
                 rSButtonMetro8ActionPerformed(evt);
             }
         });
-        jPanel8.add(rSButtonMetro8, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 20, 70, 70));
+        jPanel8.add(rSButtonMetro8, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 10, 70, 70));
 
         jPanel9.setBackground(new java.awt.Color(255, 255, 255));
         jPanel9.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -253,7 +253,7 @@ public class ManageAccount extends javax.swing.JPanel {
                 rSButtonMetro9ActionPerformed(evt);
             }
         });
-        jPanel8.add(rSButtonMetro9, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 20, 80, 70));
+        jPanel8.add(rSButtonMetro9, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 10, 80, 70));
 
         jPanel10.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -357,6 +357,7 @@ public class ManageAccount extends javax.swing.JPanel {
     private void rSButtonMetro8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro8ActionPerformed
         JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
         FrmDiaglogAccount facc = new FrmDiaglogAccount(frame, true, null);
+        facc.setLocationRelativeTo(this);
         facc.setVisible(true);
         load_data();
     }//GEN-LAST:event_rSButtonMetro8ActionPerformed
@@ -394,6 +395,7 @@ public class ManageAccount extends javax.swing.JPanel {
         if (account != null) {
             JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
             FrmDiaglogAccount facc = new FrmDiaglogAccount(frame, true, account);
+            facc.setLocationRelativeTo(this);
             facc.setVisible(true);
             load_data();
         }else{
@@ -405,6 +407,7 @@ public class ManageAccount extends javax.swing.JPanel {
     private void rSButtonMetro9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro9ActionPerformed
         JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
         FrmFind ff = new FrmFind(frame, true);
+        ff.setLocationRelativeTo(this);
         ff.setVisible(true);
         String a = ff.getData();
         load_find(a);

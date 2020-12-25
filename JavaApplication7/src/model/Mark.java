@@ -12,35 +12,45 @@ package model;
 public class Mark {
     private int Student_ID;
     private int Subject_ID;
-    private float mark;
-    private int status;
+    private int mark;
     private String note;
     private String Ex_date;
     private int S_id;
     private String S_name;
     private int SJ_id;
     private String SJ_name;
+    private String S_MSV;
 
-    public Mark(int Student_ID, int Subject_ID, float mark, int status, String note, String Ex_date) {
+    public Mark(int Student_ID, int Subject_ID, int mark, String note, String Ex_date) {
         this.Student_ID = Student_ID;
         this.Subject_ID = Subject_ID;
         this.mark = mark;
-        this.status = status;
         this.note = note;
         this.Ex_date = Ex_date;
     }
 
-    public Mark(int Student_ID, int Subject_ID, float mark, int status, String note, String Ex_date, int S_id, String S_name, int SJ_id, String SJ_name) {
+    
+    
+    public Mark(int Student_ID, int Subject_ID, int mark, String note, String Ex_date,String S_MSV) {
         this.Student_ID = Student_ID;
         this.Subject_ID = Subject_ID;
         this.mark = mark;
-        this.status = status;
+        this.note = note;
+        this.Ex_date = Ex_date;
+        this.S_MSV = S_MSV;
+    }
+
+    public Mark(int Student_ID, int Subject_ID, int mark, String note, String Ex_date, int S_id, String S_name, int SJ_id, String SJ_name,String S_MSV) {
+        this.Student_ID = Student_ID;
+        this.Subject_ID = Subject_ID;
+        this.mark = mark;
         this.note = note;
         this.Ex_date = Ex_date;
         this.S_id = S_id;
         this.S_name = S_name;
         this.SJ_id = SJ_id;
         this.SJ_name = SJ_name;
+        this.S_MSV = S_MSV;
     }
     
     
@@ -65,17 +75,10 @@ public class Mark {
         return mark;
     }
 
-    public void setMark(float mark) {
+    public void setMark(int mark) {
         this.mark = mark;
     }
 
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
 
     public String getNote() {
         return note;
@@ -124,11 +127,19 @@ public class Mark {
     public void setSJ_name(String SJ_name) {
         this.SJ_name = SJ_name;
     }
+
+    public String getS_MSV() {
+        return S_MSV;
+    }
+
+    public void setS_MSV(String S_MSV) {
+        this.S_MSV = S_MSV;
+    }
     
     
     @Override
     public String toString() {
-        return "Mark{" + "Student_ID=" + Student_ID + ", Subject_ID=" + Subject_ID + ", mark=" + mark + ", status=" + status + ", note=" + note + ", Ex_date=" + Ex_date + '}';
+        return "Mark{" + "Student_ID=" + Student_ID + ", Subject_ID=" + Subject_ID + ", mark=" + mark  + ", note=" + note + ", Ex_date=" + Ex_date + '}';
     }
     
     
