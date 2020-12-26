@@ -74,7 +74,7 @@ CREATE TABLE tbl_Mark
 	MonHoc_ID INT FOREIGN KEY REFERENCES dbo.tbl_Subject(id),
 	Diem INT,
 	Ex_Date date default(GetDate()) not null,
-	Status TINYINT,
+	Status TINYINT DEFAULT(0),
 	Note NVARCHAR(1000),
 	primary key (Student_ID,MonHoc_ID)
 )
@@ -347,25 +347,33 @@ BEGIN
 END
 GO
 
-CREATE PROC getAllMark
+ALTER PROC getAllMark
 AS
 BEGIN
-	SELECT M.*,s.id'Student_Id',s.Name'Student_Name',s.MaSV'S_MSV',SJ.id'SJ_ID',SJ.Name'SJ_Name' FROM dbo.tbl_Mark M 
-	LEFT JOIN dbo.tbl_Students S ON S.id = M.Student_ID
+	SELECT M.*,s.id'Student_Id',s.Name'Student_Name',s.MaSV'S_MSV',SJ.id'SJ_ID',SJ.Name'SJ_Name' FROM dbo.tbl_Students S 
+	LEFT JOIN dbo.tbl_Mark M ON S.id = M.Student_ID
 	LEFT JOIN dbo.tbl_Subject SJ ON SJ.id = M.MonHoc_ID
 END
 GO
 
-CREATE PROC addMark
+EXEC dbo.getAllMark
+EXEC dbo.getAllStudent
+
+SELECT M.*,s.id'Student_Id',s.Name'Student_Name',s.MaSV'S_MSV',SJ.id'SJ_ID',SJ.Name'SJ_Name' FROM dbo.tbl_Students S 
+LEFT JOIN dbo.tbl_Mark M ON S.id = M.Student_ID
+LEFT JOIN dbo.tbl_Subject SJ ON SJ.id = M.MonHoc_ID
+GO
+
+
+ALTER PROC addMark
 @Student_ID INT,
 @MonHoc_ID INT,
 @Diem INT,
 @Ex_Date DATE,
-@Status TINYINT,
 @Note NVARCHAR(1000)
 AS
 BEGIN
-    INSERT INTO tbl_Mark(Student_ID,MonHoc_ID,Diem,Ex_Date,Status,Note) VALUES (@Student_ID,@MonHoc_ID,@Diem,@Ex_Date,@Status,@Note)
+    INSERT INTO tbl_Mark(Student_ID,MonHoc_ID,Diem,Ex_Date,Note) VALUES (@Student_ID,@MonHoc_ID,@Diem,@Ex_Date,@Note)
 END
 GO
 
@@ -378,6 +386,7 @@ EXEC dbo.addMark @Student_ID =3,         -- int
 EXEC getAllMark
 GO
 
+SELECT COUNT(*) FROM dbo.tbl_Subject
 
 CREATE PROC findStudentMark
 @name NVARCHAR(100)
@@ -398,7 +407,7 @@ CREATE PROC updateMark
 @Note TEXT
 AS
 BEGIN
-    UPDATE dbo.tbl_Mark SET MonHoc_ID=@Student_ID,Diem=@Diem,Ex_Date=@Ex_Date,Status=@Status,Note=@Note WHERE Student_ID=@Student_ID
+    UPDATE dbo.tbl_Mark SET MonHoc_ID=@Student_ID,Diem=@Diem,Ex_Date=@Ex_Date,Status=@Status,Note=@Note WHERE Student_ID=@Student_ID AND MonHoc_ID = @MonHoc_ID
 END
 GO
 
@@ -434,10 +443,10 @@ insert into tbl_Class(Name,KhoaHoc_ID,GiaoVien_ID) values
 GO
 
 insert into tbl_Students(MaSV,Name,Phone,Email,Address,Birthday,Gender,Status,Class_ID) values
-('B001',N'Trịnh Việt Thái','0973086596','zxczxc@gmail.com',N'Phạm Văn Đồng, Bắc Từ Liêm, Hà Nội','1996-01-09',0,1,5),
-('B002',N'Ngô Thị Duyên','097654123','asdasd@gmail.com',N'Lạc Long Quân, Bắc Từ Liêm, Hà Nội','1995-01-27',0,1,2),
-('B003',N'Lê Văn Hải','0973086558','zxczxc@gmail.com',N'Phạm Văn Đồng, Bắc Từ Liêm, Hà Nội','1994-01-28',1,1,3),
-('B004',N'Trịnh Văn Mạnh','0973086528 ','qeqwe@gmail.com',N'Âu Cơ, Bắc Từ Liêm, Hà Nội','1993-02-27',1,1,4)
+('B003',N'Trịnh Việt Thái','0973086596','zxczxc@gmail.com',N'Phạm Văn Đồng, Bắc Từ Liêm, Hà Nội','1996-01-09',0,1,5),
+('B004',N'Ngô Thị Duyên','097654123','asdasd@gmail.com',N'Lạc Long Quân, Bắc Từ Liêm, Hà Nội','1995-01-27',0,1,2),
+('B005',N'Lê Văn Hải','0973086558','zxczxc@gmail.com',N'Phạm Văn Đồng, Bắc Từ Liêm, Hà Nội','1994-01-28',1,1,3),
+('B006',N'Trịnh Văn Mạnh','0973086528 ','qeqwe@gmail.com',N'Âu Cơ, Bắc Từ Liêm, Hà Nội','1993-02-27',1,1,4)
 GO
 
 EXEC dbo.getAllAccount

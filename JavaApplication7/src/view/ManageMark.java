@@ -41,12 +41,12 @@ public class ManageMark extends javax.swing.JPanel {
     private void load_data() {
         MarkDAO ad = new MarkDAO();
         listm = ad.getAllMark();
-        String columns[] = {"STT", "Tên", "Môn học", "Điểm", "Trạng thái", "Ghi chú", "Ngày kêt thúc môn"};
+        String columns[] = {"STT", "MSV", "Tên", "Môn học", "Điểm", "Trạng thái", "Ghi chú", "Ngày kêt thúc môn"};
         DefaultTableModel dtm = new DefaultTableModel(columns, 0);
         Integer i = 1;
         for (Mark m : listm) {
             int diem = (int) m.getMark();
-            dtm.addRow(new Object[]{i,m.getS_MSV(), m.getS_name(), m.getSJ_name(), m.getMark(),diem <= 10 &&diem > 8  ? "Tốt" : diem > 7 ? "Khá" : diem >= 5 ? "Đạt" : "Trượt", m.getNote(), m.getEx_date()});
+            dtm.addRow(new Object[]{i, m.getS_MSV(), m.getS_name(), m.getSJ_name(), m.getMark(), diem <= 10 && diem > 8 ? "Tốt" : diem > 7 ? "Khá" : diem >= 5 ? "Đạt" : "Trượt", m.getNote(), m.getEx_date()});
             i++;
         }
         tbMark.setModel(dtm);
@@ -69,12 +69,12 @@ public class ManageMark extends javax.swing.JPanel {
     void load_find(String name) {
         MarkDAO ad = new MarkDAO();
         listm = ad.findStudentMark(name);
-        String columns[] = {"STT","Mã SV", "Tên", "Môn học", "Điểm", "Trạng thái", "Ghi chú", "Ngày kêt thúc môn"};
+        String columns[] = {"STT", "Mã SV", "Tên", "Môn học", "Điểm", "Trạng thái", "Ghi chú", "Ngày kêt thúc môn"};
         DefaultTableModel dtm = new DefaultTableModel(columns, 0);
         Integer i = 1;
         for (Mark m : listm) {
             int diem = (int) m.getMark();
-            dtm.addRow(new Object[]{i,m.getS_MSV(), m.getS_name(), m.getSJ_name(), m.getMark(),diem <= 10 &&diem > 8  ? "Tốt" : diem > 7 ? "Khá" : diem >= 5 ? "Đạt" : "Trượt", m.getNote(), m.getEx_date()});
+            dtm.addRow(new Object[]{i, m.getS_MSV(), m.getS_name(), m.getSJ_name(), m.getMark(), diem <= 10 && diem > 8 ? "Tốt" : diem > 7 ? "Khá" : diem >= 5 ? "Đạt" : "Trượt", m.getNote(), m.getEx_date()});
             i++;
         }
         tbMark.setModel(dtm);
@@ -358,11 +358,16 @@ public class ManageMark extends javax.swing.JPanel {
     }//GEN-LAST:event_rSButtonMetro16MouseExited
 
     private void rSButtonMetro16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro16ActionPerformed
-        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
-        FrmDialogMark fmark = new FrmDialogMark(frame, true, mark);
-        fmark.setLocationRelativeTo(this);
-        fmark.setVisible(true);
-        load_data();
+        if (mark != null) {
+            JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+            FrmDialogMark fmark = new FrmDialogMark(frame, true, mark);
+            fmark.setLocationRelativeTo(this);
+            fmark.setVisible(true);
+            load_data();
+        }else{
+            JOptionPane.showMessageDialog(null,"Bạn chưa chọn gì cả");
+        }
+
     }//GEN-LAST:event_rSButtonMetro16ActionPerformed
 
     private void rSButtonMetro6MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSButtonMetro6MouseEntered

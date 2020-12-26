@@ -8,6 +8,7 @@ package view;
 import DAO.AccountDAO;
 import DAO.StudentDAO;
 import java.awt.Color;
+import java.awt.event.MouseEvent;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -108,6 +109,9 @@ public class ManageStudent extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPopupMenu1 = new javax.swing.JPopupMenu();
+        updateMark = new javax.swing.JCheckBoxMenuItem();
+        info = new javax.swing.JCheckBoxMenuItem();
         jPanel1 = new javax.swing.JPanel();
         jPanel17 = new javax.swing.JPanel();
         rSButtonMetro9 = new rojerusan.RSButtonMetro();
@@ -121,6 +125,24 @@ public class ManageStudent extends javax.swing.JPanel {
         jPanel19 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         tbStudent = new javax.swing.JTable();
+
+        updateMark.setSelected(true);
+        updateMark.setText("Cập nhật điểm");
+        updateMark.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateMarkActionPerformed(evt);
+            }
+        });
+        jPopupMenu1.add(updateMark);
+
+        info.setSelected(true);
+        info.setText("Xem chi tiết");
+        info.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                infoActionPerformed(evt);
+            }
+        });
+        jPopupMenu1.add(info);
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -289,6 +311,11 @@ public class ManageStudent extends javax.swing.JPanel {
         ));
         tbStudent.setGridColor(new java.awt.Color(0, 0, 0));
         tbStudent.setSelectionBackground(new java.awt.Color(51, 204, 255));
+        tbStudent.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbStudentMouseClicked(evt);
+            }
+        });
         jScrollPane3.setViewportView(tbStudent);
 
         jPanel19.add(jScrollPane3, java.awt.BorderLayout.CENTER);
@@ -400,24 +427,50 @@ public class ManageStudent extends javax.swing.JPanel {
     }//GEN-LAST:event_rSButtonMetro13ActionPerformed
 
     private void rSButtonMetro15MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSButtonMetro15MouseEntered
-        // TODO add your handling code here:
+        rSButtonMetro15.setBackground(new Color(85, 159, 213));
     }//GEN-LAST:event_rSButtonMetro15MouseEntered
 
     private void rSButtonMetro15MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSButtonMetro15MouseExited
-        // TODO add your handling code here:
+         rSButtonMetro15.setBackground(new Color(255, 255, 255));
     }//GEN-LAST:event_rSButtonMetro15MouseExited
 
     private void rSButtonMetro15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro15ActionPerformed
-        // TODO add your handling code here:
+        load_data();
     }//GEN-LAST:event_rSButtonMetro15ActionPerformed
+
+    private void tbStudentMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbStudentMouseClicked
+        if (evt.getButton() == MouseEvent.BUTTON3) {
+            jPopupMenu1.show(tbStudent, evt.getX(), evt.getY());
+        }
+    }//GEN-LAST:event_tbStudentMouseClicked
+
+    private void infoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_infoActionPerformed
+        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+        viewInfoStudent fstu = new viewInfoStudent(frame, true, st);
+        fstu.setLocationRelativeTo(this);
+        fstu.setTitle("Thông tin sinh viên");
+        fstu.setVisible(true);
+        load_data();
+    }//GEN-LAST:event_infoActionPerformed
+
+    private void updateMarkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateMarkActionPerformed
+        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+        FrmDialogStudentMark fstu = new FrmDialogStudentMark(frame, true, st);
+        fstu.setLocationRelativeTo(this);
+        fstu.setTitle("Cập nhật điểm sinh viên - "+st.getName()+" -");
+        fstu.setVisible(true);
+        load_data();
+    }//GEN-LAST:event_updateMarkActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBoxMenuItem info;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel17;
     private javax.swing.JPanel jPanel18;
     private javax.swing.JPanel jPanel19;
+    private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane3;
     private rojerusan.RSButtonMetro rSButtonMetro10;
     private rojerusan.RSButtonMetro rSButtonMetro11;
@@ -426,5 +479,6 @@ public class ManageStudent extends javax.swing.JPanel {
     private rojerusan.RSButtonMetro rSButtonMetro15;
     private rojerusan.RSButtonMetro rSButtonMetro9;
     private javax.swing.JTable tbStudent;
+    private javax.swing.JCheckBoxMenuItem updateMark;
     // End of variables declaration//GEN-END:variables
 }

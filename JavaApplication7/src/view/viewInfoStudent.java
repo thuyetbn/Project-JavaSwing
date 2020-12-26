@@ -18,43 +18,42 @@ import model.Student;
  *
  * @author BinDz
  */
-public class viewInfoMark extends javax.swing.JDialog {
+public class viewInfoStudent extends javax.swing.JDialog {
 
-    Mark mark;
     List<Student> lists;
-    Student s;
+    Student student;
 
     /**
      * Creates new form viewInfoMark
      */
-    public viewInfoMark(java.awt.Frame parent, boolean modal, Mark mark) {
+    public viewInfoStudent(java.awt.Frame parent, boolean modal, Student student) {
         super(parent, modal);
         initComponents();
         MarkDAO md = new MarkDAO();
-        this.mark = mark;
+        this.student = student;
         load_data();
     }
 
     private void load_data() {
-        int old_id = mark.getStudent_ID();
+        int old_id = student.getId();
         StudentDAO sd = new StudentDAO();
         lists = sd.getInfoStudent(old_id);
-        s = lists.get(0);
-        txtName.setText(s.getName());
-        txtGender.setText(s.getGender() == 0 ? "Nam" : "Nữ");
-        LocalDate dt = LocalDate.parse(s.getBirthday());
+        student = lists.get(0);
+        txtName.setText(student.getName());
+        txtGender.setText(student.getGender() == 0 ? "Nam" : "Nữ");
+        LocalDate dt = LocalDate.parse(student.getBirthday());
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         String time = dtf.format(dt);
         txtDate.setText(time);
-        txtAddress.setText(s.getAddress());
-        txtClass.setText(s.getClass_name());
-        txtCourse.setText(s.getKH_Name());
-        txtStatus1.setText(s.getStatus() == 0 ? "Đang theo học" : "Đã tốt nghiệp");
-        txtStatus.setText(s.getTeacher_Name());
+        txtAddress.setText(student.getAddress());
+        txtClass.setText(student.getClass_name());
+        txtCourse.setText(student.getKH_Name());
+        txtStatus1.setText(student.getStatus() == 0 ? "Đang theo học" : "Đã tốt nghiệp");
+        txtStatus.setText(student.getTeacher_Name());
         String columns[] = {"STT", "Tên môn học", "Điểm", "Trạng thái"};
         DefaultTableModel dtm = new DefaultTableModel(columns, 0);
         Integer i = 1;
-        String SJ_Name = s.getSJ_Name();
+        String SJ_Name = student.getSJ_Name();
         for (Student m : lists) {
             int diem = m.getDiem();
             dtm.addRow(new Object[]{i, m.getSJ_Name(), diem, diem <= 10 && diem > 8 ? "Tốt" : diem > 7 ? "Khá" : diem >= 5 ? "Đạt" : "Trượt"});
@@ -332,20 +331,21 @@ public class viewInfoMark extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(viewInfoMark.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(viewInfoStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(viewInfoMark.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(viewInfoStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(viewInfoMark.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(viewInfoStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(viewInfoMark.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(viewInfoStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                viewInfoMark dialog = new viewInfoMark(new javax.swing.JFrame(), true, null);
+                viewInfoStudent dialog = new viewInfoStudent(new javax.swing.JFrame(), true, null);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

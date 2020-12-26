@@ -29,13 +29,14 @@ public class MarkDAO {
     public int addMark(Mark s){
         int row =0;
         List<Mark> lstm = new ArrayList<>();
-        String sql = "{CALL addMark(?,?,?,?)}";
+        String sql = "{CALL addMark(?,?,?,?,?)}";
         try {
             CallableStatement cs = conn.prepareCall(sql);
             cs.setInt(1, s.getStudent_ID());
             cs.setInt(2, s.getSubject_ID());
             cs.setInt(3, (int) s.getMark());
-            cs.setString(4, s.getNote());
+            cs.setString(4, s.getEx_date());
+            cs.setString(5, s.getNote());
             row = cs.executeUpdate();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, ex);

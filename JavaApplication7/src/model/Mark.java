@@ -21,12 +21,13 @@ public class Mark {
     private String SJ_name;
     private String S_MSV;
 
-    public Mark(int Student_ID, int Subject_ID, int mark, String note, String Ex_date) {
+    public Mark(int Student_ID, int Subject_ID, int mark, String Ex_date, String note) {
         this.Student_ID = Student_ID;
         this.Subject_ID = Subject_ID;
         this.mark = mark;
-        this.note = note;
         this.Ex_date = Ex_date;
+        this.note = note;
+        
     }
 
     

@@ -7,21 +7,28 @@ package view;
 
 import DAO.MarkDAO;
 import DAO.StudentDAO;
+import DAO.SubjectDAO;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import model.Mark;
+import model.Subject;
 
 /**
  *
  * @author BinDz
  */
 public class FrmDialogMark extends javax.swing.JDialog {
+
+    Subject sj;
+    List<Subject> lstsj;
 
     /**
      * Creates new form FrmDialogMark
@@ -31,21 +38,39 @@ public class FrmDialogMark extends javax.swing.JDialog {
         initComponents();
         MarkDAO md = new MarkDAO();
         this.mark = mark;
+        load_combo();
         innitData();
+        
     }
     Mark mark;
+    DefaultComboBoxModel dcbm = new DefaultComboBoxModel();
+    private void load_combo() {
+
+        SubjectDAO sd = new SubjectDAO();
+        lstsj = sd.getAllSubject();
+        
+        dcbm.addElement("Chọn môn học:");
+        for (Subject lstsj1 : lstsj) {
+            dcbm.addElement(lstsj1.getName());
+        }
+        jComboBox1.setModel(dcbm);
+    }
 
     private void innitData() {
         txtMaSV.setText(mark.getS_MSV());
         txtName.setText(mark.getS_name());
-        txtSub.setText(mark.getSJ_name());
-        Date date = null;
+        if(mark.getSJ_name() != null){
+            dcbm.removeElement(mark.getSJ_name());
+        }
+        if (mark.getEx_date() != null) {
+            Date date = null;
             try {
                 date = new SimpleDateFormat("yyyy-MM-dd").parse(mark.getEx_date());
             } catch (ParseException ex) {
                 Logger.getLogger(FrmDiaglogAccount.class.getName()).log(Level.SEVERE, null, ex);
             }
             jDateChooser1.setDate(date);
+        }
     }
 
     /**
@@ -70,11 +95,11 @@ public class FrmDialogMark extends javax.swing.JDialog {
         jPanel3 = new javax.swing.JPanel();
         txtMaSV = new javax.swing.JTextField();
         txtName = new javax.swing.JTextField();
-        txtSub = new javax.swing.JTextField();
         txtNote = new javax.swing.JTextField();
         txtMark = new javax.swing.JTextField();
         jDateChooser1 = new com.toedter.calendar.JDateChooser();
         update = new rojerusan.RSButtonMetro();
+        jComboBox1 = new javax.swing.JComboBox<>();
         jPanel4 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -151,9 +176,6 @@ public class FrmDialogMark extends javax.swing.JDialog {
         txtName.setEditable(false);
         txtName.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(204, 204, 204)));
 
-        txtSub.setEditable(false);
-        txtSub.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(204, 204, 204)));
-
         txtMark.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(204, 204, 204)));
 
         jDateChooser1.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(204, 204, 204)));
@@ -171,7 +193,6 @@ public class FrmDialogMark extends javax.swing.JDialog {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(txtName)
-            .addComponent(txtSub)
             .addComponent(txtNote)
             .addComponent(txtMark)
             .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, 323, Short.MAX_VALUE)
@@ -180,6 +201,7 @@ public class FrmDialogMark extends javax.swing.JDialog {
                 .addGap(31, 31, 31)
                 .addComponent(update, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -187,8 +209,8 @@ public class FrmDialogMark extends javax.swing.JDialog {
                 .addComponent(txtMaSV, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
                 .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(txtSub, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(11, 11, 11)
                 .addComponent(txtMark, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -245,20 +267,24 @@ public class FrmDialogMark extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateActionPerformed
-        int id_student = mark.getS_id();
-        int id_sub = mark.getSJ_id();
-        int mark = Integer.parseInt(txtMark.getText());
-        String Ex_date = String.valueOf(new SimpleDateFormat("yyyy/MM/dd").format(jDateChooser1.getDate()));
-        String note = txtNote.getText();
-
-        Mark mk = new Mark(id_student, id_sub, mark, Ex_date, note);
-        MarkDAO md = new MarkDAO();
-        if (md.addMark(mk) == 1) {
-            JOptionPane.showMessageDialog(null, "Bạn đã thêm học sinh mới thành công");
-            dispose();
-        } else {
-            JOptionPane.showMessageDialog(null, "Đã có lỗi xảy ra, vui lòng kiểm tra lại");
+        if (mark.getSJ_name() != null) {
+            int id_student = mark.getS_id();
+            int mark = Integer.parseInt(txtMark.getText());
+            String Ex_date = String.valueOf(new SimpleDateFormat("yyyy-MM-dd").format(jDateChooser1.getDate()));
+            String note = txtNote.getText();
+            int id_sub = lstsj.get(jComboBox1.getSelectedIndex()).getId();
+            Mark mk = new Mark(id_student, id_sub, mark, Ex_date, note);
+            MarkDAO md = new MarkDAO();
+            if (md.addMark(mk) == 1) {
+                JOptionPane.showMessageDialog(null, "Bạn đã thêm điểm mới thành công");
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(null, "Đã có lỗi xảy ra, vui lòng kiểm tra lại");
+            }
+        }else{
+            JOptionPane.showMessageDialog(rootPane, mark);
         }
+
     }//GEN-LAST:event_updateActionPerformed
 
     /**
@@ -305,6 +331,7 @@ public class FrmDialogMark extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JComboBox<String> jComboBox1;
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -321,7 +348,6 @@ public class FrmDialogMark extends javax.swing.JDialog {
     private javax.swing.JTextField txtMark;
     private javax.swing.JTextField txtName;
     private javax.swing.JTextField txtNote;
-    private javax.swing.JTextField txtSub;
     private rojerusan.RSButtonMetro update;
     // End of variables declaration//GEN-END:variables
 }
