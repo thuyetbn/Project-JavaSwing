@@ -77,7 +77,21 @@ public class FrmClassRoom extends javax.swing.JDialog {
             });
         }
     }
-
+    
+    private boolean check_Class(String classroom) {
+        ClassDAO cd = new ClassDAO();
+        ClassRoom clas;
+        List<ClassRoom> lstc;
+        lstc = cd.getAllClass();
+        boolean check = false;
+        for (ClassRoom t : lstc) {
+            if (t.getName().equals(classroom)) {
+                check = true;
+            }
+        }
+        return check;
+    }
+    
     private void loadkhoahoc() {
         DefaultComboBoxModel dcm2 = new DefaultComboBoxModel();
         KhoaHocDAO kh = new KhoaHocDAO();

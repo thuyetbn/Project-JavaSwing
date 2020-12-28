@@ -202,6 +202,8 @@ BEGIN
 END
 GO
 
+EXEC dbo.getAllStudent
+
 CREATE PROC findStudent
 @name NVARCHAR(100)
 AS
@@ -350,13 +352,15 @@ GO
 ALTER PROC getAllMark
 AS
 BEGIN
-	SELECT M.*,s.id'Student_Id',s.Name'Student_Name',s.MaSV'S_MSV',SJ.id'SJ_ID',SJ.Name'SJ_Name' FROM dbo.tbl_Students S 
+	SELECT M.*,s.id'Student_Id',s.Name'Student_Name',s.MaSV'S_MSV',SJ.id'SJ_ID',SJ.Name'SJ_Name',C.Name'ClassName',c.id'ClassID' FROM dbo.tbl_Students S 
 	LEFT JOIN dbo.tbl_Mark M ON S.id = M.Student_ID
 	LEFT JOIN dbo.tbl_Subject SJ ON SJ.id = M.MonHoc_ID
+	LEFT JOIN dbo.tbl_Class C ON C.id = S.Class_ID
 END
 GO
 
-EXEC dbo.getAllMark
+EXEC dbo.getInfoStudent @id = 3 -- int
+
 EXEC dbo.getAllStudent
 
 SELECT M.*,s.id'Student_Id',s.Name'Student_Name',s.MaSV'S_MSV',SJ.id'SJ_ID',SJ.Name'SJ_Name' FROM dbo.tbl_Students S 
@@ -386,30 +390,56 @@ EXEC dbo.addMark @Student_ID =3,         -- int
 EXEC getAllMark
 GO
 
-SELECT COUNT(*) FROM dbo.tbl_Subject
 
-CREATE PROC findStudentMark
+ALTER PROC findStudentMark
 @name NVARCHAR(100)
 AS
 BEGIN
-    SELECT M.*,S.id'Student_Id',S.Name'Student_Name',SJ.id'SJ_ID',SJ.Name'SJ_Name' FROM dbo.tbl_Mark M 
-	LEFT JOIN dbo.tbl_Students S ON S.id = M.Student_ID
-	LEFT JOIN dbo.tbl_Subject SJ ON SJ.id = M.MonHoc_ID WHERE S.Name LIKE N'%'+@name+N'%'
+	SELECT M.*,s.id'Student_Id',s.Name'Student_Name',s.MaSV'S_MSV',SJ.id'SJ_ID',SJ.Name'SJ_Name',C.Name'ClassName',c.id'ClassID' FROM dbo.tbl_Students S 
+	LEFT JOIN dbo.tbl_Mark M ON S.id = M.Student_ID
+	LEFT JOIN dbo.tbl_Subject SJ ON SJ.id = M.MonHoc_ID 
+	LEFT JOIN dbo.tbl_Class C ON C.id = S.Class_ID
+	WHERE S.Name LIKE N'%'+@name+N'%'
 END
 GO
 
-CREATE PROC updateMark
+
+
+ALTER PROC filterMarkBySucject
+@name NVARCHAR(100)
+AS
+BEGIN
+    SELECT M.*,s.id'Student_Id',s.Name'Student_Name',s.MaSV'S_MSV',SJ.id'SJ_ID',SJ.Name'SJ_Name',C.Name'ClassName',c.id'ClassID' FROM dbo.tbl_Students S 
+	LEFT JOIN dbo.tbl_Mark M ON S.id = M.Student_ID
+	LEFT JOIN dbo.tbl_Subject SJ ON SJ.id = M.MonHoc_ID 
+	LEFT JOIN dbo.tbl_Class C ON C.id = S.Class_ID
+	WHERE SJ.Name LIKE N'%'+@name+N'%'
+END
+
+EXEC dbo.findStudentMark @name = N'Th' -- nvarchar(100)
+
+
+ALTER PROC updateMark
 @Student_ID INT,
 @MonHoc_ID INT,
 @Diem INT,
 @Ex_Date DATE,
-@Status TINYINT,
 @Note TEXT
 AS
 BEGIN
-    UPDATE dbo.tbl_Mark SET MonHoc_ID=@Student_ID,Diem=@Diem,Ex_Date=@Ex_Date,Status=@Status,Note=@Note WHERE Student_ID=@Student_ID AND MonHoc_ID = @MonHoc_ID
+    UPDATE dbo.tbl_Mark SET Diem=@Diem,Ex_Date=@Ex_Date,Note=@Note WHERE Student_ID=@Student_ID AND MonHoc_ID = @MonHoc_ID
 END
 GO
+
+CREATE PROC deleteMark
+@Student_ID INT,
+@MonHoc_ID INT
+AS
+BEGIN
+    DELETE FROM dbo.tbl_Mark WHERE Student_ID=@Student_ID AND MonHoc_ID = @MonHoc_ID
+END
+GO
+
 
 EXEC getAllMark
 GO
@@ -429,7 +459,15 @@ BEGIN
 	WHERE s.id = @id							    
 END
 
-EXEC dbo.getAllStudent
+    SELECT s.*,c.Name'C_Name',t.Name'T_Name',kh.Name'KH_Name',
+	kh.Begin_date'KH_begin_date',kh.End_data'KH_end_date',m.Diem'Diem',m.Status'M_Status',sj.Name'SJ_Name'
+	FROM dbo.tbl_Students s 
+	LEFT JOIN dbo.tbl_Class c ON c.id = s.Class_ID
+	LEFT JOIN dbo.tbl_Teacher t ON t.id = c.GiaoVien_ID
+	LEFT JOIN dbo.tbl_KhoaHoc kh ON kh.id = c.KhoaHoc_ID
+	LEFT JOIN dbo.tbl_Mark m ON  m.Student_ID = s.id
+	LEFT JOIN dbo.tbl_Subject sj ON sj.id = m.MonHoc_ID
+	WHERE s.id = 4	
 
 
 insert into tbl_Class(Name,KhoaHoc_ID,GiaoVien_ID) values

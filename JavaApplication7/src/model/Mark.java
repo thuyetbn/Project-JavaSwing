@@ -20,6 +20,8 @@ public class Mark {
     private int SJ_id;
     private String SJ_name;
     private String S_MSV;
+    private int Class_Id;
+    private String Class_Name;
 
     public Mark(int Student_ID, int Subject_ID, int mark, String Ex_date, String note) {
         this.Student_ID = Student_ID;
@@ -41,7 +43,7 @@ public class Mark {
         this.S_MSV = S_MSV;
     }
 
-    public Mark(int Student_ID, int Subject_ID, int mark, String note, String Ex_date, int S_id, String S_name, int SJ_id, String SJ_name,String S_MSV) {
+    public Mark(int Student_ID, int Subject_ID, int mark, String note, String Ex_date, int S_id, String S_name, int SJ_id, String SJ_name,String S_MSV,int Class_Id,String Class_Name) {
         this.Student_ID = Student_ID;
         this.Subject_ID = Subject_ID;
         this.mark = mark;
@@ -51,7 +53,9 @@ public class Mark {
         this.S_name = S_name;
         this.SJ_id = SJ_id;
         this.SJ_name = SJ_name;
-        this.S_MSV = S_MSV;
+        this.S_MSV = S_MSV; 
+        this.Class_Id = Class_Id;
+        this.Class_Name = Class_Name;
     }
     
     
@@ -135,6 +139,22 @@ public class Mark {
 
     public void setS_MSV(String S_MSV) {
         this.S_MSV = S_MSV;
+    }
+
+    public int getClass_Id() {
+        return Class_Id;
+    }
+
+    public void setClass_Id(int Class_Id) {
+        this.Class_Id = Class_Id;
+    }
+
+    public String getClass_Name() {
+        return Class_Name;
+    }
+
+    public void setClass_Name(String Class_Name) {
+        this.Class_Name = Class_Name;
     }
     
     

@@ -6,8 +6,13 @@
 package view;
 
 import DAO.AccountDAO;
+import java.awt.Color;
 import java.awt.Frame;
+import static java.awt.SystemColor.text;
 import java.awt.event.KeyEvent;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import javax.swing.JOptionPane;
 import model.Account;
@@ -19,6 +24,7 @@ import static view.FrmMain.maximized;
  */
 public class FrmLogin extends javax.swing.JFrame {
 
+    public static String regexemail = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
     static FrmLogin login = new FrmLogin();
     static boolean maximized = true;
     int xMouse;
@@ -30,6 +36,8 @@ public class FrmLogin extends javax.swing.JFrame {
     public FrmLogin() {
         initComponents();
         setLocationRelativeTo(null);
+        errorEmail.setVisible(false);
+        errorPass.setVisible(false);
 
     }
 
@@ -53,11 +61,13 @@ public class FrmLogin extends javax.swing.JFrame {
         jPanel4 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
         txtEmail = new javax.swing.JTextField();
         txtPass = new javax.swing.JPasswordField();
+        errorPass = new javax.swing.JLabel();
+        errorEmail = new javax.swing.JLabel();
         rSButtonMetro1 = new rojerusan.RSButtonMetro();
         btnLogin = new rojerusan.RSButtonMetro();
 
@@ -91,7 +101,7 @@ public class FrmLogin extends javax.swing.JFrame {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_Ball_Point_Pen_25px_1.png"))); // NOI18N
         jLabel1.setText("Đăng nhập");
-        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 210, 200, 110));
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 210, 190, 100));
 
         jPanel8.setBackground(new java.awt.Color(255, 255, 255));
         jPanel8.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -145,13 +155,13 @@ public class FrmLogin extends javax.swing.JFrame {
         jPanel5.setBackground(new java.awt.Color(255, 255, 255));
         jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel3.setText("Password:");
-        jPanel5.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, -1, -1));
-
         jLabel4.setText("Email:");
         jPanel5.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, -1, -1));
 
-        jPanel4.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 70, 80));
+        jLabel3.setText("Password:");
+        jPanel5.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, -1, -1));
+
+        jPanel4.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 70, 110));
 
         jPanel6.setBackground(new java.awt.Color(255, 255, 255));
         jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -162,7 +172,7 @@ public class FrmLogin extends javax.swing.JFrame {
         txtEmail.setAlignmentY(0.0F);
         txtEmail.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
         txtEmail.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        jPanel6.add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 250, 30));
+        jPanel6.add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 250, 20));
 
         txtPass.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtPass.setText("Thuyet123");
@@ -172,9 +182,19 @@ public class FrmLogin extends javax.swing.JFrame {
                 txtPassKeyPressed(evt);
             }
         });
-        jPanel6.add(txtPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 250, 30));
+        jPanel6.add(txtPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 250, 20));
 
-        jPanel4.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 86, 270, 90));
+        errorPass.setBackground(new java.awt.Color(255, 0, 102));
+        errorPass.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        errorPass.setText("jLabel5");
+        jPanel6.add(errorPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 250, -1));
+
+        errorEmail.setBackground(new java.awt.Color(255, 0, 102));
+        errorEmail.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        errorEmail.setText("sad");
+        jPanel6.add(errorEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 250, -1));
+
+        jPanel4.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 76, 270, 140));
 
         rSButtonMetro1.setBackground(new java.awt.Color(51, 204, 255));
         rSButtonMetro1.setText("Quên mật khẩu");
@@ -219,25 +239,47 @@ public class FrmLogin extends javax.swing.JFrame {
     }//GEN-LAST:event_jPanel3MouseDragged
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-        String email = txtEmail.getText();
-        String pass = String.valueOf(txtPass.getPassword());
-        AccountDAO ad = new AccountDAO();
-        List<Account> lsta;
-        lsta = ad.loginForm(email, pass);
-        Account acc;
-        acc = lsta.get(0);
-        if (lsta.size() == 1) {
-//            JOptionPane.showMessageDialog(null, "Đăng nhập thành công");
-            FrmMain fm = new FrmMain(acc);
-            fm.setVisible(true);
-            login.setVisible(false);
-            dispose();
+        String email = txtEmail.getText().trim();
+        String pass = String.valueOf(txtPass.getPassword()).trim();
+        boolean validate = true;
+        if (email.equals("")) {
+            errorEmail.setVisible(true);
+            errorEmail.setForeground(new Color(255, 0, 0));
+            errorEmail.setText("Trường email không được bỏ trống");
 
         } else {
-            JOptionPane.showMessageDialog(null, "Đăng nhập thất bại");
+            if (!email.matches(regexemail)) {
+                errorEmail.setVisible(true);
+                errorEmail.setForeground(new Color(255, 0, 0));
+                errorEmail.setText("Trường email không đúng định dạng");
+                validate = false;
+            }
         }
-
-
+        if (pass.equals("")) {
+            errorPass.setVisible(true);
+            errorPass.setForeground(new Color(255, 0, 0));
+            errorPass.setText("Trường password không được bỏ trống");
+            validate = false;
+        }
+        if (validate == true) {
+            errorEmail.setVisible(false);
+            errorPass.setVisible(false);
+            AccountDAO ad = new AccountDAO();
+            List<Account> lsta;
+            lsta = ad.loginForm(email, pass);
+            Account acc;
+            if (lsta.size() == 1) {
+                acc = lsta.get(0);
+                FrmMain fm = new FrmMain(acc);
+                fm.setVisible(true);
+                login.setVisible(false);
+                dispose();
+            } else {
+                errorEmail.setVisible(true);
+                errorEmail.setForeground(new Color(255, 0, 0));
+                errorEmail.setText("Tài khoản mật khẩu không chính xác");
+            }
+        }
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void txtPassKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPassKeyPressed
@@ -300,6 +342,8 @@ public class FrmLogin extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private rojerusan.RSButtonMetro btnLogin;
+    private javax.swing.JLabel errorEmail;
+    private javax.swing.JLabel errorPass;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

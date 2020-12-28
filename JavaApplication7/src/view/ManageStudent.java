@@ -16,6 +16,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -27,7 +28,7 @@ import model.Student;
  * @author BinDz
  */
 public class ManageStudent extends javax.swing.JPanel {
-
+    
     Student st;
     List<Student> liststudent;
 

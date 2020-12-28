@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Vector;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -39,6 +40,8 @@ public class ManageAccount extends javax.swing.JPanel {
     public ManageAccount() {
         initComponents();
         load_data();
+        tbAccount.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+
     }
 
     private void load_data() {

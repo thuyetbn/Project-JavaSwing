@@ -149,8 +149,8 @@ public class StudentDAO {
             cs.setInt(1, s.getId());
             cs.setString(2, s.getMaSV());
             cs.setString(3, s.getName());
-            cs.setString(4, s.getEmail());
-            cs.setString(5, s.getPhone());
+            cs.setString(4, s.getPhone());
+            cs.setString(5, s.getEmail());
             cs.setString(6, s.getAddress());
             cs.setString(7, s.getBirthday());
             cs.setInt(8, s.getGender());
