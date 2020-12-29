@@ -284,22 +284,46 @@ public class FrmLogin extends javax.swing.JFrame {
 
     private void txtPassKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPassKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            String email = txtEmail.getText();
-            String pass = String.valueOf(txtPass.getPassword());
-            AccountDAO ad = new AccountDAO();
-            List<Account> lsta;
-            lsta = ad.loginForm(email, pass);
-            Account acc;
-            acc = lsta.get(0);
-            if (lsta.size() == 1) {
-//                JOptionPane.showMessageDialog(null, "Đăng nhập thành công");
-                FrmMain fm = new FrmMain(acc);
-                fm.setVisible(true);
-                login.setVisible(false);
-                dispose();
+            String email = txtEmail.getText().trim();
+            String pass = String.valueOf(txtPass.getPassword()).trim();
+            boolean validate = true;
+            if (email.equals("")) {
+                errorEmail.setVisible(true);
+                errorEmail.setForeground(new Color(255, 0, 0));
+                errorEmail.setText("Trường email không được bỏ trống");
 
             } else {
-                JOptionPane.showMessageDialog(null, "Đăng nhập thất bại");
+                if (!email.matches(regexemail)) {
+                    errorEmail.setVisible(true);
+                    errorEmail.setForeground(new Color(255, 0, 0));
+                    errorEmail.setText("Trường email không đúng định dạng");
+                    validate = false;
+                }
+            }
+            if (pass.equals("")) {
+                errorPass.setVisible(true);
+                errorPass.setForeground(new Color(255, 0, 0));
+                errorPass.setText("Trường password không được bỏ trống");
+                validate = false;
+            }
+            if (validate == true) {
+                errorEmail.setVisible(false);
+                errorPass.setVisible(false);
+                AccountDAO ad = new AccountDAO();
+                List<Account> lsta;
+                lsta = ad.loginForm(email, pass);
+                Account acc;
+                if (lsta.size() == 1) {
+                    acc = lsta.get(0);
+                    FrmMain fm = new FrmMain(acc);
+                    fm.setVisible(true);
+                    login.setVisible(false);
+                    dispose();
+                } else {
+                    errorEmail.setVisible(true);
+                    errorEmail.setForeground(new Color(255, 0, 0));
+                    errorEmail.setText("Tài khoản mật khẩu không chính xác");
+                }
             }
         }
 

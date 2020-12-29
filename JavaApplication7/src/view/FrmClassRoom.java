@@ -13,7 +13,9 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
@@ -27,7 +29,6 @@ import model.Student;
  * @author BinDz
  */
 public class FrmClassRoom extends javax.swing.JDialog {
-
     List<KhoaHoc> lk;
     List<Account> la;
     List<ClassRoom> listclass;
@@ -64,20 +65,21 @@ public class FrmClassRoom extends javax.swing.JDialog {
                 @Override
                 public void valueChanged(ListSelectionEvent lse) {
                     int pos = tbClassRoom.getSelectedRow();
-                    if (pos < 0) {
-                        pos = 0;
-                    }
+
                     classroom = listclass.get(pos);
                     if (classroom != null) {
                         txtName.setText(classroom.getName());
-                        khoaHoc.setSelectedIndex((classroom.getKH_id())-1);
-                        Teacher.setSelectedIndex((classroom.getTeacher_id())-1);
+                        khoaHoc.setSelectedIndex((classroom.getKH_id()) - 1);
+                        Teacher.setSelectedIndex((classroom.getTeacher_id()) - 1);
+                        txtName.setEnabled(false);
+                    } else {
+                        txtName.setEnabled(true);
                     }
                 }
             });
         }
     }
-    
+
     private boolean check_Class(String classroom) {
         ClassDAO cd = new ClassDAO();
         ClassRoom clas;
@@ -91,7 +93,7 @@ public class FrmClassRoom extends javax.swing.JDialog {
         }
         return check;
     }
-    
+
     private void loadkhoahoc() {
         DefaultComboBoxModel dcm2 = new DefaultComboBoxModel();
         KhoaHocDAO kh = new KhoaHocDAO();
@@ -130,12 +132,13 @@ public class FrmClassRoom extends javax.swing.JDialog {
         jPanel3 = new javax.swing.JPanel();
         txtName = new javax.swing.JTextField();
         khoaHoc = new javax.swing.JComboBox<>();
-        Teacher = new javax.swing.JComboBox<>();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbClassRoom = new javax.swing.JTable();
-        rSButtonMetro2 = new rojerusan.RSButtonMetro();
-        rSButtonMetro3 = new rojerusan.RSButtonMetro();
+        add = new rojerusan.RSButtonMetro();
+        update = new rojerusan.RSButtonMetro();
+        Teacher = new javax.swing.JComboBox<>();
+        update1 = new rojerusan.RSButtonMetro();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Thêm lớp học");
@@ -175,11 +178,11 @@ public class FrmClassRoom extends javax.swing.JDialog {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(19, 19, 19)
                 .addComponent(jLabel2)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
                 .addComponent(jLabel3)
-                .addGap(18, 18, 18)
+                .addGap(27, 27, 27)
                 .addComponent(jLabel4)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(26, 26, 26))
         );
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
@@ -192,17 +195,15 @@ public class FrmClassRoom extends javax.swing.JDialog {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(txtName)
             .addComponent(khoaHoc, 0, 283, Short.MAX_VALUE)
-            .addComponent(Teacher, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(30, 30, 30)
                 .addComponent(khoaHoc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(Teacher, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(19, 19, 19))
         );
 
         tbClassRoom.setModel(new javax.swing.table.DefaultTableModel(
@@ -233,19 +234,29 @@ public class FrmClassRoom extends javax.swing.JDialog {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE))
         );
 
-        rSButtonMetro2.setBackground(new java.awt.Color(51, 204, 255));
-        rSButtonMetro2.setText("Thêm");
-        rSButtonMetro2.addActionListener(new java.awt.event.ActionListener() {
+        add.setBackground(new java.awt.Color(51, 204, 255));
+        add.setText("Thêm");
+        add.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rSButtonMetro2ActionPerformed(evt);
+                addActionPerformed(evt);
             }
         });
 
-        rSButtonMetro3.setBackground(new java.awt.Color(51, 204, 255));
-        rSButtonMetro3.setText("Cập nhật");
-        rSButtonMetro3.addActionListener(new java.awt.event.ActionListener() {
+        update.setBackground(new java.awt.Color(51, 204, 255));
+        update.setText("Cập nhật");
+        update.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rSButtonMetro3ActionPerformed(evt);
+                updateActionPerformed(evt);
+            }
+        });
+
+        update1.setBackground(new java.awt.Color(51, 204, 255));
+        update1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_refresh_15px.png"))); // NOI18N
+        update1.setText("Refesh");
+        update1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        update1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                update1ActionPerformed(evt);
             }
         });
 
@@ -256,18 +267,24 @@ public class FrmClassRoom extends javax.swing.JDialog {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(rSButtonMetro2, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(31, 31, 31)
-                        .addComponent(rSButtonMetro3, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(57, 57, 57)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Teacher, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(add, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(48, 48, 48)
+                        .addComponent(update, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(38, 38, 38)
+                        .addComponent(update1, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(87, 87, 87))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -278,13 +295,17 @@ public class FrmClassRoom extends javax.swing.JDialog {
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 68, Short.MAX_VALUE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(Teacher, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(27, 27, 27)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(rSButtonMetro2, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(rSButtonMetro3, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(56, 56, 56))))
+                            .addComponent(update1, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE)
+                            .addComponent(update, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(add, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(70, 70, 70))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -301,44 +322,83 @@ public class FrmClassRoom extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void rSButtonMetro2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro2ActionPerformed
-        String new_name = txtName.getText();
+    private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
+        String new_name = txtName.getText().toUpperCase().trim();
         int new_kh_id = lk.get(khoaHoc.getSelectedIndex()).getId();
         int new_teacher_id = la.get(Teacher.getSelectedIndex()).getId();
 
         if (new_name.length() == 0) {
-            JOptionPane.showMessageDialog(null, "Vui lòng nhập tên lớp !");
+            MessageBox mb = new MessageBox(null, true, "Bạn chưa nhập tên lớp");
+            mb.setLocationRelativeTo(this);
+            mb.setVisible(true);
+
+        } else if (check_Class(new_name)) {
+            MessageBox mb = new MessageBox(null, true, "Tên lớp đã tồn tại!");
+            mb.setLocationRelativeTo(this);
+            mb.setVisible(true);
+        } else if (new_name.length() != 6) {
+            MessageBox mb = new MessageBox(null, true, "Tên lớp phải có 6 kí tự!");
+            mb.setLocationRelativeTo(this);
+            mb.setVisible(true);
         } else {
             ClassRoom new_classroom = new ClassRoom(new_name, new_kh_id, new_teacher_id);
             ClassDAO cd = new ClassDAO();
             if (cd.addClassRoom(new_classroom) == 1) {
-                JOptionPane.showMessageDialog(null, "Bạn đã thêm lớp mới thành công");
+                MessageBox mb = new MessageBox(null, true, "Bạn đã thêm lớp mới thành công");
+                mb.setLocationRelativeTo(this);
+                mb.setVisible(true);
                 load_table();
             } else {
-                JOptionPane.showMessageDialog(null, "Đã có lỗi xảy ra, vui lòng kiểm tra lại");
+                MessageBox mb = new MessageBox(null, true, "Đã có lỗi xảy ra, vui lòng kiểm tra lại");
+                mb.setLocationRelativeTo(this);
+                mb.setVisible(true);
             }
         }
-    }//GEN-LAST:event_rSButtonMetro2ActionPerformed
+    }//GEN-LAST:event_addActionPerformed
 
-    private void rSButtonMetro3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro3ActionPerformed
-        int new_id = classroom.getId();
-        String new_name = txtName.getText();
-        int new_kh_id = lk.get(khoaHoc.getSelectedIndex()).getId();
-        int new_teacher_id = la.get(Teacher.getSelectedIndex()).getId();
+    private void updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateActionPerformed
+        if (classroom != null) {
+            String old_name = classroom.getName();
+            int new_id = classroom.getId();
+            String new_name = txtName.getText().toUpperCase().trim();
+            int new_kh_id = lk.get(khoaHoc.getSelectedIndex()).getId();
+            int new_teacher_id = la.get(Teacher.getSelectedIndex()).getId();
 
-        if (new_name.length() == 0) {
-            JOptionPane.showMessageDialog(null, "Vui lòng nhập tên lớp !");
+            if (new_name.length() == 0) {
+                MessageBox mb = new MessageBox(null, true, "Bạn chưa nhập tên lớp");
+                mb.setLocationRelativeTo(this);
+                mb.setVisible(true);
+
+            } else if (new_name.length() != 6) {
+                MessageBox mb = new MessageBox(null, true, "Tên lớp phải có 6 kí tự!");
+                mb.setLocationRelativeTo(this);
+                mb.setVisible(true);
+            } else {
+                ClassRoom new_classroom = new ClassRoom(new_id, new_name, new_kh_id, new_teacher_id);
+                ClassDAO cd = new ClassDAO();
+                if (cd.updateClassRoom(new_classroom) == 1) {
+                    MessageBox mb = new MessageBox(null, true, "Bạn đã thêm lớp mới thành công");
+                    mb.setLocationRelativeTo(this);
+                    mb.setVisible(true);
+                    load_table();
+                } else {
+                    MessageBox mb = new MessageBox(null, true, "Đã có lỗi xảy ra, vui lòng kiểm tra lại");
+                    mb.setLocationRelativeTo(this);
+                    mb.setVisible(true);
+                }
+            }
         } else {
-            ClassRoom new_classroom = new ClassRoom(new_id,new_name, new_kh_id, new_teacher_id);
-            ClassDAO cd = new ClassDAO();
-            if (cd.updateClassRoom(new_classroom) == 1) {
-                JOptionPane.showMessageDialog(null, "Bạn đã cập nhật lớp thành công");
-                load_table();
-            } else {
-                JOptionPane.showMessageDialog(null, "Đã có lỗi xảy ra, vui lòng kiểm tra lại");
-            }
+            MessageBox mb = new MessageBox(null, true, "Bạn chưa chọn gì cả");
+            mb.setLocationRelativeTo(this);
+            mb.setVisible(true);
         }
-    }//GEN-LAST:event_rSButtonMetro3ActionPerformed
+
+    }//GEN-LAST:event_updateActionPerformed
+
+    private void update1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_update1ActionPerformed
+        txtName.setEnabled(true);
+        txtName.setText("");
+    }//GEN-LAST:event_update1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -384,6 +444,7 @@ public class FrmClassRoom extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> Teacher;
+    private rojerusan.RSButtonMetro add;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -394,9 +455,9 @@ public class FrmClassRoom extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JComboBox<String> khoaHoc;
-    private rojerusan.RSButtonMetro rSButtonMetro2;
-    private rojerusan.RSButtonMetro rSButtonMetro3;
     private javax.swing.JTable tbClassRoom;
     private javax.swing.JTextField txtName;
+    private rojerusan.RSButtonMetro update;
+    private rojerusan.RSButtonMetro update1;
     // End of variables declaration//GEN-END:variables
 }

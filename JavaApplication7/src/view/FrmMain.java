@@ -41,7 +41,8 @@ public class FrmMain extends javax.swing.JFrame {
     Account account;
     List<Account> listacc;
     List<Role> lr;
-
+    public static MessageBox messagebox ;
+    
     /**
      * Creates new form FrmMain
      */

@@ -16,6 +16,7 @@ public class Home extends javax.swing.JPanel {
      */
     public Home() {
         initComponents();
+        
     }
 
     /**
@@ -75,12 +76,12 @@ public class Home extends javax.swing.JPanel {
         jPanel35.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
         jPanel32.add(jPanel35, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 250, 410, 220));
 
-        jPanel36.setBackground(new java.awt.Color(255, 51, 51));
+        jPanel36.setBackground(new java.awt.Color(255, 255, 255));
         jPanel36.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel36.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel18.setText("jLabel7");
-        jPanel36.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
+        jLabel18.setText("Xin chào !!!");
+        jPanel36.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 110, -1));
 
         jPanel32.add(jPanel36, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 20, 410, 230));
 

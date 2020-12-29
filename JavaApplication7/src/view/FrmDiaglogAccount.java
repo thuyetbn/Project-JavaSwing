@@ -21,6 +21,9 @@ import javax.swing.DefaultComboBoxModel;
 import DAO.RoleDAO;
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,16 +31,18 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import model.Role;
+import org.apache.log4j.helpers.DateTimeDateFormat;
 
 /**
  *
- * @author BinDz zxczx
+ * @author BinDz
  */
 public class FrmDiaglogAccount extends javax.swing.JDialog {
+
     /**
      * Creates new form FrmDiaglogAccount
      */
-    public FrmDiaglogAccount(java.awt.Frame parent, boolean modal,Account account) {
+    public FrmDiaglogAccount(java.awt.Frame parent, boolean modal, Account account) {
         super(parent, modal);
         initComponents();
         AccountDAO ad = new AccountDAO();
@@ -48,6 +53,7 @@ public class FrmDiaglogAccount extends javax.swing.JDialog {
     Account account;
     List<Role> lr;
     List<Account> la;
+    public static String regexemail = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -81,8 +87,8 @@ public class FrmDiaglogAccount extends javax.swing.JDialog {
         txtPassword = new javax.swing.JPasswordField();
         jDateChooser = new com.toedter.calendar.JDateChooser();
         jLabel9 = new javax.swing.JLabel();
-        rSButtonMetro1 = new rojerusan.RSButtonMetro();
-        rSButtonMetro2 = new rojerusan.RSButtonMetro();
+        update = new rojerusan.RSButtonMetro();
+        add = new rojerusan.RSButtonMetro();
         jPanel1 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -257,28 +263,28 @@ public class FrmDiaglogAccount extends javax.swing.JDialog {
         jLabel9.setText("Thông Tin Giáo Viên");
         jPanel2.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 0, 210, 30));
 
-        rSButtonMetro1.setBackground(new java.awt.Color(51, 204, 255));
-        rSButtonMetro1.setText("Cập nhật");
-        rSButtonMetro1.addActionListener(new java.awt.event.ActionListener() {
+        update.setBackground(new java.awt.Color(51, 204, 255));
+        update.setText("Cập nhật");
+        update.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rSButtonMetro1ActionPerformed(evt);
+                updateActionPerformed(evt);
             }
         });
-        jPanel2.add(rSButtonMetro1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 340, 180, 50));
+        jPanel2.add(update, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 340, 180, 50));
 
-        rSButtonMetro2.setBackground(new java.awt.Color(51, 204, 255));
-        rSButtonMetro2.setText("Thêm");
-        rSButtonMetro2.addMouseListener(new java.awt.event.MouseAdapter() {
+        add.setBackground(new java.awt.Color(51, 204, 255));
+        add.setText("Thêm");
+        add.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                rSButtonMetro2MouseClicked(evt);
+                addMouseClicked(evt);
             }
         });
-        rSButtonMetro2.addActionListener(new java.awt.event.ActionListener() {
+        add.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rSButtonMetro2ActionPerformed(evt);
+                addActionPerformed(evt);
             }
         });
-        jPanel2.add(rSButtonMetro2, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 340, 180, 50));
+        jPanel2.add(add, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 340, 180, 50));
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 405, 410));
 
@@ -289,9 +295,9 @@ public class FrmDiaglogAccount extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    private void initData(){
+    private void initData() {
         if (account != null) {
-            rSButtonMetro2.setVisible(false);
+            add.setVisible(false);
             txtName.setText(account.getName());
             txtPhone.setText(account.getPhone());
             txtMail.setText(account.getEmail());
@@ -304,17 +310,19 @@ public class FrmDiaglogAccount extends javax.swing.JDialog {
                 Logger.getLogger(FrmDiaglogAccount.class.getName()).log(Level.SEVERE, null, ex);
             }
             jDateChooser.setDate(date);
-            if(account.getStatus()== 0){
+            if (account.getStatus() == 0) {
                 rdStatus.setSelected(true);
-            }else{
+            } else {
                 jRadioButton2.setSelected(true);
             }
-            cbRole.setSelectedIndex((account.getRole_ID())-1); 
-        } else{
-            rSButtonMetro1.setVisible(false);
+            cbRole.setSelectedIndex((account.getRole_ID()) - 1);
+        } else {
+            update.setVisible(false);
+            Date date = new Date();
+            jDateChooser.setDate(date);
         }
     }
-    
+
     private void fillCombobox() {
         DefaultComboBoxModel dcm = new DefaultComboBoxModel();
         RoleDAO rd = new RoleDAO();
@@ -326,63 +334,91 @@ public class FrmDiaglogAccount extends javax.swing.JDialog {
 
     }
 
-    private boolean check_Mail_Phone(String mail, String phone) {
+    private boolean checkMail(String mail) {
         AccountDAO ad = new AccountDAO();
         la = ad.getAllAccount1();
         boolean check = false;
         for (Account t : la) {
-            if (t.getPhone().equals(phone) || t.getEmail().equals(mail)) {
+            if (t.getEmail().equals(mail)) {
                 check = true;
             }
         }
         return check;
     }
 
-    private void rSButtonMetro2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro2ActionPerformed
+    private boolean checkPhone(String phonne) {
+        AccountDAO ad = new AccountDAO();
+        la = ad.getAllAccount1();
+        boolean check = false;
+        for (Account t : la) {
+            if (t.getPhone().equals(phonne)) {
+                check = true;
+            }
+        }
+        return check;
+    }
+
+    private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
         String regex_Phone = "^0[0-9]{9,10}$";
-        String new_name = txtName.getText();
-        String new_Phone = txtPhone.getText();
-        String new_Email = txtMail.getText();
-        String new_pass = String.valueOf(txtPassword.getPassword());
-        String new_Address = txtAddress.getText();
+        String new_name = txtName.getText().trim();
+        String new_Phone = txtPhone.getText().trim();
+        String new_Email = txtMail.getText().trim();
+        String new_pass = String.valueOf(txtPassword.getPassword()).trim();
+        String new_Address = txtAddress.getText().trim();
 
         Date date = jDateChooser.getDate();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String new_birthday = sdf.format(date);
-
         int selectRole = cbRole.getSelectedIndex();
         int new_id_Role = lr.get(selectRole).getId();
-        
+
         Integer new_status;
-        if(rdStatus.isSelected()){
+        if (rdStatus.isSelected()) {
             new_status = 0;
-        }else{
+        } else {
             new_status = 1;
         }
 
-        
         String new_role_name = cbRole.getSelectedItem().toString();
 
-        if (new_name.length() == 0 || new_Phone.length() == 0 || new_Email.length() == 0 || new_Address.length() == 0 || new_birthday.length() == 0) {
-            JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ thông tin vào các trường để tiến hành");
+        if (new_name.length() == 0 || new_Phone.length() == 0 || new_Email.length() == 0 || new_Address.length() == 0 || date == null) {
+            MessageBox mb = new MessageBox(null, true, "<html><pre>Vui lòng nhập đầy đủ\nthông tin vào các trường\nđể tiến hành</pre></html>");
+            mb.setLocationRelativeTo(this);
+            mb.setVisible(true);
         } else if (new_Phone.length() > 11 || new_Phone.length() < 10 || regex_Phone.matches(new_Phone)) {
-            JOptionPane.showMessageDialog(null, "Vui lòng nhập đúng số điện thoại để tiếp tục");
-        } else if (check_Mail_Phone(new_Email, new_Phone)) {
-            JOptionPane.showMessageDialog(null, "Số điện thoại hoặc Email đã được sử dụng!");
+            MessageBox mb = new MessageBox(null, true, "<html><pre>Số điện thoại \nkhông đúng định dạng</pre></html>");
+            mb.setLocationRelativeTo(this);
+            mb.setVisible(true);
+        } else if (!new_Email.matches(regexemail)) {
+            MessageBox mb = new MessageBox(null, true, "<html><pre>Email không đúng \nđịnh dạng</pre></html>");
+            mb.setLocationRelativeTo(this);
+            mb.setVisible(true);
+        } else if (checkMail(new_Email)) {
+            MessageBox mb = new MessageBox(null, true, "<html><pre>Số điện thoại \nđã được sử dụng!</pre></html>");
+            mb.setLocationRelativeTo(this);
+            mb.setVisible(true);
+        } else if (checkPhone(new_Phone)) {
+            MessageBox mb = new MessageBox(null, true, "<html><pre>Email \nđã được sử dụng!</pre></html>");
+            mb.setLocationRelativeTo(this);
+            mb.setVisible(true);
         } else {
             Account newTeacher = new Account(new_name, new_Phone, new_Email, new_pass, new_Address, new_birthday, new_status, new_id_Role, new_role_name);
             AccountDAO ad = new AccountDAO();
             if (ad.addAccount(newTeacher) == 1) {
-                JOptionPane.showMessageDialog(null, "Bạn đã thêm tài khoản thành công");
-                    dispose();
+                MessageBox mb = new MessageBox(null, true, "<html><pre>Bạn đã thêm tài \nkhoản thành công</pre></html>");
+                mb.setLocationRelativeTo(this);
+                mb.setVisible(true);
+                dispose();
             } else {
-                JOptionPane.showMessageDialog(null, "Đã có lỗi xảy ra! \nVui lòng kiểm tra lại Email hoặc SĐT");
+                MessageBox mb = new MessageBox(null, true, "<html><pre>Đã có lỗi xảy ra! \nVui lòng kiểm tra lại \nEmail hoặc SĐT</pre></html>");
+                mb.setLocationRelativeTo(this);
+                mb.setVisible(true);
             }
         }
-    }//GEN-LAST:event_rSButtonMetro2ActionPerformed
+    }//GEN-LAST:event_addActionPerformed
 
-    private void rSButtonMetro1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro1ActionPerformed
-        String regex_Phone = "^0[0-9]{9,10}$";
+    private void updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateActionPerformed
+        String regex_Phone = "(09|03|08|05|07)+([0-9]{8})\b";
         String new_name = txtName.getText();
         String new_Phone = txtPhone.getText();
         String new_Email = txtMail.getText();
@@ -395,35 +431,58 @@ public class FrmDiaglogAccount extends javax.swing.JDialog {
 
         int selectRole = cbRole.getSelectedIndex();
         int new_id_Role = lr.get(selectRole).getId();
-        
+
         Integer new_status;
-        if(rdStatus.isSelected()){
+        if (rdStatus.isSelected()) {
             new_status = 0;
-        }else{
+        } else {
             new_status = 1;
         }
 
-        
         String new_role_name = cbRole.getSelectedItem().toString();
 
+        String old_email = account.getEmail();
+        String old_phone = account.getPhone();
+
         if (new_name.length() == 0 || new_Phone.length() == 0 || new_Email.length() == 0 || new_Address.length() == 0 || new_birthday.length() == 0) {
-            JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ thông tin vào các trường để tiến hành");
-        } else if (new_Phone.length() > 11 || new_Phone.length() < 10 || regex_Phone.matches(new_Phone)) {
-            JOptionPane.showMessageDialog(null, "Vui lòng nhập đúng số điện thoại để tiếp tục");
-        } 
-//        else if (check_Mail_Phone(new_Email, new_Phone)) {
-//            JOptionPane.showMessageDialog(null, "Số điện thoại hoặc Email đã được sử dụng!");}
-        else {
-            Account newTeacher = new Account(new_id,new_name, new_Phone, new_Email, new_pass, new_Address, new_birthday, new_status, new_id_Role, new_role_name);
+            MessageBox mb = new MessageBox(null, true, "<html><pre>Vui lòng nhập đầy đủ\nthông tin vào các trường\nđể tiến hành</pre></html>");
+            mb.setLocationRelativeTo(this);
+            mb.setVisible(true);
+        } else if (!new_Phone.matches(regex_Phone)) {
+            MessageBox mb = new MessageBox(null, true, "<html><pre>Số điện thoại \nkhông đúng định dạng</pre></html>");
+            mb.setLocationRelativeTo(this);
+            mb.setVisible(true);
+        } else if (!new_Email.matches(regexemail)) {
+            MessageBox mb = new MessageBox(null, true, "<html><pre>Email \nkhông đúng định dạng</pre></html>");
+            mb.setLocationRelativeTo(this);
+            mb.setVisible(true);
+        } else if (!old_email.equals(new_Email)) {
+            if (checkMail(new_Email)) {
+                MessageBox mb = new MessageBox(null, true, "<html><pre>Số điện thoại \nđã được sử dụng!</pre></html>");
+                mb.setLocationRelativeTo(this);
+                mb.setVisible(true);
+            }
+        } else if (!old_phone.equals(new_Phone)) {
+            if (checkPhone(new_Phone)) {
+                MessageBox mb = new MessageBox(null, true, "<html><pre>Email \nđã được sử dụng!</pre></html>");
+                mb.setLocationRelativeTo(this);
+                mb.setVisible(true);
+            }
+        } else {
+            Account newTeacher = new Account(new_id, new_name, new_Phone, new_Email, new_pass, new_Address, new_birthday, new_status, new_id_Role, new_role_name);
             AccountDAO ad = new AccountDAO();
             if (ad.updateAccount(newTeacher) == 1) {
-                JOptionPane.showMessageDialog(null, "Bạn đã cập nhật tài khoản thành công");
+                MessageBox mb = new MessageBox(null, true, "<html><pre>Bạn đã cập nhật tài \nkhoản thành công</pre></html>");
+                mb.setLocationRelativeTo(this);
+                mb.setVisible(true);
                 dispose();
             } else {
-                JOptionPane.showMessageDialog(null, "Đã có lỗi xảy ra! \nVui lòng kiểm tra lại Email hoặc SĐT");
+                MessageBox mb = new MessageBox(null, true, "<html><pre>Đã có lỗi xảy ra! \nVui lòng kiểm tra lại Email hoặc SĐT</pre></html>");
+                mb.setLocationRelativeTo(this);
+                mb.setVisible(true);
             }
         }
-    }//GEN-LAST:event_rSButtonMetro1ActionPerformed
+    }//GEN-LAST:event_updateActionPerformed
 
     private void cbRoleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbRoleActionPerformed
 
@@ -439,9 +498,9 @@ public class FrmDiaglogAccount extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_jCheckBox2ActionPerformed
 
-    private void rSButtonMetro2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSButtonMetro2MouseClicked
-        
-    }//GEN-LAST:event_rSButtonMetro2MouseClicked
+    private void addMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addMouseClicked
+
+    }//GEN-LAST:event_addMouseClicked
 
     private void rdStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdStatusActionPerformed
         // TODO add your handling code here:
@@ -477,7 +536,7 @@ public class FrmDiaglogAccount extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                FrmDiaglogAccount dialog = new FrmDiaglogAccount(new javax.swing.JFrame(), true,null);
+                FrmDiaglogAccount dialog = new FrmDiaglogAccount(new javax.swing.JFrame(), true, null);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -490,6 +549,7 @@ public class FrmDiaglogAccount extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private rojerusan.RSButtonMetro add;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JComboBox<String> cbRole;
     private javax.swing.JCheckBox jCheckBox2;
@@ -508,13 +568,12 @@ public class FrmDiaglogAccount extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JRadioButton jRadioButton2;
-    private rojerusan.RSButtonMetro rSButtonMetro1;
-    private rojerusan.RSButtonMetro rSButtonMetro2;
     private javax.swing.JRadioButton rdStatus;
     private javax.swing.JTextField txtAddress;
     private javax.swing.JTextField txtMail;
     private javax.swing.JTextField txtName;
     private javax.swing.JPasswordField txtPassword;
     private javax.swing.JTextField txtPhone;
+    private rojerusan.RSButtonMetro update;
     // End of variables declaration//GEN-END:variables
 }
