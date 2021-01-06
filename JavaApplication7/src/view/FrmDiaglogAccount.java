@@ -394,11 +394,11 @@ public class FrmDiaglogAccount extends javax.swing.JDialog {
             mb.setLocationRelativeTo(this);
             mb.setVisible(true);
         } else if (checkMail(new_Email)) {
-            MessageBox mb = new MessageBox(null, true, "<html><pre>Số điện thoại \nđã được sử dụng!</pre></html>");
+            MessageBox mb = new MessageBox(null, true, "<html><pre>Email \nđã được sử dụng!</pre></html>");
             mb.setLocationRelativeTo(this);
             mb.setVisible(true);
         } else if (checkPhone(new_Phone)) {
-            MessageBox mb = new MessageBox(null, true, "<html><pre>Email \nđã được sử dụng!</pre></html>");
+            MessageBox mb = new MessageBox(null, true, "<html><pre>Số điện thoại \nđã được sử dụng!</pre></html>");
             mb.setLocationRelativeTo(this);
             mb.setVisible(true);
         } else {
@@ -418,10 +418,10 @@ public class FrmDiaglogAccount extends javax.swing.JDialog {
     }//GEN-LAST:event_addActionPerformed
 
     private void updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateActionPerformed
-        String regex_Phone = "(09|03|08|05|07)+([0-9]{8})\b";
+        String regex_Phone = "(09|03|08|05|07)+([0-9]{8})";
         String new_name = txtName.getText();
         String new_Phone = txtPhone.getText();
-        String new_Email = txtMail.getText();
+        String new_Email = txtMail.getText().trim();
         String new_pass = String.valueOf(txtPassword.getPassword());
         String new_Address = txtAddress.getText();
         int new_id = account.getId();
@@ -444,31 +444,43 @@ public class FrmDiaglogAccount extends javax.swing.JDialog {
         String old_email = account.getEmail();
         String old_phone = account.getPhone();
 
-        if (new_name.length() == 0 || new_Phone.length() == 0 || new_Email.length() == 0 || new_Address.length() == 0 || new_birthday.length() == 0) {
+        boolean validation = true;
+
+        if (new_name.length() == 0 || new_Phone.length() == 0 || new_Email.length() == 0 || new_Address.length() == 0 || date == null) {
             MessageBox mb = new MessageBox(null, true, "<html><pre>Vui lòng nhập đầy đủ\nthông tin vào các trường\nđể tiến hành</pre></html>");
             mb.setLocationRelativeTo(this);
             mb.setVisible(true);
-        } else if (!new_Phone.matches(regex_Phone)) {
+            validation = false;
+        }
+        if (new_Phone.length() > 11 || new_Phone.length() < 10 || regex_Phone.matches(new_Phone)) {
             MessageBox mb = new MessageBox(null, true, "<html><pre>Số điện thoại \nkhông đúng định dạng</pre></html>");
             mb.setLocationRelativeTo(this);
             mb.setVisible(true);
-        } else if (!new_Email.matches(regexemail)) {
-            MessageBox mb = new MessageBox(null, true, "<html><pre>Email \nkhông đúng định dạng</pre></html>");
+            validation = false;
+        }
+        if (!new_Email.matches(regexemail)) {
+            MessageBox mb = new MessageBox(null, true, "<html><pre>Email không đúng \nđịnh dạng</pre></html>");
             mb.setLocationRelativeTo(this);
             mb.setVisible(true);
-        } else if (!old_email.equals(new_Email)) {
+            validation = false;
+        }
+        if (!new_Email.equals(old_email)) {
             if (checkMail(new_Email)) {
-                MessageBox mb = new MessageBox(null, true, "<html><pre>Số điện thoại \nđã được sử dụng!</pre></html>");
-                mb.setLocationRelativeTo(this);
-                mb.setVisible(true);
-            }
-        } else if (!old_phone.equals(new_Phone)) {
-            if (checkPhone(new_Phone)) {
                 MessageBox mb = new MessageBox(null, true, "<html><pre>Email \nđã được sử dụng!</pre></html>");
                 mb.setLocationRelativeTo(this);
                 mb.setVisible(true);
             }
-        } else {
+            validation = false;
+        }
+        if (!new_Phone.equals(old_phone)) {
+            if (checkPhone(new_Phone)) {
+                MessageBox mb = new MessageBox(null, true, "<html><pre>Số điện thoại \nđã được sử dụng!</pre></html>");
+                mb.setLocationRelativeTo(this);
+                mb.setVisible(true);
+            }
+            validation = false;
+        }
+        if (validation = true) {
             Account newTeacher = new Account(new_id, new_name, new_Phone, new_Email, new_pass, new_Address, new_birthday, new_status, new_id_Role, new_role_name);
             AccountDAO ad = new AccountDAO();
             if (ad.updateAccount(newTeacher) == 1) {

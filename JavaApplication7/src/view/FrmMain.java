@@ -49,7 +49,7 @@ public class FrmMain extends javax.swing.JFrame {
     public FrmMain(Account account) {
         initComponents();
         setLocationRelativeTo(null);
-        Home h = new Home();
+        Home h = new Home(account);
         Body.add(h);
         Body.repaint();
         Body.revalidate();
@@ -356,7 +356,7 @@ public class FrmMain extends javax.swing.JFrame {
 
     private void btnHome3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHome3ActionPerformed
         Body.removeAll();
-        Home h = new Home();
+        Home h = new Home(account);
         Body.add(h);
         Body.repaint();
         Body.revalidate();

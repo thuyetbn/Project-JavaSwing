@@ -5,20 +5,37 @@
  */
 package view;
 
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import model.Account;
+import sun.util.resources.LocaleData;
+
 /**
  *
  * @author BinDz
  */
 public class Home extends javax.swing.JPanel {
-
+    Account account;
     /**
      * Creates new form Home
      */
-    public Home() {
+    public Home(Account account) {
         initComponents();
-        
+        this.account = account;
+        showInfo();
     }
 
+    private void showInfo(){
+        infoName.setText(account.getName());
+        LocalDate date = LocalDate.parse(account.getBirthday());
+        int age = Period.between(date, LocalDate.now()).getYears();
+        infoAge.setText(String.valueOf(age)+" Tuổi");
+        infoRole.setText(account.getRolde_Name());
+        infoAddress.setText(account.getAddress());
+        
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -33,12 +50,18 @@ public class Home extends javax.swing.JPanel {
         jPanel31 = new javax.swing.JPanel();
         jLabel16 = new javax.swing.JLabel();
         jPanel32 = new javax.swing.JPanel();
-        jPanel33 = new javax.swing.JPanel();
-        jLabel17 = new javax.swing.JLabel();
-        jPanel34 = new javax.swing.JPanel();
-        jPanel35 = new javax.swing.JPanel();
         jPanel36 = new javax.swing.JPanel();
-        jLabel18 = new javax.swing.JLabel();
+        infoAddress = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        infoName = new javax.swing.JLabel();
+        infoAge = new javax.swing.JLabel();
+        infoRole = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        a = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
 
         jPanel30.setBackground(new java.awt.Color(255, 255, 255));
         jPanel30.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
@@ -55,35 +78,58 @@ public class Home extends javax.swing.JPanel {
         jPanel30.add(jPanel31, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 2, 260, 96));
 
         jPanel32.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel32.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 1, 0, 0, new java.awt.Color(0, 0, 0)));
         jPanel32.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel33.setBackground(new java.awt.Color(255, 204, 102));
-        jPanel33.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel33.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel17.setText("jLabel8");
-        jPanel33.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, -1, -1));
-
-        jPanel32.add(jPanel33, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 20, 410, 230));
-
-        jPanel34.setBackground(new java.awt.Color(255, 204, 102));
-        jPanel34.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel34.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        jPanel32.add(jPanel34, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 250, 410, 220));
-
-        jPanel35.setBackground(new java.awt.Color(255, 51, 51));
-        jPanel35.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel35.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        jPanel32.add(jPanel35, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 250, 410, 220));
-
         jPanel36.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel36.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel36.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel18.setText("Xin chào !!!");
-        jPanel36.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 110, -1));
+        infoAddress.setText("Xin chào !!!");
+        jPanel36.add(infoAddress, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 200, 260, -1));
 
-        jPanel32.add(jPanel36, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 20, 410, 230));
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_more_info_30px_1.png"))); // NOI18N
+        jLabel1.setText("Thông tin tài khoản");
+        jPanel36.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 320, 50));
+
+        infoName.setText("Xin chào !!!");
+        jPanel36.add(infoName, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 80, 290, -1));
+
+        infoAge.setText("Xin chào !!!");
+        jPanel36.add(infoAge, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 120, 260, -1));
+
+        infoRole.setText("Xin chào !!!");
+        jPanel36.add(infoRole, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 160, 270, -1));
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel2.setText("Chức vụ:");
+        jPanel36.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, -1, -1));
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel3.setText("Họ Tên:");
+        jPanel36.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, -1, -1));
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel4.setText("Tuổi:");
+        jPanel36.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, -1, -1));
+
+        a.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        a.setText("Quê Quán:");
+        jPanel36.add(a, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, -1, -1));
+
+        jPanel32.add(jPanel36, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 140, 820, 320));
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_classroom_75px.png"))); // NOI18N
+        jLabel5.setText("Chào mừng đến với phần mềm quản lý sinh viên");
+        jPanel32.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 820, -1));
+
+        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_person_25px.png"))); // NOI18N
+        jLabel6.setText("Được thiết kế bởi Thuyết - C1905M");
+        jPanel32.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 84, 820, 30));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -93,23 +139,19 @@ public class Home extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jPanel32, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jPanel30, javax.swing.GroupLayout.PREFERRED_SIZE, 820, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jPanel30, javax.swing.GroupLayout.DEFAULT_SIZE, 818, Short.MAX_VALUE)
+                        .addComponent(jPanel32, javax.swing.GroupLayout.DEFAULT_SIZE, 820, Short.MAX_VALUE))
                     .addGap(0, 0, Short.MAX_VALUE)))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 568, Short.MAX_VALUE)
+            .addGap(0, 591, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addGap(100, 100, 100)
-                            .addComponent(jPanel32, javax.swing.GroupLayout.PREFERRED_SIZE, 468, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(jPanel30, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGap(0, 0, Short.MAX_VALUE)))
+                    .addComponent(jPanel30, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, 0)
+                    .addComponent(jPanel32, javax.swing.GroupLayout.DEFAULT_SIZE, 462, Short.MAX_VALUE)))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -130,16 +172,22 @@ public class Home extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel a;
+    private javax.swing.JLabel infoAddress;
+    private javax.swing.JLabel infoAge;
+    private javax.swing.JLabel infoName;
+    private javax.swing.JLabel infoRole;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel30;
     private javax.swing.JPanel jPanel31;
     private javax.swing.JPanel jPanel32;
-    private javax.swing.JPanel jPanel33;
-    private javax.swing.JPanel jPanel34;
-    private javax.swing.JPanel jPanel35;
     private javax.swing.JPanel jPanel36;
     // End of variables declaration//GEN-END:variables
 }

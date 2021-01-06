@@ -101,4 +101,19 @@ public class SubjectDAO {
         }
         return lsts;
     }
+    public boolean delete(int id) {
+        boolean check = false;
+        String sql = "{CALL deleteSubject(?)}";
+        try {
+            CallableStatement cs = conn.prepareCall(sql);
+            cs.setInt(1, id);
+            int result = cs.executeUpdate();
+            if (result > 0) {
+                check = true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return check;
+    }
 }

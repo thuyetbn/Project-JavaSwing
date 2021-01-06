@@ -235,6 +235,8 @@ public class FrmDiaglogStrudent extends javax.swing.JDialog {
         } else {
             setMaSV();
             update.setVisible(false);
+            Date date = new Date();
+            jDateStudent.setDate(date);
         }
     }
 
@@ -250,18 +252,30 @@ public class FrmDiaglogStrudent extends javax.swing.JDialog {
 
     }
 
-    private boolean check_Mail_Phone(String mail, String phone) {
+    private boolean check_Mail(String mail) {
         StudentDAO sd = new StudentDAO();
         ls = sd.getAllStudent();
         boolean check = false;
         for (Student t : ls) {
-            if (t.getPhone().equals(phone) || t.getEmail().equals(mail)) {
+            if ( t.getEmail().equals(mail)) {
                 check = true;
             }
         }
         return check;
     }
 
+    private boolean check_Phone(String phone) {
+        StudentDAO sd = new StudentDAO();
+        ls = sd.getAllStudent();
+        boolean check = false;
+        for (Student t : ls) {
+            if (t.getPhone().equals(phone)) {
+                check = true;
+            }
+        }
+        return check;
+    }
+    
     private void setMaSV() {
         StudentDAO sd = new StudentDAO();
         ls = sd.getAllStudent();
@@ -278,7 +292,7 @@ public class FrmDiaglogStrudent extends javax.swing.JDialog {
     }
 
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
-        String regex_Phone = "^0[0-9]{9,10}$";
+        String regex_Phone = "(09|03|08|05|07)+([0-9]{8})";
         String new_masv = txtMaSV.getText();
         String new_name = txtName.getText();
         String new_phone = txtPhone.getText();
@@ -291,36 +305,57 @@ public class FrmDiaglogStrudent extends javax.swing.JDialog {
         } else {
             new_gender = 1;
         }
-
         int new_class_id = lc.get(className.getSelectedIndex()).getId();
-
         int new_status;
+        boolean validate = true;
         if (Status.isSelected()) {
             new_status = 0;
         } else {
             new_status = 1;
         }
         if (new_name.length() == 0 || new_phone.length() == 0 || new_email.length() == 0 || new_address.length() == 0) {
-            JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ thông tin vào các trường để tiến hành thêm mới");
-        } else if (new_phone.length() > 11 || new_phone.length() < 10 || regex_Phone.matches(new_phone)) {
-            JOptionPane.showMessageDialog(null, "Vui lòng điển đúng số điện thoại để tiếp tục!");
-        } else if (check_Mail_Phone(new_email, new_phone)) {
-            JOptionPane.showMessageDialog(null, "Email hoặc Số điện thoại đã được sử dụng!");
-        } else {
+            MessageBox mb = new MessageBox(null, true, "<html><pre>Vui lòng nhập đầy đủ thông \ntin vào các trường để tiến \nhành thêm mới</pre></html>");
+            mb.setLocationRelativeTo(this);
+            mb.setVisible(true);
+            validate = false;
+        }
+        if (!new_phone.matches(regex_Phone)) {
+            MessageBox mb = new MessageBox(null, true, "<html><pre>Vui lòng điển đúng số điện thoại\n để tiếp tục</pre></html>");
+            mb.setLocationRelativeTo(this);
+            mb.setVisible(true);
+            validate = false;
+        }
+        if (check_Mail(new_email)) {
+            MessageBox mb = new MessageBox(null, true, "<html><pre>Email đã được sử dụng!</pre></html>");
+            mb.setLocationRelativeTo(this);
+            mb.setVisible(true);
+            validate = false;
+        }
+        if (check_Phone(new_phone)) {
+            MessageBox mb = new MessageBox(null, true, "<html><pre>Phone đã được sử dụng!</pre></html>");
+            mb.setLocationRelativeTo(this);
+            mb.setVisible(true);
+            validate = false;
+        }
+        if (validate == true) {
             Student new_Student = new Student(new_masv, new_name, new_phone, new_email, new_address, birthday, new_gender, new_status, new_class_id);
             StudentDAO SC = new StudentDAO();
             if (SC.addStudent(new_Student) == 1) {
-                JOptionPane.showMessageDialog(null, "Bạn đã thêm học sinh mới thành công");
+                MessageBox mb = new MessageBox(null, true, "<html><pre>Bạn đã thêm học sinh \nmới thành công</pre></html>");
+                mb.setLocationRelativeTo(this);
+                mb.setVisible(true);
                 dispose();
             } else {
-                JOptionPane.showMessageDialog(null, "Đã có lỗi xảy ra, vui lòng kiểm tra lại");
+                MessageBox mb = new MessageBox(null, true, "<html><pre>Đã có lỗi xảy ra\n vui lòng kiểm tra lại</pre></html>");
+                mb.setLocationRelativeTo(this);
+                mb.setVisible(true);
             }
         }
     }//GEN-LAST:event_addActionPerformed
 
     private void updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateActionPerformed
         int new_id = st.getId();
-        String regex_Phone = "^0[0-9]{9,10}$";
+        String regex_Phone = "(09|03|08|05|07)+([0-9]{8})";
         String new_masv = txtMaSV.getText();
         String new_name = txtName.getText();
         String new_phone = txtPhone.getText();
@@ -337,30 +372,55 @@ public class FrmDiaglogStrudent extends javax.swing.JDialog {
         int new_class_id = lc.get(className.getSelectedIndex()).getId();
 
         int new_status;
+        String oldPhone = st.getPhone();
+        String oldEmail = st.getEmail();
+        boolean validate = true;
+
         if (Status.isSelected()) {
             new_status = 0;
         } else {
             new_status = 1;
         }
         if (new_name.length() == 0 || new_phone.length() == 0 || new_email.length() == 0 || new_address.length() == 0) {
-            JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ thông tin vào các trường để tiến hành thêm mới");
-        } else if (new_phone.length() > 11 || new_phone.length() < 10 || regex_Phone.matches(new_phone)) {
-            JOptionPane.showMessageDialog(null, "Vui lòng điển đúng số điện thoại để tiếp tục!");
-        } 
-//        else if (check_Mail_Phone(new_email, new_phone)) {
-//            JOptionPane.showMessageDialog(null, "Email hoặc Số điện thoại đã được sử dụng!");
-//        } 
-        else {
-            Student new_Student = new Student(new_id,new_masv, new_name, new_phone, new_email, new_address, birthday, new_gender, new_status, new_class_id);
+            MessageBox mb = new MessageBox(null, true, "<html><pre>Vui lòng nhập đầy\n đủ thông tin\n vào các trường để tiến \nhành thêm mới</pre></html>");
+            mb.setLocationRelativeTo(this);
+            mb.setVisible(true);
+            validate = false;
+        }
+        if (!new_phone.matches(regex_Phone)) {
+            MessageBox mb = new MessageBox(null, true, "<html><pre>Vui lòng điển đúng số \nđiện thoại để tiếp tục!</pre></html>");
+            mb.setLocationRelativeTo(this);
+            mb.setVisible(true);
+            validate = false;
+        }
+        if (!oldPhone.equals(new_phone)) {
+            if (check_Phone(new_phone)) {
+                MessageBox mb = new MessageBox(null, true, "<html><pre>Số điện \nthoại đã được sử dụng!</pre></html>");
+                mb.setLocationRelativeTo(this);
+                mb.setVisible(true);
+            }
+            validate = false;
+        }
+        if (!oldEmail.equals(new_email)) {
+            if (check_Mail(new_email)) {
+                MessageBox mb = new MessageBox(null, true, "<html><pre>Email đã được sử dụng!</pre></html>");
+                mb.setLocationRelativeTo(this);
+                mb.setVisible(true);
+            }
+            validate = false;
+        }
+
+        if (validate == true) {
+            Student new_Student = new Student(new_id, new_masv, new_name, new_phone, new_email, new_address, birthday, new_gender, new_status, new_class_id);
             StudentDAO SC = new StudentDAO();
             if (SC.updateAccount(new_Student) == 1) {
-                JOptionPane.showMessageDialog(null, "Bạn đã thêm học sinh mới thành công");
+                JOptionPane.showMessageDialog(null, "Bạn đã thêm học \nsinh mới thành công");
                 dispose();
             } else {
-                JOptionPane.showMessageDialog(null, "Đã có lỗi xảy ra, vui lòng kiểm tra lại");
+                JOptionPane.showMessageDialog(null, "Đã có lỗi xảy ra\n vui lòng kiểm tra lại");
             }
         }
-        
+
     }//GEN-LAST:event_updateActionPerformed
 
     /**

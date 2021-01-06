@@ -45,7 +45,7 @@ public class FrmDialogStudentMark extends javax.swing.JDialog {
         for (Subject lstsj1 : lstsj) {
             dcbm.addElement(lstsj1.getName());
         }
-        jComboBox1.setModel(dcbm);
+        
     }
 
     private void initData() {

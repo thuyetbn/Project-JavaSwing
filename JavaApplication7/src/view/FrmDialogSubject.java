@@ -23,7 +23,7 @@ public class FrmDialogSubject extends javax.swing.JDialog {
     /**
      * Creates new form FrmDialogSubject
      */
-    public FrmDialogSubject(java.awt.Frame parent, boolean modal,Subject sub) {
+    public FrmDialogSubject(java.awt.Frame parent, boolean modal, Subject sub) {
         super(parent, modal);
         initComponents();
         setLocationRelativeTo(null);
@@ -33,6 +33,7 @@ public class FrmDialogSubject extends javax.swing.JDialog {
         loadCombo();
     }
     Subject sub;
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -172,7 +173,8 @@ public class FrmDialogSubject extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
     List<KhoaHoc> listKH;
     KhoaHoc KH;
-    private void loadCombo(){
+
+    private void loadCombo() {
         DefaultComboBoxModel dcm = new DefaultComboBoxModel();
         KhoaHocDAO rd = new KhoaHocDAO();
         listKH = rd.getAllKhoaHoc();
@@ -181,78 +183,86 @@ public class FrmDialogSubject extends javax.swing.JDialog {
         }
         cbKhoaHoc.setModel(dcm);
     }
-    private  void initData(){
-        if(sub != null){
+
+    private void initData() {
+        if (sub != null) {
             add.setVisible(false);
             txtSub.setText(sub.getName());
             txtCre.setText(String.valueOf(sub.getCredits()));
-            int a =sub.getKH_ID();
+            int a = sub.getKH_ID();
 
-            
-            if(sub.getStatus()==0){
+            if (sub.getStatus() == 0) {
                 status.setSelected(true);
-            }else{
+            } else {
                 jRadioButton1.setSelected(true);
             }
-            
+        } else {
+            update.setVisible(false);
         }
     }
-    
-    
+
+
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
-        String name = txtSub.getText();
-        int credits = Integer.parseInt(txtCre.getText());
+        String regexcredit = "^[1-9][0-9]";
+        String name = txtSub.getText().trim();
+        String credits = txtCre.getText().trim();
         int new_status;
-        if(status.isSelected()){
-            new_status =0;
-        }else{
+        if (status.isSelected()) {
+            new_status = 0;
+        } else {
             new_status = 1;
         }
         int new_id_KH = listKH.get(cbKhoaHoc.getSelectedIndex()).getId();
-        if(name.length() == 0 || credits == 0){
-            JOptionPane.showMessageDialog(null,"Nhập đầy đủ các trường");
-        }else if(credits < 0){
-            JOptionPane.showMessageDialog(null,"Số tín chỉ phải lớn hơn 0");
-        }else{
-            Subject new_subject = new Subject(name, credits, new_status,new_id_KH);
+        boolean validation = true;
+        if (name.length() == 0 || !credits.matches(regexcredit)) {
+            validation = false;
+            MessageBox mb = new MessageBox(null, true, "<html><pre>Nhập đầy đủ các trường và số \n tín nhỏ hơn <b style='color:red'>100</b> và lớn\n hơn <b style='color:red'>0</b></pre></html>");
+            mb.setLocationRelativeTo(this);
+            mb.setVisible(true);
+        }
+        if (validation == true) {
+            Subject new_subject = new Subject(name, Integer.parseInt(credits), new_status, new_id_KH);
             SubjectDAO sd = new SubjectDAO();
             if (sd.addSubject(new_subject) == 1) {
                 JOptionPane.showMessageDialog(null, "Bạn đã thêm môn học thành công");
-                    dispose();
+                dispose();
             } else {
                 JOptionPane.showMessageDialog(null, "Đã có lỗi xảy ra! \nVui lòng kiểm tra lại");
             }
         }
-        
+
     }//GEN-LAST:event_addActionPerformed
 
     private void updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateActionPerformed
+        String regexcredit = "^[1-9][0-9]";
         int new_id = sub.getId();
         String name = txtSub.getText();
-        int credits = Integer.parseInt(txtCre.getText());
+        String credits = txtCre.getText().trim();
         int new_status;
-        if(status.isSelected()){
-            new_status =0;
-        }else{
+        if (status.isSelected()) {
+            new_status = 0;
+        } else {
             new_status = 1;
         }
         int new_id_KH = listKH.get(cbKhoaHoc.getSelectedIndex()).getId();
-        if(name.length() == 0 || credits == 0){
-            JOptionPane.showMessageDialog(null,"Nhập đầy đủ các trường");
-        }else if(credits < 0){
-            JOptionPane.showMessageDialog(null,"Số tín chỉ phải lớn hơn 0");
-        }else{
-            Subject new_subject = new Subject(new_id,name, credits, new_status,new_id_KH);
+        boolean validation = true;
+        if (name.length() == 0 || !credits.matches(regexcredit)) {
+            MessageBox mb = new MessageBox(null, true, "<html><pre>Nhập đầy đủ các trường và số \n tín nhỏ hơn <b style='color:red'>100</b> và lớn\n hơn <b style='color:red'>0</b></pre></html>");
+            mb.setLocationRelativeTo(this);
+            mb.setVisible(true);
+        }
+        if (validation == true) {
+            Subject new_subject = new Subject(new_id, name, Integer.parseInt(credits), new_status, new_id_KH);
             SubjectDAO sd = new SubjectDAO();
             if (sd.updateSubject(new_subject) == 1) {
                 JOptionPane.showMessageDialog(null, "Bạn đã cập nhật môn học thành công");
-                    dispose();
+                dispose();
             } else {
                 JOptionPane.showMessageDialog(null, "Đã có lỗi xảy ra! \nVui lòng kiểm tra lại");
             }
         }
     }//GEN-LAST:event_updateActionPerformed
-    
+
     /**
      * @param args the command line arguments
      */
@@ -283,7 +293,7 @@ public class FrmDialogSubject extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                FrmDialogSubject dialog = new FrmDialogSubject(new javax.swing.JFrame(), true,null);
+                FrmDialogSubject dialog = new FrmDialogSubject(new javax.swing.JFrame(), true, null);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

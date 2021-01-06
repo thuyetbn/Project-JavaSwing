@@ -170,7 +170,6 @@ AS
 BEGIN
 	SELECT tbl_Teacher.id,tbl_Teacher.Name,dbo.tbl_Role.id 'RoleId',tbl_Role.Name 'RoleName',Phone,Email,Password,Address,Birthday,Status FROM dbo.tbl_Teacher INNER JOIN dbo.tbl_Role ON tbl_Role.id = tbl_Teacher.Role_ID
 	WHERE tbl_Teacher.Name LIKE N'%'+@name+N'%'
-	
 END
 GO
 

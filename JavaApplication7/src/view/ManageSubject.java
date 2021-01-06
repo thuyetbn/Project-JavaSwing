@@ -11,11 +11,13 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import model.Subject;
+
 /**
  *
  * @author BinDz
@@ -31,15 +33,16 @@ public class ManageSubject extends javax.swing.JPanel {
     }
     Subject sub;
     List<Subject> listsub;
+
     private void load_data() {
         SubjectDAO sd = new SubjectDAO();
         listsub = sd.getAllSubject();
-        String columns[] = {"STT", "Tên", "Số tín chỉ","Khoá học", "Trạng thái"};
+        String columns[] = {"STT", "Tên", "Số tín chỉ", "Khoá học", "Trạng thái"};
         DefaultTableModel dtm = new DefaultTableModel(columns, 0);
         DateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         Integer i = 1;
         for (Subject s : listsub) {
-            dtm.addRow(new Object[]{i, s.getName(),s.getCredits(),s.getKH_Name(), s.getStatus() == 0 ? "Đang hoạt động" : "Đã ngừng dạy"});
+            dtm.addRow(new Object[]{i, s.getName(), s.getCredits(), s.getKH_Name(), s.getStatus() == 0 ? "Đang hoạt động" : "Đã ngừng dạy"});
             i++;
         }
         tbSubject.setModel(dtm);
@@ -58,6 +61,7 @@ public class ManageSubject extends javax.swing.JPanel {
             });
         }
     }
+
     void load_find(String name) {
         SubjectDAO ad = new SubjectDAO();
         listsub = ad.findSubject(name);
@@ -66,7 +70,7 @@ public class ManageSubject extends javax.swing.JPanel {
         DateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         Integer i = 1;
         for (Subject s : listsub) {
-            dtm.addRow(new Object[]{i, s.getName(),s.getCredits(), s.getStatus() == 0 ? "Đang hoạt động" : "Đã ngừng dạy"});
+            dtm.addRow(new Object[]{i, s.getName(), s.getCredits(), s.getStatus() == 0 ? "Đang hoạt động" : "Đã ngừng dạy"});
             i++;
         }
         tbSubject.setModel(dtm);
@@ -86,8 +90,7 @@ public class ManageSubject extends javax.swing.JPanel {
         }
 
     }
-    
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -340,21 +343,46 @@ public class ManageSubject extends javax.swing.JPanel {
 
     private void rSButtonMetro16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro16ActionPerformed
         JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
-        FrmDialogSubject fsub = new FrmDialogSubject(frame, true,null);
+        FrmDialogSubject fsub = new FrmDialogSubject(frame, true, null);
         fsub.setVisible(true);
         load_data();
     }//GEN-LAST:event_rSButtonMetro16ActionPerformed
 
     private void rSButtonMetro13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro13ActionPerformed
-        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
-        FrmDialogSubject fsub = new FrmDialogSubject(frame, true,sub);
-        
-        fsub.setVisible(true);
-        load_data();
+        if (sub != null) {
+            JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+            FrmDialogSubject fsub = new FrmDialogSubject(frame, true, sub);
+            fsub.setTitle("Sửa thông tin môn học");
+            fsub.setVisible(true);
+            load_data();
+        }else{
+            MessageBox mb = new MessageBox(null, true, "<html><pre>Hãy chọn cái cần sửa !</pre></html>");
+            mb.setLocationRelativeTo(this);
+            mb.setVisible(true);
+        }
+
     }//GEN-LAST:event_rSButtonMetro13ActionPerformed
 
     private void rSButtonMetro15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro15ActionPerformed
-        // TODO add your handling code here:
+        int pos = tbSubject.getSelectedRow();
+        if (pos < 0) {
+            MessageBox mb = new MessageBox(null, true, "<html><pre>Hãy chọn cái cần xoá !</pre></html>");
+            mb.setLocationRelativeTo(this);
+            mb.setVisible(true);
+        }
+        int id = listsub.get(pos).getId();
+        String name = listsub.get(pos).getName();
+        SubjectDAO sd = new SubjectDAO();
+
+        int choose = JOptionPane.showConfirmDialog(null, "Bạn chắc chắn muốn xoá " + name + " chứ!", "Xoá " + name, JOptionPane.YES_NO_OPTION);
+
+        if (choose == JOptionPane.YES_OPTION) {
+            sd.delete(id);
+            MessageBox mb = new MessageBox(null, true, "<html><pre>Đã xoá  " + name + " !</pre></html>");
+            mb.setLocationRelativeTo(this);
+            mb.setVisible(true);
+            load_data();
+        }
     }//GEN-LAST:event_rSButtonMetro15ActionPerformed
 
     private void rSButtonMetro6MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSButtonMetro6MouseEntered
@@ -370,7 +398,7 @@ public class ManageSubject extends javax.swing.JPanel {
     }//GEN-LAST:event_rSButtonMetro6ActionPerformed
 
     private void rSButtonMetro14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro14ActionPerformed
-       JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
         FrmFind ff = new FrmFind(frame, true);
         ff.setTitle("Tìm kiếm môn học theo tên");
         ff.setVisible(true);
