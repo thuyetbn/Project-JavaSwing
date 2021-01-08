@@ -21,6 +21,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import model.Account;
 import model.Student;
 
 /**
@@ -28,22 +29,24 @@ import model.Student;
  * @author BinDz
  */
 public class ManageStudent extends javax.swing.JPanel {
-    
+
     Student st;
     List<Student> liststudent;
+    Account acclogin;
 
     /**
      * Creates new form ManageStudent
      */
-    public ManageStudent() {
+    public ManageStudent(Account acclogin) {
         initComponents();
         load_data();
+        this.acclogin = acclogin;
     }
 
     private void load_data() {
         StudentDAO ad = new StudentDAO();
         liststudent = ad.getAllStudent();
-        String columns[] = {"STT", "Mã SV", "Tên", "Số điện thoại", "Email", "Address", "Ngày sinh", "Giới tính", "Trạng thái", "Lớp học","Khoá học","Giáo viên"};
+        String columns[] = {"STT", "Mã SV", "Tên", "Số điện thoại", "Email", "Address", "Ngày sinh", "Giới tính", "Trạng thái", "Lớp học", "Khoá học", "Giáo viên"};
         DefaultTableModel dtm = new DefaultTableModel(columns, 0);
 
         Integer i = 1;
@@ -51,7 +54,7 @@ public class ManageStudent extends javax.swing.JPanel {
             LocalDate dt = LocalDate.parse(a.getBirthday());
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
             String time = dtf.format(dt);
-            dtm.addRow(new Object[]{i, a.getMaSV(), a.getName(), a.getPhone(), a.getEmail(), a.getAddress(), time, a.getGender() == 0 ? "Nam" : "Nữ", a.getStatus() == 0 ? "Đang theo học" : "Đã nghỉ", a.getClass_name(),a.getKH_Name(),a.getTeacher_Name()});
+            dtm.addRow(new Object[]{i, a.getMaSV(), a.getName(), a.getPhone(), a.getEmail(), a.getAddress(), time, a.getGender() == 0 ? "Nam" : "Nữ", a.getStatus() == 0 ? "Đang theo học" : "Đã nghỉ", a.getClass_name(), a.getKH_Name(), a.getTeacher_Name()});
             i++;
         }
         tbStudent.setModel(dtm);
@@ -70,18 +73,18 @@ public class ManageStudent extends javax.swing.JPanel {
             });
         }
     }
-    
+
     void load_find(String name) {
         StudentDAO sd = new StudentDAO();
         liststudent = sd.findStudent(name);
-        String columns[] = {"STT", "Mã SV", "Tên", "Số điện thoại", "Email", "Address", "Ngày sinh", "Giới tính", "Trạng thái", "Lớp học","Khoá học","Giáo viên"};
+        String columns[] = {"STT", "Mã SV", "Tên", "Số điện thoại", "Email", "Address", "Ngày sinh", "Giới tính", "Trạng thái", "Lớp học", "Khoá học", "Giáo viên"};
         DefaultTableModel dtm = new DefaultTableModel(columns, 0);
         Integer i = 1;
         for (Student a : liststudent) {
             LocalDate dt = LocalDate.parse(a.getBirthday());
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
             String time = dtf.format(dt);
-            dtm.addRow(new Object[]{i, a.getMaSV(), a.getName(), a.getPhone(), a.getEmail(), a.getAddress(), time, a.getGender() == 0 ? "Nam" : "Nữ", a.getStatus() == 0 ? "Đang theo học" : "Đã nghỉ", a.getClass_name(),a.getKH_Name(),a.getTeacher_Name()});
+            dtm.addRow(new Object[]{i, a.getMaSV(), a.getName(), a.getPhone(), a.getEmail(), a.getAddress(), time, a.getGender() == 0 ? "Nam" : "Nữ", a.getStatus() == 0 ? "Đang theo học" : "Đã nghỉ", a.getClass_name(), a.getKH_Name(), a.getTeacher_Name()});
             i++;
         }
         tbStudent.setModel(dtm);
@@ -101,6 +104,7 @@ public class ManageStudent extends javax.swing.JPanel {
         }
 
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -368,46 +372,75 @@ public class ManageStudent extends javax.swing.JPanel {
     }//GEN-LAST:event_rSButtonMetro12MouseExited
 
     private void rSButtonMetro12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro12ActionPerformed
-        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
-        FrmDiaglogStrudent facc = new FrmDiaglogStrudent(frame, true, null);
-        facc.setVisible(true);
-        load_data();
-    }//GEN-LAST:event_rSButtonMetro12ActionPerformed
-
-    private void rSButtonMetro11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro11ActionPerformed
-        int pos = tbStudent.getSelectedRow();
-        if (pos < 0) {
-            JOptionPane.showMessageDialog(null, "Bạn chưa chọn gì để xoá!");
-        }
-        int id = liststudent.get(pos).getId();
-        String name = liststudent.get(pos).getName();
-        StudentDAO sd = new StudentDAO();
-        int choose = JOptionPane.showConfirmDialog(null, "Bạn chắc chắn muốn xoá " + name + " chứ!", "Xoá " + name, JOptionPane.YES_NO_OPTION);
-
-        if (choose == JOptionPane.YES_OPTION) {
-            sd.delete(id);
-            JOptionPane.showMessageDialog(null, "Đã Xoá " + name);
-            load_data();
-        }
-    }//GEN-LAST:event_rSButtonMetro11ActionPerformed
-
-    private void rSButtonMetro9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro9ActionPerformed
-        if (st != null) {
+        if (acclogin.getId() == 1) {
             JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
-            FrmDiaglogStrudent facc = new FrmDiaglogStrudent(frame, true, st);
+            FrmDiaglogStrudent facc = new FrmDiaglogStrudent(frame, true, null);
             facc.setVisible(true);
             load_data();
         } else {
-            JOptionPane.showMessageDialog(null, "Bạn chưa chọn !");
+            MessageBox mb = new MessageBox(null, true, "<html><pre>Bạn không có quyền \n truy cập</pre></html>");
+            mb.setLocationRelativeTo(this);
+            mb.setVisible(true);
+        }
+
+    }//GEN-LAST:event_rSButtonMetro12ActionPerformed
+
+    private void rSButtonMetro11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro11ActionPerformed
+        if (acclogin.getId() == 1) {
+            int pos = tbStudent.getSelectedRow();
+            if (pos < 0) {
+                JOptionPane.showMessageDialog(null, "Bạn chưa chọn gì để xoá!");
+            }
+            int id = liststudent.get(pos).getId();
+            String name = liststudent.get(pos).getName();
+            StudentDAO sd = new StudentDAO();
+            int choose = JOptionPane.showConfirmDialog(null, "Bạn chắc chắn muốn xoá " + name + " chứ!", "Xoá " + name, JOptionPane.YES_NO_OPTION);
+
+            if (choose == JOptionPane.YES_OPTION) {
+                sd.delete(id);
+                JOptionPane.showMessageDialog(null, "Đã Xoá " + name);
+                load_data();
+            }
+        } else {
+            MessageBox mb = new MessageBox(null, true, "<html><pre>Bạn không có quyền \n truy cập</pre></html>");
+            mb.setLocationRelativeTo(this);
+            mb.setVisible(true);
+        }
+
+
+    }//GEN-LAST:event_rSButtonMetro11ActionPerformed
+
+    private void rSButtonMetro9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro9ActionPerformed
+        if (acclogin.getId() == 1) {
+            if (st != null) {
+                JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+                FrmDiaglogStrudent facc = new FrmDiaglogStrudent(frame, true, st);
+                facc.setVisible(true);
+                load_data();
+            } else {
+                JOptionPane.showMessageDialog(null, "Bạn chưa chọn !");
+            }
+        } else {
+            MessageBox mb = new MessageBox(null, true, "<html><pre>Bạn không có quyền \n truy cập</pre></html>");
+            mb.setLocationRelativeTo(this);
+            mb.setVisible(true);
         }
 
 
     }//GEN-LAST:event_rSButtonMetro9ActionPerformed
 
     private void rSButtonMetro10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro10ActionPerformed
-        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
-        FrmClassRoom fcl = new FrmClassRoom(frame, true);
-        fcl.setVisible(true);
+        if (acclogin.getId() == 1) {
+            JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+            FrmClassRoom fcl = new FrmClassRoom(frame, true);
+            fcl.setVisible(true);
+        } else {
+            MessageBox mb = new MessageBox(null, true, "<html><pre>Bạn không có quyền \n truy cập</pre></html>");
+            mb.setLocationRelativeTo(this);
+            mb.setVisible(true);
+        }
+
+
     }//GEN-LAST:event_rSButtonMetro10ActionPerformed
 
     private void rSButtonMetro13MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSButtonMetro13MouseEntered
@@ -432,7 +465,7 @@ public class ManageStudent extends javax.swing.JPanel {
     }//GEN-LAST:event_rSButtonMetro15MouseEntered
 
     private void rSButtonMetro15MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSButtonMetro15MouseExited
-         rSButtonMetro15.setBackground(new Color(255, 255, 255));
+        rSButtonMetro15.setBackground(new Color(255, 255, 255));
     }//GEN-LAST:event_rSButtonMetro15MouseExited
 
     private void rSButtonMetro15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro15ActionPerformed
@@ -458,7 +491,7 @@ public class ManageStudent extends javax.swing.JPanel {
         JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
         FrmDialogStudentMark fstu = new FrmDialogStudentMark(frame, true, st);
         fstu.setLocationRelativeTo(this);
-        fstu.setTitle("Cập nhật điểm sinh viên - "+st.getName()+" -");
+        fstu.setTitle("Cập nhật điểm sinh viên - " + st.getName() + " -");
         fstu.setVisible(true);
         load_data();
     }//GEN-LAST:event_updateMarkActionPerformed

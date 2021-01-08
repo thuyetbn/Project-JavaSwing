@@ -128,8 +128,8 @@ public class StudentDAO {
             CallableStatement cs = conn.prepareCall(sql);
             cs.setString(1, s.getMaSV());
             cs.setString(2, s.getName());
-            cs.setString(3, s.getEmail());
-            cs.setString(4, s.getPhone());
+            cs.setString(3, s.getPhone());
+            cs.setString(4, s.getEmail());
             cs.setString(5, s.getAddress());
             cs.setString(6, s.getBirthday());
             cs.setInt(7, s.getGender());

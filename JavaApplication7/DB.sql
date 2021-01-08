@@ -201,7 +201,7 @@ BEGIN
 END
 GO
 
-EXEC dbo.getAllStudent
+EXEC dbo.getAllAccount
 
 CREATE PROC findStudent
 @name NVARCHAR(100)
@@ -259,6 +259,14 @@ BEGIN
 END
 GO
 
+CREATE PROC deleteSubject
+@id INT
+AS
+BEGIN
+	DELETE FROM dbo.tbl_Subject WHERE id = @id
+END
+GO
+
 CREATE PROC getAllSubject
 AS
 BEGIN
@@ -303,6 +311,16 @@ BEGIN
 END
 GO
 
+CREATE PROC findSubject2
+@name NVARCHAR(100)
+AS
+BEGIN
+	SELECT S.*,KH.id,KH.Name'KH_Name' FROM dbo.tbl_Subject S INNER JOIN dbo.tbl_KhoaHoc KH ON KH.id = S.KhoaHoc_ID
+	WHERE S.Name = @name
+END
+GO
+
+exec findSubject2 @name = 'Java'
 
 CREATE PROC loginForm
 @Email NVARCHAR(100),
@@ -388,7 +406,7 @@ EXEC dbo.addMark @Student_ID =3,         -- int
                  @Note = N'Trượt'              -- nvarchar(1000)
 EXEC getAllMark
 GO
-
+exec getAllSubject
 
 ALTER PROC findStudentMark
 @name NVARCHAR(100)
@@ -402,7 +420,19 @@ BEGIN
 END
 GO
 
+create PROC findStudentMark1
+@name NVARCHAR(100)
+AS
+BEGIN
+	SELECT M.*,s.id'Student_Id',s.Name'Student_Name',s.MaSV'S_MSV',SJ.id'SJ_ID',SJ.Name'SJ_Name',C.Name'ClassName',c.id'ClassID' FROM dbo.tbl_Students S 
+	LEFT JOIN dbo.tbl_Mark M ON S.id = M.Student_ID
+	LEFT JOIN dbo.tbl_Subject SJ ON SJ.id = M.MonHoc_ID 
+	LEFT JOIN dbo.tbl_Class C ON C.id = S.Class_ID
+	WHERE S.MaSV = @name
+END
+GO
 
+exec getAllAccount
 
 ALTER PROC filterMarkBySucject
 @name NVARCHAR(100)

@@ -203,7 +203,7 @@ public class FrmDialogSubject extends javax.swing.JDialog {
 
 
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
-        String regexcredit = "^[1-9][0-9]";
+        String regexcredit = "^(?:[1-9]|0[1-9]|10)$";
         String name = txtSub.getText().trim();
         String credits = txtCre.getText().trim();
         int new_status;
@@ -216,7 +216,7 @@ public class FrmDialogSubject extends javax.swing.JDialog {
         boolean validation = true;
         if (name.length() == 0 || !credits.matches(regexcredit)) {
             validation = false;
-            MessageBox mb = new MessageBox(null, true, "<html><pre>Nhập đầy đủ các trường và số \n tín nhỏ hơn <b style='color:red'>100</b> và lớn\n hơn <b style='color:red'>0</b></pre></html>");
+            MessageBox mb = new MessageBox(null, true, "<html><pre>Nhập đầy đủ các trường và số \n tín nhỏ hơn <b style='color:red'>11</b> và lớn\n hơn <b style='color:red'>0</b></pre></html>");
             mb.setLocationRelativeTo(this);
             mb.setVisible(true);
         }
@@ -234,7 +234,7 @@ public class FrmDialogSubject extends javax.swing.JDialog {
     }//GEN-LAST:event_addActionPerformed
 
     private void updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateActionPerformed
-        String regexcredit = "^[1-9][0-9]";
+        String regexcredit = "^(?:[1-9]|0[1-9]|10)$";
         int new_id = sub.getId();
         String name = txtSub.getText();
         String credits = txtCre.getText().trim();
@@ -247,9 +247,10 @@ public class FrmDialogSubject extends javax.swing.JDialog {
         int new_id_KH = listKH.get(cbKhoaHoc.getSelectedIndex()).getId();
         boolean validation = true;
         if (name.length() == 0 || !credits.matches(regexcredit)) {
-            MessageBox mb = new MessageBox(null, true, "<html><pre>Nhập đầy đủ các trường và số \n tín nhỏ hơn <b style='color:red'>100</b> và lớn\n hơn <b style='color:red'>0</b></pre></html>");
+            MessageBox mb = new MessageBox(null, true, "<html><pre>Nhập đầy đủ các trường và số \n tín nhỏ hơn <b style='color:red'>11</b> và lớn\n hơn <b style='color:red'>0</b></pre></html>");
             mb.setLocationRelativeTo(this);
             mb.setVisible(true);
+            validation = false;
         }
         if (validation == true) {
             Subject new_subject = new Subject(new_id, name, Integer.parseInt(credits), new_status, new_id_KH);

@@ -76,7 +76,7 @@ public class Mark {
         this.Subject_ID = Subject_ID;
     }
 
-    public float getMark() {
+    public int getMark() {
         return mark;
     }
 

@@ -44,6 +44,8 @@ public class FrmDiaglogStrudent extends javax.swing.JDialog {
     Student st;
     List<ClassRoom> lc;
     List<Student> ls;
+    public static String regexemail = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
+    public static String regex_Phone = "^(09|03|08|05|07)+([0-9]{8})$";
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -252,19 +254,19 @@ public class FrmDiaglogStrudent extends javax.swing.JDialog {
 
     }
 
-    private boolean check_Mail(String mail) {
+    private boolean checkMail(String mail) {
         StudentDAO sd = new StudentDAO();
         ls = sd.getAllStudent();
         boolean check = false;
         for (Student t : ls) {
-            if ( t.getEmail().equals(mail)) {
+            if (t.getEmail().equals(mail)) {
                 check = true;
             }
         }
         return check;
     }
 
-    private boolean check_Phone(String phone) {
+    private boolean checkPhone(String phone) {
         StudentDAO sd = new StudentDAO();
         ls = sd.getAllStudent();
         boolean check = false;
@@ -275,7 +277,7 @@ public class FrmDiaglogStrudent extends javax.swing.JDialog {
         }
         return check;
     }
-    
+
     private void setMaSV() {
         StudentDAO sd = new StudentDAO();
         ls = sd.getAllStudent();
@@ -292,7 +294,6 @@ public class FrmDiaglogStrudent extends javax.swing.JDialog {
     }
 
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
-        String regex_Phone = "(09|03|08|05|07)+([0-9]{8})";
         String new_masv = txtMaSV.getText();
         String new_name = txtName.getText();
         String new_phone = txtPhone.getText();
@@ -320,18 +321,24 @@ public class FrmDiaglogStrudent extends javax.swing.JDialog {
             validate = false;
         }
         if (!new_phone.matches(regex_Phone)) {
-            MessageBox mb = new MessageBox(null, true, "<html><pre>Vui lòng điển đúng số điện thoại\n để tiếp tục</pre></html>");
+            MessageBox mb = new MessageBox(null, true, "<html><pre>Vui lòng điền đúng \nsố điện thoại\n để tiếp tục</pre></html>");
             mb.setLocationRelativeTo(this);
             mb.setVisible(true);
             validate = false;
         }
-        if (check_Mail(new_email)) {
+        if (checkMail(new_email)) {
             MessageBox mb = new MessageBox(null, true, "<html><pre>Email đã được sử dụng!</pre></html>");
             mb.setLocationRelativeTo(this);
             mb.setVisible(true);
             validate = false;
         }
-        if (check_Phone(new_phone)) {
+        if (!new_email.matches(regexemail)) {
+            MessageBox mb = new MessageBox(null, true, "<html><pre>Email không đúng \nđịnh dạng</pre></html>");
+            mb.setLocationRelativeTo(this);
+            mb.setVisible(true);
+            validate = false;
+        }
+        if (checkPhone(new_phone)) {
             MessageBox mb = new MessageBox(null, true, "<html><pre>Phone đã được sử dụng!</pre></html>");
             mb.setLocationRelativeTo(this);
             mb.setVisible(true);
@@ -355,7 +362,7 @@ public class FrmDiaglogStrudent extends javax.swing.JDialog {
 
     private void updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateActionPerformed
         int new_id = st.getId();
-        String regex_Phone = "(09|03|08|05|07)+([0-9]{8})";
+
         String new_masv = txtMaSV.getText();
         String new_name = txtName.getText();
         String new_phone = txtPhone.getText();
@@ -374,7 +381,7 @@ public class FrmDiaglogStrudent extends javax.swing.JDialog {
         int new_status;
         String oldPhone = st.getPhone();
         String oldEmail = st.getEmail();
-        boolean validate = true;
+        boolean validation = true;
 
         if (Status.isSelected()) {
             new_status = 0;
@@ -385,39 +392,49 @@ public class FrmDiaglogStrudent extends javax.swing.JDialog {
             MessageBox mb = new MessageBox(null, true, "<html><pre>Vui lòng nhập đầy\n đủ thông tin\n vào các trường để tiến \nhành thêm mới</pre></html>");
             mb.setLocationRelativeTo(this);
             mb.setVisible(true);
-            validate = false;
+            validation = false;
         }
+//        if (!new_email.equals(oldEmail)) {
+//            if (checkMail(new_email)) {
+//                MessageBox mb = new MessageBox(null, true, "<html><pre>Email \nđã được sử dụng!</pre></html>");
+//                mb.setLocationRelativeTo(this);
+//                mb.setVisible(true);
+//            }
+//            validate = false;
+//        }
+//        if (!new_phone.equals(oldPhone)) {
+//            if (checkPhone(new_phone)) {
+//                MessageBox mb = new MessageBox(null, true, "<html><pre>Số điện thoại \nđã được sử dụng!</pre></html>");
+//                mb.setLocationRelativeTo(this);
+//                mb.setVisible(true);
+//            }
+//            validation = false;
+//        }
         if (!new_phone.matches(regex_Phone)) {
-            MessageBox mb = new MessageBox(null, true, "<html><pre>Vui lòng điển đúng số \nđiện thoại để tiếp tục!</pre></html>");
+            MessageBox mb = new MessageBox(null, true, "<html><pre>Vui lòng điền đúng \nsố điện thoại\n để tiếp tục</pre></html>");
             mb.setLocationRelativeTo(this);
             mb.setVisible(true);
-            validate = false;
+            validation = false;
         }
-        if (!oldPhone.equals(new_phone)) {
-            if (check_Phone(new_phone)) {
-                MessageBox mb = new MessageBox(null, true, "<html><pre>Số điện \nthoại đã được sử dụng!</pre></html>");
-                mb.setLocationRelativeTo(this);
-                mb.setVisible(true);
-            }
-            validate = false;
+        if (!new_email.matches(regexemail)) {
+            MessageBox mb = new MessageBox(null, true, "<html><pre>Email không đúng \nđịnh dạng</pre></html>");
+            mb.setLocationRelativeTo(this);
+            mb.setVisible(true);
+            validation = false;
         }
-        if (!oldEmail.equals(new_email)) {
-            if (check_Mail(new_email)) {
-                MessageBox mb = new MessageBox(null, true, "<html><pre>Email đã được sử dụng!</pre></html>");
-                mb.setLocationRelativeTo(this);
-                mb.setVisible(true);
-            }
-            validate = false;
-        }
-
-        if (validate == true) {
+        if (validation == true) {
+            System.out.println("1");
             Student new_Student = new Student(new_id, new_masv, new_name, new_phone, new_email, new_address, birthday, new_gender, new_status, new_class_id);
             StudentDAO SC = new StudentDAO();
             if (SC.updateAccount(new_Student) == 1) {
-                JOptionPane.showMessageDialog(null, "Bạn đã thêm học \nsinh mới thành công");
+                MessageBox mb = new MessageBox(null, true, "<html><pre>Bạn đã cập nhật học \nsinh mới thành công</pre></html>");
+                mb.setLocationRelativeTo(this);
+                mb.setVisible(true);
                 dispose();
             } else {
-                JOptionPane.showMessageDialog(null, "Đã có lỗi xảy ra\n vui lòng kiểm tra lại");
+                MessageBox mb = new MessageBox(null, true, "<html><pre>Đã có lỗi xảy ra\n vui lòng kiểm tra lại</pre></html>");
+                mb.setLocationRelativeTo(this);
+                mb.setVisible(true);
             }
         }
 

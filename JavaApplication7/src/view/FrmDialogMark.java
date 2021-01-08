@@ -70,14 +70,10 @@ public class FrmDialogMark extends javax.swing.JDialog {
             for (Student m : slsts) {
                 dcbm.removeElement(m.getSJ_Name());
             }
-            
-//            dcbm.removeElement(mark.getSJ_name());
-            
-            
             if (mark.getEx_date() != null) {
                 Date date = null;
                 try {
-                    date = new SimpleDateFormat("dd-MM-yyyy").parse(mark.getEx_date());
+                    date = new SimpleDateFormat("yyyy-MM-dd").parse(mark.getEx_date());
                 } catch (ParseException ex) {
                     Logger.getLogger(FrmDiaglogAccount.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -93,7 +89,7 @@ public class FrmDialogMark extends javax.swing.JDialog {
             if (mark.getEx_date() != null) {
                 Date date = null;
                 try {
-                    date = new SimpleDateFormat("dd-MM-yyyy").parse(mark.getEx_date());
+                    date = new SimpleDateFormat("yyyy-MM-dd").parse(mark.getEx_date());
                 } catch (ParseException ex) {
                     Logger.getLogger(FrmDiaglogAccount.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -302,27 +298,87 @@ public class FrmDialogMark extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateActionPerformed
-        int id_student = mark.getS_id();
-        int mark1 = Integer.parseInt(txtMark.getText());
-        String Ex_date = String.valueOf(new SimpleDateFormat("yyyy-MM-dd").format(jDateChooser1.getDate()));
-        String note = txtNote.getText();
-        int id_sub = mark.getSubject_ID();
-        Mark mk = new Mark(id_student, id_sub, mark1, Ex_date, note);
-        MarkDAO md = new MarkDAO();
+        String regexcredit = "^(?:[1-9]|0[1-9]|10)$";
+        int mark2 = 0;
+        boolean validation = true;
         if (updatea == "Thêm mới") {
-            if (md.addMark(mk) == 1) {
-                JOptionPane.showMessageDialog(null, "Bạn đã Cập nhật điểm mới thành công");
-                dispose();
+
+            int id_student = mark.getS_id();
+            String mark1 = txtMark.getText().trim();
+            String Ex_date = String.valueOf(new SimpleDateFormat("yyyy-MM-dd").format(jDateChooser1.getDate()));
+            String note = txtNote.getText().trim();
+
+            String select_sj = jComboBox1.getSelectedItem().toString();
+            if (select_sj == "Chọn môn học:") {
+                validation = false;
+                MessageBox mb = new MessageBox(null, true, "<html><pre><b style='color:red'>Bạn chưa chọn môn học</b></pre></html>");
+                mb.setLocationRelativeTo(this);
+                mb.setVisible(true);
+            }
+            if (!mark1.matches(regexcredit)) {
+                validation = false;
+                MessageBox mb = new MessageBox(null, true, "<html><pre>Điểm số từ\n  <b style='color:red'>0 -> 10</b></pre></html>");
+                mb.setLocationRelativeTo(this);
+                mb.setVisible(true);
             } else {
-                JOptionPane.showMessageDialog(null, "Đã có lỗi xảy ra, vui lòng kiểm tra lại");
+                mark2 = Integer.parseInt(txtMark.getText().trim());
+            }
+
+            if (mark2 > 10) {
+                validation = false;
+                MessageBox mb = new MessageBox(null, true, "<html><pre>Điểm số từ\n  <b style='color:red'>0 -> 10</b></pre></html>");
+                mb.setLocationRelativeTo(this);
+                mb.setVisible(true);
+            }
+
+            if (validation == true) {
+                SubjectDAO sd = new SubjectDAO();
+                lstsj = sd.findSubject1(select_sj);
+                Subject sj;
+                sj = lstsj.get(0);
+                int id_sub = sj.getId();
+                Mark mk = new Mark(id_student, id_sub, mark2, Ex_date, note);
+                MarkDAO md = new MarkDAO();
+                if (md.addMark(mk) == 1) {
+                    JOptionPane.showMessageDialog(null, "Bạn đã thêm điểm mới thành công");
+                    dispose();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Đã có lỗi xảy ra, vui lòng kiểm tra lại");
+                }
             }
         } else {
-            if (md.updateMark(mk) == 1) {
-                JOptionPane.showMessageDialog(null, "Bạn đã Cập nhật điểm mới thành công");
-                dispose();
+            String mark1 = txtMark.getText().trim();
+            if (!mark1.matches(regexcredit)) {
+                validation = false;
+                MessageBox mb = new MessageBox(null, true, "<html><pre>Điểm số từ\n  <b style='color:red'>0 -> 10</b></pre></html>");
+                mb.setLocationRelativeTo(this);
+                mb.setVisible(true);
             } else {
-                JOptionPane.showMessageDialog(null, "Đã có lỗi xảy ra, vui lòng kiểm tra lại");
+                mark2 = Integer.parseInt(txtMark.getText().trim());
             }
+
+            if (mark2 > 10) {
+                validation = false;
+                MessageBox mb = new MessageBox(null, true, "<html><pre>Điểm số từ\n  <b style='color:red'>0 -> 10</b></pre></html>");
+                mb.setLocationRelativeTo(this);
+                mb.setVisible(true);
+            }
+            int id_student = mark.getS_id();
+
+            String Ex_date = String.valueOf(new SimpleDateFormat("yyyy-MM-dd").format(jDateChooser1.getDate()));
+            String note = txtNote.getText();
+            int id_sub = mark.getSubject_ID();
+            if (validation == true) {
+                Mark mk = new Mark(id_student, id_sub, mark2, Ex_date, note);
+                MarkDAO md = new MarkDAO();
+                if (md.updateMark(mk) == 1) {
+                    JOptionPane.showMessageDialog(null, "Bạn đã Cập nhật điểm mới thành công");
+                    dispose();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Đã có lỗi xảy ra, vui lòng kiểm tra lại");
+                }
+            }
+
         }
 
     }//GEN-LAST:event_updateActionPerformed

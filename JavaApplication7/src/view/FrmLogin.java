@@ -267,10 +267,10 @@ public class FrmLogin extends javax.swing.JFrame {
             AccountDAO ad = new AccountDAO();
             List<Account> lsta;
             lsta = ad.loginForm(email, pass);
-            Account acc;
+            Account account;
             if (lsta.size() == 1) {
-                acc = lsta.get(0);
-                FrmMain fm = new FrmMain(acc);
+                account = lsta.get(0);
+                FrmMain fm = new FrmMain(account);
                 fm.setVisible(true);
                 login.setVisible(false);
                 dispose();
@@ -312,10 +312,10 @@ public class FrmLogin extends javax.swing.JFrame {
                 AccountDAO ad = new AccountDAO();
                 List<Account> lsta;
                 lsta = ad.loginForm(email, pass);
-                Account acc;
+                Account acclogin;
                 if (lsta.size() == 1) {
-                    acc = lsta.get(0);
-                    FrmMain fm = new FrmMain(acc);
+                    acclogin = lsta.get(0);
+                    FrmMain fm = new FrmMain(acclogin);
                     fm.setVisible(true);
                     login.setVisible(false);
                     dispose();

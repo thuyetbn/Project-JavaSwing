@@ -33,14 +33,15 @@ public class ManageAccount extends javax.swing.JPanel {
     Account account;
     List<Account> listacc;
     List<Role> lr;
+    Account acclogin;
 
     /**
      * Creates new form NewJPanel
      */
-    public ManageAccount() {
+    public ManageAccount(Account acclogin) {
         initComponents();
         load_data();
-        tbAccount.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        this.acclogin = acclogin;
 
     }
 
@@ -358,28 +359,43 @@ public class ManageAccount extends javax.swing.JPanel {
     }//GEN-LAST:event_rSButtonMetro8MouseExited
 
     private void rSButtonMetro8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro8ActionPerformed
-        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
-        FrmDiaglogAccount facc = new FrmDiaglogAccount(frame, true, null);
-        facc.setLocationRelativeTo(this);
-        facc.setVisible(true);
-        load_data();
+        if (acclogin.getId() == 1) {
+            JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+            FrmDiaglogAccount facc = new FrmDiaglogAccount(frame, true, null);
+            facc.setLocationRelativeTo(this);
+            facc.setVisible(true);
+            load_data();
+        } else {
+            MessageBox mb = new MessageBox(null, true, "<html><pre>Bạn không có quyền \n truy cập</pre></html>");
+            mb.setLocationRelativeTo(this);
+            mb.setVisible(true);
+        }
+
+
     }//GEN-LAST:event_rSButtonMetro8ActionPerformed
 
     private void rSButtonMetro7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro7ActionPerformed
-        int pos = tbAccount.getSelectedRow();
-        if (pos < 0) {
-            JOptionPane.showMessageDialog(null, "Hãy chọn cái cần xoá !");
-        }
-        int id = listacc.get(pos).getId();
-        String name = listacc.get(pos).getName();
-        AccountDAO ad = new AccountDAO();
-        int choose = JOptionPane.showConfirmDialog(null, "Bạn chắc chắn muốn xoá " + name + " chứ!", "Xoá " + name, JOptionPane.YES_NO_OPTION);
+        if (acclogin.getId() == 1) {
+            int pos = tbAccount.getSelectedRow();
+            if (pos < 0) {
+                JOptionPane.showMessageDialog(null, "Hãy chọn cái cần xoá !");
+            }
+            int id = listacc.get(pos).getId();
+            String name = listacc.get(pos).getName();
+            AccountDAO ad = new AccountDAO();
+            int choose = JOptionPane.showConfirmDialog(null, "Bạn chắc chắn muốn xoá " + name + " chứ!", "Xoá " + name, JOptionPane.YES_NO_OPTION);
 
-        if (choose == JOptionPane.YES_OPTION) {
-            ad.delete(id);
-            JOptionPane.showMessageDialog(null, "Đã xoá " + name);
-            load_data();
+            if (choose == JOptionPane.YES_OPTION) {
+                ad.delete(id);
+                JOptionPane.showMessageDialog(null, "Đã xoá " + name);
+                load_data();
+            }
+        } else {
+            MessageBox mb = new MessageBox(null, true, "<html><pre>Bạn không có quyền \n truy cập</pre></html>");
+            mb.setLocationRelativeTo(this);
+            mb.setVisible(true);
         }
+
     }//GEN-LAST:event_rSButtonMetro7ActionPerformed
 
     private void rSButtonMetro9MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSButtonMetro9MouseEntered
@@ -395,15 +411,22 @@ public class ManageAccount extends javax.swing.JPanel {
     }//GEN-LAST:event_rSButtonMetro6ActionPerformed
 
     private void rSButtonMetro5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro5ActionPerformed
-        if (account != null) {
-            JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
-            FrmDiaglogAccount facc = new FrmDiaglogAccount(frame, true, account);
-            facc.setLocationRelativeTo(this);
-            facc.setVisible(true);
-            load_data();
-        }else{
-            JOptionPane.showMessageDialog(null, "Bạn chưa chọn !");
+        if (acclogin.getId() == 1) {
+            if (account != null) {
+                JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+                FrmDiaglogAccount facc = new FrmDiaglogAccount(frame, true, account);
+                facc.setLocationRelativeTo(this);
+                facc.setVisible(true);
+                load_data();
+            } else {
+                JOptionPane.showMessageDialog(null, "Bạn chưa chọn !");
+            }
+        } else {
+            MessageBox mb = new MessageBox(null, true, "<html><pre>Bạn không có quyền \n truy cập</pre></html>");
+            mb.setLocationRelativeTo(this);
+            mb.setVisible(true);
         }
+
 
     }//GEN-LAST:event_rSButtonMetro5ActionPerformed
 

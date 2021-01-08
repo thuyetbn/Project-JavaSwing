@@ -48,7 +48,10 @@ public class ManageMark extends javax.swing.JPanel {
         load_data();
         loadFilercb();
         loadCbClass();
-
+        jLabel2.setVisible(false);
+        jTextField1.setVisible(false);
+        jComboBox1.setVisible(false);
+        
     }
     List<Mark> listm;
     Mark mark;
@@ -59,6 +62,7 @@ public class ManageMark extends javax.swing.JPanel {
     KhoaHoc kh;
     Subject sj;
     List<Subject> lstsj;
+    
 
     private void loadFilercb() {
         DefaultComboBoxModel dcbm = new DefaultComboBoxModel();
@@ -95,18 +99,18 @@ public class ManageMark extends javax.swing.JPanel {
         }
         tbMark.setModel(dtm);
         tbMark.setRowHeight(25);
-        if (listm.size() > 0) {
-            tbMark.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-                @Override
-                public void valueChanged(ListSelectionEvent lse) {
-                    int pos = tbMark.getSelectedRow();
-                    if (pos < 0) {
-                        pos = 0;
-                    }
-                    mark = listm.get(pos);
-                }
-            });
-        }
+//        if (listm.size() > 0) {
+//            tbMark.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+//                @Override
+//                public void valueChanged(ListSelectionEvent lse) {
+//                    int pos = tbMark.getSelectedRow();
+//                    if (pos < 0) {
+//                        pos = 0;
+//                    }
+//                    mark = listm.get(pos);
+//                }
+//            });
+//        }
     }
 
     void load_find(String name1) {
@@ -122,18 +126,6 @@ public class ManageMark extends javax.swing.JPanel {
         }
         tbMark.setModel(dtm);
         tbMark.setRowHeight(25);
-        if (listm.size() > 0) {
-            tbMark.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-                @Override
-                public void valueChanged(ListSelectionEvent lse) {
-                    int pos = tbMark.getSelectedRow();
-                    if (pos < 0) {
-                        pos = 0;
-                    }
-                    mark = listm.get(pos);
-                }
-            });
-        }
     }
 
     /**
@@ -303,6 +295,11 @@ public class ManageMark extends javax.swing.JPanel {
         filterClass.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 filterClassItemStateChanged(evt);
+            }
+        });
+        filterClass.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                filterClassActionPerformed(evt);
             }
         });
         jPanel20.add(filterClass, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 90, 120, -1));
@@ -492,6 +489,17 @@ public class ManageMark extends javax.swing.JPanel {
 
     private void rSButtonMetro16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro16ActionPerformed
 
+        int pos = tbMark.getSelectedRow();
+        if (pos < 0) {
+            JOptionPane.showMessageDialog(null, "Bạn chưa chọn gì cả");
+        }
+        
+        String value = tbMark.getModel().getValueAt(pos, 1).toString();
+//        JOptionPane.showMessageDialog(null, value);
+        MarkDAO md = new MarkDAO();
+        listm = md.findStudentMark1(value);
+//        JOptionPane.showMessageDialog(null, listm);
+        mark = listm.get(0);
         if (mark == null) {
             JOptionPane.showMessageDialog(null, "Bạn chưa chọn gì cả");
         } else if (mark.getMark() == 0) {
@@ -501,7 +509,7 @@ public class ManageMark extends javax.swing.JPanel {
             JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
             FrmDialogMark fmark = new FrmDialogMark(frame, true, mark, updatea);
             fmark.setLocationRelativeTo(this);
-//            fmark.setTitle("Cập nhật");
+            fmark.setTitle("Cập nhật");
             fmark.setVisible(true);
             load_data();
         }
@@ -618,11 +626,15 @@ public class ManageMark extends javax.swing.JPanel {
 
     private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
         String query = jTextField1.getText();
-        if(query != null){
+        if (query != null) {
             filter(query);
         }
-        
+
     }//GEN-LAST:event_jTextField1KeyReleased
+
+    private void filterClassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filterClassActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_filterClassActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

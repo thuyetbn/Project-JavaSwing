@@ -16,6 +16,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import model.Account;
 import model.Subject;
 
 /**
@@ -27,9 +28,12 @@ public class ManageSubject extends javax.swing.JPanel {
     /**
      * Creates new form NewJPanel1
      */
-    public ManageSubject() {
+    Account acclogin;
+
+    public ManageSubject(Account acclogin) {
         initComponents();
         load_data();
+        this.acclogin = acclogin;
     }
     Subject sub;
     List<Subject> listsub;
@@ -342,47 +346,69 @@ public class ManageSubject extends javax.swing.JPanel {
     }//GEN-LAST:event_rSButtonMetro16MouseExited
 
     private void rSButtonMetro16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro16ActionPerformed
-        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
-        FrmDialogSubject fsub = new FrmDialogSubject(frame, true, null);
-        fsub.setVisible(true);
-        load_data();
-    }//GEN-LAST:event_rSButtonMetro16ActionPerformed
-
-    private void rSButtonMetro13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro13ActionPerformed
-        if (sub != null) {
+        if (acclogin.getId() == 1) {
             JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
-            FrmDialogSubject fsub = new FrmDialogSubject(frame, true, sub);
-            fsub.setTitle("Sửa thông tin môn học");
+            FrmDialogSubject fsub = new FrmDialogSubject(frame, true, null);
             fsub.setVisible(true);
             load_data();
-        }else{
-            MessageBox mb = new MessageBox(null, true, "<html><pre>Hãy chọn cái cần sửa !</pre></html>");
+        } else {
+            MessageBox mb = new MessageBox(null, true, "<html><pre>Bạn không có quyền \n truy cập</pre></html>");
             mb.setLocationRelativeTo(this);
             mb.setVisible(true);
         }
+
+
+    }//GEN-LAST:event_rSButtonMetro16ActionPerformed
+
+    private void rSButtonMetro13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro13ActionPerformed
+        if (acclogin.getId() == 1) {
+            if (sub != null) {
+                JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+                FrmDialogSubject fsub = new FrmDialogSubject(frame, true, sub);
+                fsub.setTitle("Sửa thông tin môn học");
+                fsub.setVisible(true);
+                load_data();
+            } else {
+                MessageBox mb = new MessageBox(null, true, "<html><pre>Hãy chọn cái cần sửa !</pre></html>");
+                mb.setLocationRelativeTo(this);
+                mb.setVisible(true);
+            }
+        } else {
+            MessageBox mb = new MessageBox(null, true, "<html><pre>Bạn không có quyền \n truy cập</pre></html>");
+            mb.setLocationRelativeTo(this);
+            mb.setVisible(true);
+        }
+
 
     }//GEN-LAST:event_rSButtonMetro13ActionPerformed
 
     private void rSButtonMetro15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMetro15ActionPerformed
-        int pos = tbSubject.getSelectedRow();
-        if (pos < 0) {
-            MessageBox mb = new MessageBox(null, true, "<html><pre>Hãy chọn cái cần xoá !</pre></html>");
+        if (acclogin.getId() == 1) {
+            int pos = tbSubject.getSelectedRow();
+            if (pos < 0) {
+                MessageBox mb = new MessageBox(null, true, "<html><pre>Hãy chọn cái cần xoá !</pre></html>");
+                mb.setLocationRelativeTo(this);
+                mb.setVisible(true);
+            }
+            int id = listsub.get(pos).getId();
+            String name = listsub.get(pos).getName();
+            SubjectDAO sd = new SubjectDAO();
+
+            int choose = JOptionPane.showConfirmDialog(null, "Bạn chắc chắn muốn xoá " + name + " chứ!", "Xoá " + name, JOptionPane.YES_NO_OPTION);
+
+            if (choose == JOptionPane.YES_OPTION) {
+                sd.delete(id);
+                MessageBox mb = new MessageBox(null, true, "<html><pre>Đã xoá  " + name + " !</pre></html>");
+                mb.setLocationRelativeTo(this);
+                mb.setVisible(true);
+                load_data();
+            }
+        } else {
+            MessageBox mb = new MessageBox(null, true, "<html><pre>Bạn không có quyền \n truy cập</pre></html>");
             mb.setLocationRelativeTo(this);
             mb.setVisible(true);
         }
-        int id = listsub.get(pos).getId();
-        String name = listsub.get(pos).getName();
-        SubjectDAO sd = new SubjectDAO();
 
-        int choose = JOptionPane.showConfirmDialog(null, "Bạn chắc chắn muốn xoá " + name + " chứ!", "Xoá " + name, JOptionPane.YES_NO_OPTION);
-
-        if (choose == JOptionPane.YES_OPTION) {
-            sd.delete(id);
-            MessageBox mb = new MessageBox(null, true, "<html><pre>Đã xoá  " + name + " !</pre></html>");
-            mb.setLocationRelativeTo(this);
-            mb.setVisible(true);
-            load_data();
-        }
     }//GEN-LAST:event_rSButtonMetro15ActionPerformed
 
     private void rSButtonMetro6MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSButtonMetro6MouseEntered

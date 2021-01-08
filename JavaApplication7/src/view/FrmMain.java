@@ -35,26 +35,28 @@ import static view.FrmLogin.login;
  * @author BinDz
  */
 public class FrmMain extends javax.swing.JFrame {
+
     static boolean maximized = true;
     int xMouse;
     int yMouse;
     Account account;
+    Account acclogin;
     List<Account> listacc;
     List<Role> lr;
-    public static MessageBox messagebox ;
-    
+    public static MessageBox messagebox;
+
     /**
      * Creates new form FrmMain
      */
-    public FrmMain(Account account) {
+    public FrmMain(Account acclogin) {
         initComponents();
         setLocationRelativeTo(null);
-        Home h = new Home(account);
+        Home h = new Home(acclogin);
         Body.add(h);
         Body.repaint();
         Body.revalidate();
-        this.account = account;
-        labelName.setText(account.getName());
+        this.acclogin = acclogin;
+        labelName.setText(acclogin.getName());
 //        show_table();
 //        load_data();
     }
@@ -200,8 +202,9 @@ public class FrmMain extends javax.swing.JFrame {
         Left.add(jPanel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 120, 180, 110));
 
         btnHome1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_settings_25px.png"))); // NOI18N
-        btnHome1.setText("Cài đặt");
+        btnHome1.setText("Copyright by Thuyetbn");
         btnHome1.setBorderPainted(false);
+        btnHome1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnHome1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnHome1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -356,25 +359,31 @@ public class FrmMain extends javax.swing.JFrame {
 
     private void btnHome3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHome3ActionPerformed
         Body.removeAll();
-        Home h = new Home(account);
+        Home h = new Home(acclogin);
         Body.add(h);
         Body.repaint();
         Body.revalidate();
     }//GEN-LAST:event_btnHome3ActionPerformed
 
     private void btnHome4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHome4ActionPerformed
-        Body.removeAll();
-        ManageAccount ma = new ManageAccount();
-        Body.add(ma);
-        Body.repaint();
-        Body.revalidate();
+        if (acclogin.getId() == 1) {
+            Body.removeAll();
+            ManageAccount ma = new ManageAccount(acclogin);
+            Body.add(ma);
+            Body.repaint();
+            Body.revalidate();
+        } else {
+            MessageBox mb = new MessageBox(null, true, "<html><pre>Bạn không có quyền \n truy cập</pre></html>");
+            mb.setLocationRelativeTo(this);
+            mb.setVisible(true);
+        }
 
 
     }//GEN-LAST:event_btnHome4ActionPerformed
 
     private void btnHome9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHome9ActionPerformed
         Body.removeAll();
-        ManageStudent mss = new ManageStudent();
+        ManageStudent mss = new ManageStudent(acclogin);
         Body.add(mss);
         Body.repaint();
         Body.revalidate();
@@ -382,7 +391,7 @@ public class FrmMain extends javax.swing.JFrame {
 
     private void btnHome10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHome10ActionPerformed
         Body.removeAll();
-        ManageSubject ms = new ManageSubject();
+        ManageSubject ms = new ManageSubject(acclogin);
         Body.add(ms);
         Body.repaint();
         Body.revalidate();

@@ -101,6 +101,27 @@ public class SubjectDAO {
         }
         return lsts;
     }
+    public List<Subject> findSubject1(String name1) {
+        List<Subject> lsts = new ArrayList<>();
+        String sql = "{call findSubject(?)}";
+        try {
+            CallableStatement cs = conn.prepareCall(sql);
+            cs.setString(1, name1);
+            ResultSet rs = cs.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("Name");
+                int credits = rs.getInt("credits");
+                int status = rs.getInt("Status");
+                int KH_ID = rs.getInt("KhoaHoc_ID");
+                String KH_Name = rs.getString("KH_Name");
+                lsts.add(new Subject(id, name,credits,status,KH_ID,KH_Name));
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+        return lsts;
+    }
     public boolean delete(int id) {
         boolean check = false;
         String sql = "{CALL deleteSubject(?)}";

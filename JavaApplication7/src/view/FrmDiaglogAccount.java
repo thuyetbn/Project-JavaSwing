@@ -452,7 +452,7 @@ public class FrmDiaglogAccount extends javax.swing.JDialog {
             mb.setVisible(true);
             validation = false;
         }
-        if (new_Phone.length() > 11 || new_Phone.length() < 10 || regex_Phone.matches(new_Phone)) {
+        if (new_Phone.length() > 11 || new_Phone.length() < 10) {
             MessageBox mb = new MessageBox(null, true, "<html><pre>Số điện thoại \nkhông đúng định dạng</pre></html>");
             mb.setLocationRelativeTo(this);
             mb.setVisible(true);
@@ -480,7 +480,7 @@ public class FrmDiaglogAccount extends javax.swing.JDialog {
             }
             validation = false;
         }
-        if (validation = true) {
+        if (validation == true) {
             Account newTeacher = new Account(new_id, new_name, new_Phone, new_Email, new_pass, new_Address, new_birthday, new_status, new_id_Role, new_role_name);
             AccountDAO ad = new AccountDAO();
             if (ad.updateAccount(newTeacher) == 1) {
